@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Draw Quad", NULL, NULL);
     
     if (!window) {
         glfwTerminate();
