@@ -30,6 +30,12 @@ int main(int argc, char** argv) {
         0.5, -0.5, 0.0   //bottom right corner
     };
 
+    glViewport(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT);    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0, 1);
+    glLoadIdentity();
+
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
