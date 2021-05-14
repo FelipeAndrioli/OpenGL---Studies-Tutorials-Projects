@@ -23,3 +23,9 @@ After that we just need to compile our code with the correct links, this is what
 	``` g++ test.cpp -o test.exe -lglfw3 -lopengl32 -lgdi32 ```
 
 You can give a look in the script I am using to compile and use it as base to create your own.
+
+## TODO's
+
+	- Remove .exe files
+	- Remove build.sh files (only one is necessary in the end)
+	- Transform the create window into a header
