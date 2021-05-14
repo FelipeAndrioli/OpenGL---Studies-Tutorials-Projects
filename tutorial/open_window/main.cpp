@@ -1,17 +1,23 @@
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
+#include <cstdlib>
 
-int main(void)
-{
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+
+int main(int argc, char** argv) {
     GLFWwindow* window;
 
     /* Initialize the library */
-    if (!glfwInit())
+    if (!glfwInit()) {
+        std::cout << "The application have failed initializing the library" << std::endl;
         return -1;
+    }
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello World", NULL, NULL);
+    if (!window) {
         glfwTerminate();
         return -1;
     }
@@ -33,5 +39,6 @@ int main(void)
     }
 
     glfwTerminate();
+    
     return 0;
 }
