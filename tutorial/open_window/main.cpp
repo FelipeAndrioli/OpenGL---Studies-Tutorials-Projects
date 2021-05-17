@@ -17,6 +17,12 @@ int main(int argc, char** argv) {
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello World", NULL, NULL);
+
+    int screenWidth;
+    int screenHeight;
+
+    glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+
     if (!window) {
         glfwTerminate();
         return -1;
@@ -28,7 +34,7 @@ int main(int argc, char** argv) {
     /*
         Specifies the part of the window to which OpenGL will draw (in pixels), convert from normalised to pixels
     */
-    glViewport(0.0f, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glViewport(0.0f, 0.0f, screenWidth, screenHeight);
 
     /*
         Projection matrix defines the properties of the camera that views the objects in the world coordinate frame. 
