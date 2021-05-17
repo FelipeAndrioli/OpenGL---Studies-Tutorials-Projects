@@ -29,3 +29,4 @@ You can give a look in the script I am using to compile and use it as base to cr
 	- Remove .exe files
 	- Remove build.sh files (only one is necessary in the end)
 	- Transform the create window into a header
+	- Verify and fix the window's names
