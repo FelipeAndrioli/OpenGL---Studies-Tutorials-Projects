@@ -48,3 +48,4 @@ You can give a look in the script I am using to compile and use it as base to cr
 ## TODO's
 
 	- Transform the create window into a header
+	- Add print to all tutorial samples inside the subdirectories
