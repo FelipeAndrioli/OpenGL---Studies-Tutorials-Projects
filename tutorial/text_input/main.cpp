@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Text Input.exe", NULL, NULL);
 
     //glfwSetCharCallback(window, character_callback);
     glfwSetCharModsCallback(window, charmods_callback);

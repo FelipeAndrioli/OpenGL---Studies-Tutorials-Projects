@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     }
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello World.exe", NULL, NULL);
 
     int screenWidth;
     int screenHeight;

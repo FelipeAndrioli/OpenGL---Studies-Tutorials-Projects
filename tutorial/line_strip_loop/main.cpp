@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Line Strip Loop", NULL, NULL);
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Line Strip Loop.exe", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;

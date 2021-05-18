@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Triangle Fan", NULL, NULL);
+    window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Triangle Fan.exe", NULL, NULL);
     if (!window) {
         glfwTerminate();
         return -1;
