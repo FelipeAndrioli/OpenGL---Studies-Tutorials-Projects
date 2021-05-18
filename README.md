@@ -13,6 +13,8 @@ Shell
 
 The directory "tutorial" was maded following the Sonar Systems tutorial. Inside the directory contains a subdirectory named open_window, the main.cpp file contain a explanation about the principal configuration functions used in all the tutorials.
 
+https://github.com/SonarSystems/OpenGL-Tutorials
+
 ## How to compile
 
 To compile just execute the file 'scripts/compile_run.sh' in the same directory that contains the main.cpp flie.
@@ -20,8 +22,6 @@ To compile just execute the file 'scripts/compile_run.sh' in the same directory 
 ## How to run it through MinGW
 
 After tough hours of research I find out how to execute the whole code througth MinGW and not through Visual Studio Code as the majority of tutorials.
-
-https://github.com/SonarSystems/OpenGL-Tutorials
 
 We are going to need these files:
 
