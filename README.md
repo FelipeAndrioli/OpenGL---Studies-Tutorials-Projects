@@ -1,6 +1,22 @@
+# OpenGL / GLFW / GLEW
+
+This repository is a set of tutorial's, exercises and small projects to study OpenGL, GLFW and GLEW. 
+
+## Requirements
+
+MinGW
+GLFW
+GLEW
+
+## Directories
+
+The directory "tutorial" was maded following the Sonar Systems tutorial
+
 ## How to run it through MinGW
 
 After tough hours of research I find out how to execute the whole code througth MinGW and not through Visual Studio Code as the majority of tutorials.
+
+https://github.com/SonarSystems/OpenGL-Tutorials
 
 We are going to need these files:
 
