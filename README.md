@@ -11,7 +11,7 @@ Shell
 
 ## Directories
 
-The directory "tutorial" was maded following the Sonar Systems tutorial
+The directory "tutorial" was maded following the Sonar Systems tutorial. Inside the directory contains a subdirectory named open_window, the main.cpp file contain a explanation about the principal configuration functions used in all the tutorials.
 
 ## How to compile
 
@@ -48,4 +48,3 @@ You can give a look in the script I am using to compile and use it as base to cr
 ## TODO's
 
 	- Transform the create window into a header
-	- Verify and fix the window's names
