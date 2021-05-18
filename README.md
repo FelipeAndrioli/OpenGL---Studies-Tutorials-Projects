@@ -7,10 +7,15 @@ This repository is a set of tutorial's, exercises and small projects to study Op
 MinGW
 GLFW
 GLEW
+Shell
 
 ## Directories
 
 The directory "tutorial" was maded following the Sonar Systems tutorial
+
+## How to compile
+
+To compile just execute the file 'scripts/compile_run.sh' in the same directory that contains the main.cpp flie.
 
 ## How to run it through MinGW
 
@@ -42,6 +47,5 @@ You can give a look in the script I am using to compile and use it as base to cr
 
 ## TODO's
 
-	- Remove build.sh files (only one is necessary in the end)
 	- Transform the create window into a header
 	- Verify and fix the window's names
