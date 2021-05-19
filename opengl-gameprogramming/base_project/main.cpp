@@ -7,6 +7,25 @@
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
+void keyCallback (GLFWwindow *window, int key, int scancode, int action, int mods) {
+    if (action == GLFW_PRESS) {
+        switch (key) {
+            case GLFW_KEY_UP:
+                std::cout << "Up arrow pressed" << std::endl;
+                break;
+            case GLFW_KEY_DOWN:
+                std::cout << "Down arrow pressed" << std::endl;
+                break;
+            case GLFW_KEY_LEFT:
+                std::cout << "Left arrow pressed" << std::endl;
+                break;
+            case GLFW_KEY_RIGHT:
+                std::cout << "Right arrow pressed" << std::endl;
+                break;
+        }
+    }
+}
+
 static void cursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
     std::cout << xpos << " : " << ypos << std::endl;
 }
@@ -38,6 +57,9 @@ int main(int argc, char** argv) {
     }
 
     window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Base Project.exe", NULL, NULL);
+
+    glfwSetKeyCallback(window, keyCallback);
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
     glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
