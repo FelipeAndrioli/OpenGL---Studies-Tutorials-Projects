@@ -14,4 +14,6 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
 
     I'll spent tomorrow morning trying to fix it, otherwise I will just let it behind and try to fix it some other day.
 
+    I am also considering starts to study the book "Foundations of Game Engine Development, Volume 1 Mathematics" at the same time to be more familiarized with 3D maths.
+
 ## Day Two
