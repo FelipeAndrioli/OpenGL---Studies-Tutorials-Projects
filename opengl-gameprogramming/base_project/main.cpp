@@ -37,10 +37,17 @@ void cursorEnterCallback(GLFWwindow *window, int entered) {
 }
 
 void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
+    double ypos;
+    double xpos;
+
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
         std::cout << "Right button pressed" << std::endl;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        std::cout << xpos << " : " << ypos << std::endl;
     } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         std::cout << "Left button pressed" << std::endl;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        std::cout << xpos << " : " << ypos << std::endl;
     }
 }
 
@@ -61,7 +68,7 @@ int main(int argc, char** argv) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
-    glfwSetCursorPosCallback(window, cursorPositionCallback);
+    //glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetCursorEnterCallback(window, cursorEnterCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
