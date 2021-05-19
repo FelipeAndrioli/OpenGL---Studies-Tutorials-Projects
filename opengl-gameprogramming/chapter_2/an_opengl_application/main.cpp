@@ -32,47 +32,41 @@ void Triangle::defineColor(std::vector<GLfloat> new_color) {
 
 void Triangle::drawTriangle() {
 
-    static float alpha = 0;
+    static float alpha = 0.0;
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glRotatef(alpha, 0.0, 0.0, 1.0);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
-    glPushMatrix();
-    glTranslatef(50, 50, 0);
-    glRotatef(alpha, 0, 0, 1.0);
-    glTranslatef(-50, -50, 0);
     glVertexPointer(3, GL_FLOAT, 0, vertices.data());
     glColorPointer(3, GL_FLOAT, 0, color.data());
     glDrawArrays(GL_TRIANGLES, 0, 3);
-    glPopMatrix();
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
 
-    alpha += 0.5;
+    alpha += 1;
 }
 
 int main(int argc, char** argv) {
 
     Triangle myTriangle;
 
-/*
-    std::vector<GLfloat> vertices = {
-        halfScreenWidth, halfScreenHeight + halfSideLength, 0.0,                   //top corner
-        halfScreenWidth + halfSideLength, halfScreenHeight - halfSideLength, 0.0,  //right corner
-        halfScreenWidth - halfSideLength, halfScreenHeight - halfSideLength, 0.0,   //left corner
-    };
-*/
+        std::vector<GLfloat> vertices = {
+            -0.6f, -0.4f, 0.0f,
+            0.6f, -0.4f, 0.0f,
+            0.0f, 0.6f, 0.0f
+        };
 
-    std::vector<GLfloat> vertices = {
-        1, -1, 0,
-        -1, -1, 0,
-        0, 1, 0
-    };
+        std::vector<GLfloat> colors = {
+            0.0, 255, 0.0,
+            0.0, 255, 0.0,
+            0.0, 255, 0.0
+        };
 
-    std::vector<GLfloat> colors = {
-        0, 255, 0,
-        0, 255, 0,
-        0, 255, 0
-    };
 
     myTriangle.defineVertices(vertices);
     myTriangle.defineColor(colors);
