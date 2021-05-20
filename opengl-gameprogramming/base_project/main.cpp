@@ -5,7 +5,7 @@
 #include <cstring>
 #include <vector>
 
-#include "Window.h"
+#include "headers/Window.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
