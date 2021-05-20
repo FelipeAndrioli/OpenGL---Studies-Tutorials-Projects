@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstring>
-#include <array>
+#include <vector>
 
 #include "Window.h"
 

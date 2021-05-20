@@ -73,23 +73,6 @@ void Draw() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    GLfloat halfScreenWidth = SCREEN_WIDTH / 2;
-    GLfloat halfScreenHeight = SCREEN_HEIGHT / 2;
-
-    GLfloat halfSideScreen = 200;
-
-    GLfloat vertices[] = {
-        halfScreenWidth, halfScreenHeight + halfSideScreen, 0.0,
-        halfScreenWidth + halfSideScreen, halfScreenHeight - halfSideScreen, 0.0,
-        halfScreenWidth - halfSideScreen, halfScreenHeight - halfSideScreen, 0.0
-    };
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void Window::MainLoop() {
@@ -99,10 +82,10 @@ void Window::MainLoop() {
             glViewport(0, 0, viewPortSize[0], viewPortSize[1]);
             updateViewport = false;
         }
-
+        
+        //render here
         Draw();
 
-        //render here
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
