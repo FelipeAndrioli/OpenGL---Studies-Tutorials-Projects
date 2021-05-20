@@ -12,3 +12,4 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
     - [X] README.md to code related stuff
     - [X] PROGRESS.md to my daily report and progress stuff
 - [ ] Create method to make draw easier
+- [ ] Describe a way better the opengl-gameprogramming directory in README.md
