@@ -4,9 +4,8 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
 
 ## TODO's
 
-    - Create a base project to use in other examples and exercises
-        - Mouse input
-        - Keyboard input
+- Use Window class function instead code it inside main function
+- Transform Window class into a header to be included from outside
 
 ## Day One
 
@@ -23,3 +22,11 @@ So tomorrow morning instead of try to fix it I'll try to understand why it wasn'
 I am also considering starts to study the book "Foundations of Game Engine Development, Volume 1 Mathematics" at the same time to be more familiarized with 3D maths.
 
 ## Day Two
+
+Chapter 2
+
+Today I spent some time learning about full screen window and how to resize it. I also develop a base project to be used in other examples and exercises with mouse and keyboard input already working.
+
+Reading the Full Screen section from the chapter 2 I tried to reproduce it in GLFW, so I've developed a Window class with some functions to resize and full screen the window, althought it's already developed it's not working directly in the code, so tomorrow morning I'll start by using the class instead of coding it inside main function. I'll also transform the entire class into a header to be imported from outside.
+
+## Day Three
