@@ -20,4 +20,6 @@ Today I spent some time learning about full screen window and how to resize it. 
 
 Reading the Full Screen section from the chapter 2 I tried to reproduce it in GLFW, so I've developed a Window class with some functions to resize and full screen the window, althought it's already developed it's not working directly in the code, so tomorrow morning I'll start by using the class instead of coding it inside main function. I'll also transform the entire class into a header to be imported from outside.
 
+In the end of the chapter 2 it have some questions and exercises to do. I've answer all the questions about the chapter and complete the exercise, which was change the triangle's color and the background color, the last one through the glClearColor. Finishing this I've done with chapter 2.
+
 ## Day Three
