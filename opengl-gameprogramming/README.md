@@ -9,6 +9,7 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
 - Split README.md
     - README.md to code related stuff
     - PROGRESS.md to my daily report and progress stuff
+- Create method to make draw easier
 
 ## Day One
 
