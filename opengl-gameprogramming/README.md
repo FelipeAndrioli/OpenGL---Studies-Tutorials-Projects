@@ -6,6 +6,9 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
 
 - Use Window class function instead code it inside main function
 - Transform Window class into a header to be included from outside
+- Split README.md
+    - README.md to code related stuff
+    - PROGRESS.md to my daily report and progress stuff
 
 ## Day One
 
