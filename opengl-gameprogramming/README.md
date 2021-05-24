@@ -13,3 +13,4 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
     - [X] PROGRESS.md to my daily report and progress stuff
 - [ ] Create method to make draw easier
 - [ ] Describe a way better the opengl-gameprogramming directory in README.md
+- [ ] Search why the mouse click output is inverse from the draw values in y axe
