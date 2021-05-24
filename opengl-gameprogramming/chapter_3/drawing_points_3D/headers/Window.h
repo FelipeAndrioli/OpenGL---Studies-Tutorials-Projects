@@ -29,6 +29,7 @@ class Window {
         void MainLoop();
         bool IsFullScreen();
         void SetFullScreen(bool fullscreen);
+        void Draw();
 };
 
 void Window::Init(int width, int height) {
@@ -66,7 +67,7 @@ void Window::Resize(int cx, int cy) {
     updateViewport = true;
 }
 
-void Draw() {
+void Window::Draw() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0, 1);
@@ -89,7 +90,6 @@ void Draw() {
 
          pointSize += 1.0;
      }
-
 }
 
 void Window::MainLoop() {
@@ -99,16 +99,16 @@ void Window::MainLoop() {
         glEnable(GL_POINT_SMOOTH);
     }
 
-    //GLfloat sizes[2];
-    //GLfloat granularity;
+    GLfloat sizes[2];
+    GLfloat granularity;
 
     //retrieve the point size range
-    //glGetFloatv(GL_POINT_SIZE_RANGE, sizes);
-    //GLfloat minPointSize = sizes[0];
-    //GLfloat maxPointSize = sizes[1];
+    glGetFloatv(GL_POINT_SIZE_RANGE, sizes);
+    GLfloat minPointSize = sizes[0];
+    GLfloat maxPointSize = sizes[1];
 
     //retrieve the point size granularity
-    //glGetFloatv(GL_POINT_SIZE_GRANULARITY, &granularity);
+    glGetFloatv(GL_POINT_SIZE_GRANULARITY, &granularity);
 
     while (!glfwWindowShouldClose(window)) {
         if (updateViewport) {
