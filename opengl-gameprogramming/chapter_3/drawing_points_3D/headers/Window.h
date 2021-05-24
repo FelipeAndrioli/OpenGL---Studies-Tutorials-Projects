@@ -73,22 +73,43 @@ void Draw() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    GLfloat vertices[] = {
-	SCREEN_WIDTH / 2,  SCREEN_HEIGHT / 2, 0.0,
-    SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + 10.0, 0.0
-    };
+     GLfloat pointSize = 0.5;
 
-    glPointSize(5.0);
-    
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnable(GL_POINT_SMOOTH);
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
-    glDrawArrays(GL_POINTS, 0, 2);
-    glDisable(GL_POINT_SMOOTH);
-    glDisableClientState(GL_VERTEX_ARRAY);
+     for (GLfloat point = 4.0; point < SCREEN_WIDTH - 4.0; point += 50) {
+
+         GLfloat vertices[] = {
+             point, SCREEN_HEIGHT / 2, 0.0
+         };
+
+         glPointSize(pointSize);
+         glEnableClientState(GL_VERTEX_ARRAY);
+         glVertexPointer(3, GL_FLOAT, 0, vertices);
+         glDrawArrays(GL_POINTS, 0, 1);
+         glDisableClientState(GL_VERTEX_ARRAY);
+
+         pointSize += 1.0;
+     }
+
 }
 
 void Window::MainLoop() {
+
+    //if point antialising is currently disabled, then enable it
+    if (!glIsEnabled(GL_POINT_SMOOTH)) {
+        glEnable(GL_POINT_SMOOTH);
+    }
+
+    //GLfloat sizes[2];
+    //GLfloat granularity;
+
+    //retrieve the point size range
+    //glGetFloatv(GL_POINT_SIZE_RANGE, sizes);
+    //GLfloat minPointSize = sizes[0];
+    //GLfloat maxPointSize = sizes[1];
+
+    //retrieve the point size granularity
+    //glGetFloatv(GL_POINT_SIZE_GRANULARITY, &granularity);
+
     while (!glfwWindowShouldClose(window)) {
         if (updateViewport) {
             glfwGetFramebufferSize(window, &viewPortSize[0], &viewPortSize[1]);
@@ -102,6 +123,8 @@ void Window::MainLoop() {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    glDisable(GL_POINT_SMOOTH);
 }
 
 bool Window::IsFullScreen() {
