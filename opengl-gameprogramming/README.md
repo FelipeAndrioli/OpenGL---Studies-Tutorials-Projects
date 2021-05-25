@@ -15,4 +15,5 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
 - [ ] Describe a way better the opengl-gameprogramming directory in README.md
 - [ ] Search why the mouse click output is inverse from the draw values in y axe
 - [ ] Finish loop of lines with different width
-- [ ] Fix inverted y axis
+- [X] Fix inverted y axis
+- [ ] Create a better looking cursor

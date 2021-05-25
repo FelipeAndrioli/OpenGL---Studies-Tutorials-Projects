@@ -31,3 +31,7 @@ So today I've started the chapter 3 and it already starts giving me some trouble
 I am going to stop for today, I'm pretty tired, but for tomorrow I need to fix it, otherwise all the book examples will need to be even more reworked.
 
 ## Day Four
+
+Chapter 3
+
+Well, today I started fixing the y axis that look to be inverted to me. Using the function to get the mouse position, the x axis looks correct, from left to right, and 0 to max, but the y axis was being from top to bottom, zero to max, which doesn't make sense, once I was drawing and my draws are getting inverted becauses seens to be only inverted when getting the cursor position, and in the draw the y axis value seens correct, from bottom to top, zero to max. To fix it I just subtract the give value from the total height of the window. It can cause a mess if it is just some window configuration, so I put the left mouse click as the subtracted value and right mouse click as the original function output.
