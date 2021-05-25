@@ -44,8 +44,3 @@ After that we just need to compile our code with the correct links, this is what
 	g++ test.cpp -o test.exe -lglfw3 -lopengl32 -lgdi32 
 
 You can give a look in the script I am using to compile and use it as base to create your own.
-
-## TODO's
-
-	- Transform the create window into a header
-	- Add print to all tutorial samples inside the subdirectories
