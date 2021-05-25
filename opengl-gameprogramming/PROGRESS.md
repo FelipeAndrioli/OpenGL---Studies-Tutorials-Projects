@@ -35,3 +35,5 @@ I am going to stop for today, I'm pretty tired, but for tomorrow I need to fix i
 Chapter 3
 
 Well, today I started fixing the y axis that look to be inverted to me. Using the function to get the mouse position, the x axis looks correct, from left to right, and 0 to max, but the y axis was being from top to bottom, zero to max, which doesn't make sense, once I was drawing and my draws are getting inverted becauses seens to be only inverted when getting the cursor position, and in the draw the y axis value seens correct, from bottom to top, zero to max. To fix it I just subtract the give value from the total height of the window. It can cause a mess if it is just some window configuration, so I put the left mouse click as the subtracted value and right mouse click as the original function output.
+
+So once I've decided to not get stuck into boring questions, I decided to move up even not reproducing the stippled line example, it doesn't show any error but it also doesn't stipple the line.
