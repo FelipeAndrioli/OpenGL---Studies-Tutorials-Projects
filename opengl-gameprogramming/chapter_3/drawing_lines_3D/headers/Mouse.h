@@ -5,7 +5,7 @@
 #include <cstring>
 #include <array>
 
-static void cursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
+static void cursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {    
     std::cout << xpos << " : " << ypos << std::endl;
 }
 
@@ -19,14 +19,19 @@ void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
     double ypos;
     double xpos;
 
+    int screenWidth;
+    int screenHeight;
+
+    glfwGetWindowSize(window, &screenWidth, &screenHeight);
+
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
         std::cout << "Right button pressed" << std::endl;
-        glfwGetCursorPos(window, &xpos, &ypos);
+        glfwGetCursorPos(window, &xpos, &ypos);        
         std::cout << xpos << " : " << ypos << std::endl;
     } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         std::cout << "Left button pressed" << std::endl;
         glfwGetCursorPos(window, &xpos, &ypos);
-        std::cout << xpos << " : " << ypos << std::endl;
+        std::cout << xpos << " : " << screenHeight - ypos << std::endl;
     }
 }
 
@@ -50,7 +55,7 @@ GLFWcursor* createCursor() {
 void initMouse(GLFWwindow* window) {
     //glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-    glfwSetCursorEnterCallback(window, cursorEnterCallback);
+    //glfwSetCursorEnterCallback(window, cursorEnterCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
     glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
     glfwSetScrollCallback(window, scrollCallback);
