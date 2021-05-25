@@ -19,6 +19,11 @@ void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
     double ypos;
     double xpos;
 
+    int screenWidth;
+    int screenHeight;
+
+    glfwGetWindowSize(window, &screenWidth, &screenHeight);
+
     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
         std::cout << "Right button pressed" << std::endl;
         glfwGetCursorPos(window, &xpos, &ypos);
@@ -26,7 +31,7 @@ void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
     } else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         std::cout << "Left button pressed" << std::endl;
         glfwGetCursorPos(window, &xpos, &ypos);
-        std::cout << xpos << " : " << ypos << std::endl;
+        std::cout << xpos << " : " << screenHeight - ypos << std::endl;
     }
 }
 
