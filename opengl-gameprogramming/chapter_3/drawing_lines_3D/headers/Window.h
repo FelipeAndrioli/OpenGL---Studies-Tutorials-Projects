@@ -73,26 +73,28 @@ void Draw() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    //GLfloat vertices[] = {
-    //    (SCREEN_WIDTH / 2) + 100, (SCREEN_HEIGHT / 2) + 100, 0.0,
-    //    (SCREEN_WIDTH / 2) + 200, (SCREEN_HEIGHT / 2) + 100
-    //};
+    GLfloat lineWidth = 0.5;
 
-    GLfloat vertices[] = {
-        450.0, 450.0, 0.0,
-        750.0, 450.0, 0.0
-    };
+    for (GLfloat line = 50.0; line < SCREEN_HEIGHT - 50; line += 50) {
 
-    glLineWidth(5.0);
+        GLfloat vertices[] = {
+            100.0, line, 0.0,
+            300.0, line, 0.0
+        };
 
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
-    glDrawArrays(GL_LINES, 0, 2);
-    glDisableClientState(GL_VERTEX_ARRAY);
+        glLineWidth(lineWidth);
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT, 0, vertices);
+        glDrawArrays(GL_LINES, 0, 2);
+        glDisableClientState(GL_VERTEX_ARRAY);
+
+        lineWidth += 1.0;
+    }
+
 }
 
 void Window::MainLoop() {
-
     while (!glfwWindowShouldClose(window)) {
         if (updateViewport) {
             glfwGetFramebufferSize(window, &viewPortSize[0], &viewPortSize[1]);

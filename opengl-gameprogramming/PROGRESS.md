@@ -23,3 +23,11 @@ Reading the Full Screen section from the chapter 2 I tried to reproduce it in GL
 In the end of the chapter 2 it have some questions and exercises to do. I've answer all the questions about the chapter and complete the exercise, which was change the triangle's color and the background color, the last one through the glClearColor. Finishing this I've done with chapter 2.
 
 ## Day Three
+
+Chapter 3
+
+So today I've started the chapter 3 and it already starts giving me some trouble. Following a example from the book, I find out that my y axis looks to be inverted or not working properly. The first evidence I have from this is my click output, it suppose to show me the cursor position to make the draw task easier, but instead of 100 for example it's showing up 500, which is the screen height less the 100 that it was suppose to be showed. 
+
+I am going to stop for today, I'm pretty tired, but for tomorrow I need to fix it, otherwise all the book examples will need to be even more reworked.
+
+## Day Four
