@@ -77,21 +77,34 @@ void Draw() {
 
     for (GLfloat line = 50.0; line < SCREEN_HEIGHT - 50; line += 50) {
 
-        GLfloat vertices[] = {
+        GLfloat vertices_column_left[] = {
             100.0, line, 0.0,
             300.0, line, 0.0
+        };
+
+        GLfloat vertices_column_right[] = {
+            500.0, line, 0.0,
+            700.0, line, 0.0
         };
 
         glLineWidth(lineWidth);
 
         glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, 0, vertices);
+        glVertexPointer(3, GL_FLOAT, 0, vertices_column_left);
         glDrawArrays(GL_LINES, 0, 2);
         glDisableClientState(GL_VERTEX_ARRAY);
 
+        glEnableClientState(GL_LINE_STIPPLE);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        short stipplePattern = 0x00FF;
+        glLineStipple(2, stipplePattern);
+        glVertexPointer(3, GL_FLOAT, 0, vertices_column_right);
+        glDrawArrays(GL_LINES, 0, 2);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_LINE_STIPPLE);
+
         lineWidth += 1.0;
     }
-
 }
 
 void Window::MainLoop() {
