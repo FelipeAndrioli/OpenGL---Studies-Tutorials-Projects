@@ -73,6 +73,22 @@ void Draw() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    //starting point 40, 40
+    glPointSize(4.0);
+
+    for (GLdouble y = 10; y < 50; y += 10) {
+        for (GLdouble x = 10; x < 50; x += 10) {
+            
+            GLdouble point_vertices[] = {
+                x * 5, y * 5, 0.0
+            };
+
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glVertexPointer(3, GL_DOUBLE, 0, point_vertices);
+            glDrawArrays(GL_POINTS, 0, 1);
+            glDisableClientState(GL_VERTEX_ARRAY);
+        }
+    }  
 }
 
 void Window::MainLoop() {
