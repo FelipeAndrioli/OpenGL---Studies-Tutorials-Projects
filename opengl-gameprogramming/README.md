@@ -20,3 +20,4 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
     - [ ] Shape
     - [ ] Color
 - [ ] Fix NVIDIA logo screwing in full screen
+- [ ] Finish grid draw application
