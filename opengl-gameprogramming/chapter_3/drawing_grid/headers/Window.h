@@ -94,7 +94,10 @@ void Draw() {
             glDisableClientState(GL_VERTEX_ARRAY);
 
             */
-           
+
+            /*
+            // Triangle grid
+
             GLdouble starting_triangle_position_x = (x * 5);
 
             GLdouble triangle_vertices[] = {
@@ -107,6 +110,33 @@ void Draw() {
             glVertexPointer(3, GL_DOUBLE, 0, triangle_vertices);
             glDrawArrays(GL_TRIANGLES, 0, 3);
             glDisableClientState(GL_VERTEX_ARRAY);
+
+            */
+            GLdouble starting_quad_position_x = x * 5;
+            GLdouble starting_quad_position_y = y * 5;
+
+            GLdouble quad_colors[] = {
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0
+            };
+
+            GLdouble quad_vertices[] = {
+                starting_quad_position_x, starting_quad_position_y, 0.0,
+                starting_quad_position_x + 50.0, starting_quad_position_y, 0.0,
+                starting_quad_position_x + 50.0, starting_quad_position_y + 50.0, 0.0,
+                starting_quad_position_x, starting_quad_position_y + 50.0, 0.0
+            };
+
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glEnableClientState(GL_COLOR_ARRAY);        
+            glVertexPointer(3, GL_DOUBLE, 0, quad_vertices);
+            glColorPointer(3, GL_DOUBLE, 0, quad_colors);
+            glDrawArrays(GL_QUADS, 0, 4);
+            glDisableClientState(GL_VERTEX_ARRAY);
+            glDisableClientState(GL_COLOR_ARRAY);
+
         }
     }  
 }
