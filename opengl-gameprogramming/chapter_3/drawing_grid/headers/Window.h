@@ -112,6 +112,11 @@ void Draw() {
             glDisableClientState(GL_VERTEX_ARRAY);
 
             */
+
+            /*
+
+            // Filled square grid
+
             GLdouble starting_quad_position_x = x * 5;
             GLdouble starting_quad_position_y = y * 5;
 
@@ -137,6 +142,35 @@ void Draw() {
             glDisableClientState(GL_VERTEX_ARRAY);
             glDisableClientState(GL_COLOR_ARRAY);
 
+            */
+
+           GLdouble starting_position_x = x * 5;
+           GLdouble starting_position_y = y * 5;
+
+            GLdouble triangle_strip_vertices[] = {
+                starting_position_x, starting_position_y, 0.0,
+                starting_position_x + 50.0, starting_position_y, 0.0, 
+                starting_position_x, starting_position_y + 50.0, 0.0,
+                starting_position_x + 50.0, starting_position_y + 50.0, 0.0
+            };
+
+            GLdouble triangle_strip_colors[] = {
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0
+            };
+
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glEnableClientState(GL_COLOR_ARRAY);
+            glVertexPointer(3, GL_DOUBLE, 0, triangle_strip_vertices);
+            glColorPointer(3, GL_DOUBLE, 0, triangle_strip_colors);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0 , 4);
+            glDisableClientState(GL_VERTEX_ARRAY);
+            glDisableClientState(GL_COLOR_ARRAY);
+
         }
     }  
 }
@@ -149,7 +183,6 @@ void Window::MainLoop() {
             updateViewport = false;
         }
         
-        //render here
         Draw();
 
         glfwSwapBuffers(window);
