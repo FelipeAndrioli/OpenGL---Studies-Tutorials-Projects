@@ -39,3 +39,17 @@ Well, today I started fixing the y axis that look to be inverted to me. Using th
 So once I've decided to not get stuck into boring questions, I decided to move up even not reproducing the stippled line example, it doesn't show any error but it also doesn't stipple the line.
 
 By the end of the day I was able to reach the end of the chapter, however we've found an very interesting example wich hold me and due to this I wasn't able to finish the chapter. The example is an application with 6 grids on it, each one with its own primitive. So with the rest of the day I'll start it and finish it tomorrow by morning.
+
+## Day Five
+
+Chapter 3
+
+Today I've started to reproduce the drid draws example from the chapter, for practice and for a better understanding of grid system, draw system and the coordinate system from OpenGL. 
+
+The first grid draw was fine, the points grid, but the second one is out of position when I've tried to put it aside the first grid draw. So I've decided to draw all the grid examples in the same position, commenting the past draws to move forward faster but have to face another problem.
+
+Some grids should not be filled, like the square grid or the triangle strip grid, once their are filled it's just transform into a giant square. It should be just some configuration, but it'll require some documentation research.
+
+So from today I've finished with two main issues, the position of the grids except the first one and how to not fill some primitives.
+
+I am acumulating all this issues to take at least one day in the week just to solve them, probably friday to saturday, otherwise I am going to stay stucked for too long and will not progride in the book.
