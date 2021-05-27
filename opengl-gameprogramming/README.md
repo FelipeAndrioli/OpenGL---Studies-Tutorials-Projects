@@ -21,3 +21,5 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
     - [ ] Color
 - [ ] Fix NVIDIA logo screwing in full screen
 - [ ] Finish grid draw application
+    - [ ] Find out how to draw all the grids at the same time, x axis issue
+    - [ ] Fix square grid, it's filling when it should not
