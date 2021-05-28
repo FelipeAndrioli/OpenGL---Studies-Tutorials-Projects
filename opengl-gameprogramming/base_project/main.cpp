@@ -19,8 +19,7 @@ int main(int argc, char** argv) {
     }
 
     Window window;
-    window.Init(SCREEN_WIDTH, SCREEN_HEIGHT, true);
-    //window.SetFullScreen(true);
+    window.Init(SCREEN_WIDTH, SCREEN_HEIGHT, false);
 
     return 0;
 }

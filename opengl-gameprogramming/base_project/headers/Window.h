@@ -12,6 +12,7 @@
 class Window {
     private:
         GLFWwindow* window = NULL;
+        GLFWmonitor* monitor = NULL;
 
     public:
         void Init(int width, int height, bool full_window);
@@ -20,7 +21,11 @@ class Window {
 
 void Window::Init(int width, int height, bool full_window) {
 
-    window = glfwCreateWindow(width, height, "main.exe", glfwGetPrimaryMonitor(), NULL);
+    if (full_window) {
+        monitor = glfwGetPrimaryMonitor();
+    }
+
+    window = glfwCreateWindow(width, height, "main.exe", monitor, NULL);
 
     initKeyboard(window);
     initMouse(window);
