@@ -19,7 +19,7 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [X] Split README.md
     - [X] README.md to code related stuff
     - [X] PROGRESS.md to my daily report and progress stuff
-- [ ] Create method to make draw easier
+- [X] Create method to make draw easier
 - [X] Describe a way better the opengl-gameprogramming directory in README.md
 - [X] Search why the mouse click output is inverse from the draw values in y axe
 - [X] Finish loop of lines with different width
@@ -35,3 +35,4 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [ ] Fix on your own example, find out how to draw only the edges of the circle
     - [ ] Add function to change between circles with mouse/keyboard input (only if have time)
 - [ ] Add string parameter on window creation to alter the window name
+- [ ] Remove unused dependencies from header files
