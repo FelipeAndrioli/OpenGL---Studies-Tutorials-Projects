@@ -20,7 +20,6 @@ int main(int argc, char** argv) {
     Window window;
     window.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
     //window.SetFullScreen(true);
-    window.MainLoop();
 
     return 0;
 }

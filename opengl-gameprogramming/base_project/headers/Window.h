@@ -7,9 +7,10 @@
 
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Draw.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+//#define SCREEN_WIDTH 800
+//#define SCREEN_HEIGHT 600
 
 class Window {
     private:
@@ -26,7 +27,7 @@ class Window {
 
         void Init(int width, int height);
         static void CallbackResize(GLFWwindow* window, int cx, int cy);
-        void MainLoop();
+        void MainLoop(int width, int height);
         bool IsFullScreen();
         void SetFullScreen(bool fullscreen);
 };
@@ -52,6 +53,8 @@ void Window::Init(int width, int height) {
     glfwGetWindowPos(window, &windowPosition[0], &windowPosition[1]);
 
     updateViewport = true;
+
+    Window::MainLoop(width, height);
 }
 
 void Window::CallbackResize(GLFWwindow* window, int cx, int cy) {
@@ -66,16 +69,7 @@ void Window::Resize(int cx, int cy) {
     updateViewport = true;
 }
 
-void Draw() {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-}
-
-void Window::MainLoop() {
+void Window::MainLoop(int width, int height) {
     while (!glfwWindowShouldClose(window)) {
         if (updateViewport) {
             glfwGetFramebufferSize(window, &viewPortSize[0], &viewPortSize[1]);
@@ -84,7 +78,7 @@ void Window::MainLoop() {
         }
         
         //render here
-        Draw();
+        Draw(width, height);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
