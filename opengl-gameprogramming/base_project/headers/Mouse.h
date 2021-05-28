@@ -39,23 +39,24 @@ void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
     std::cout << xoffset << " : " << yoffset << std::endl;
 }
 
+GLFWcursor* createDefaultCursor() {
+    return glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+}
 
-GLFWcursor* createCursor(bool standard_cursor) {
+GLFWcursor* createPersonCursor(bool standard_cursor) {
 
-    GLFWcursor* cursor = NULL;
+    /*
+        Create a personalized cursor, might be useful sometime
+    */
 
-    if (standard_cursor) {
-        cursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
-    } else {
-        unsigned char pixels[16 * 16 * 4];
-        memset(pixels, GLFW_ARROW_CURSOR, sizeof(pixels));
+    unsigned char pixels[16 * 16 * 4];
+    memset(pixels, GLFW_ARROW_CURSOR, sizeof(pixels));
 
-        GLFWimage image;
-        image.width = 16;
-        image.height = 16;
-        image.pixels = pixels;
-        cursor = glfwCreateCursor(&image, 0, 0);
-    }
+    GLFWimage image;
+    image.width = 16;
+    image.height = 16;
+    image.pixels = pixels;
+    GLFWcursor* cursor = glfwCreateCursor(&image, 0, 0);
 
     return cursor;
 }
@@ -68,6 +69,6 @@ void initMouse(GLFWwindow* window) {
     glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
     glfwSetScrollCallback(window, scrollCallback);
 
-    GLFWcursor* cursor = createCursor(true);
+    GLFWcursor* cursor = createDefaultCursor();
     glfwSetCursor(window, cursor);
 }
