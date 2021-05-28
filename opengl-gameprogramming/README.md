@@ -24,9 +24,9 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [X] Search why the mouse click output is inverse from the draw values in y axe
 - [X] Finish loop of lines with different width
 - [X] Fix inverted y axis
-- [ ] Create a better looking cursor
-    - [ ] Shape
-    - [ ] Color
+- [X] Create a better looking cursor
+    - [X] Shape
+    - [X] Color
 - [ ] Fix NVIDIA logo screwing in full screen
 - [ ] Finish grid draw application
     - [ ] Find out how to draw all the grids at the same time, x axis issue
@@ -36,3 +36,4 @@ The book had too many good examples, to demonstrate the funtionalities from Open
     - [ ] Add function to change between circles with mouse/keyboard input (only if have time)
 - [ ] Add string parameter on window creation to alter the window name
 - [ ] Remove unused dependencies from header files
+- [ ] Should I transform the functions of all headers into class methods?
