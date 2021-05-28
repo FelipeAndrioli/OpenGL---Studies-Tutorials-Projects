@@ -63,3 +63,11 @@ Well, today I've decided to move forward from the examples to do some progress i
 By the end of the day I've finished the On Your Own section of the chapter, but I'm feeling itsn't right. I mean, to draw the edge circles I've used the OpenGL primitive GL_LINE_STRIP, and to draw the filled circle I've used the OpenGL primitive GL_TRIANGLE_FAN. I'd like to find out a way to draw only the edges of the GL_TRIANGLE_STRIP, it's on TODO's list.
 
 Tomorrow it's gonna be the day to fix some of the TODO's issues.
+
+## Day Seven
+
+Fixing Issues
+
+The first issue I fixed was the draw function, it was inside the window header, so I've decided to create a new header, exclusive to draw.
+
+The second issue was the cursor, once the cursor I was using were a square and it was not that intuitive about where I was clicking at, so I've added the default windows cursor.
