@@ -38,3 +38,4 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [ ] Remove unused dependencies from header files
 - [ ] Should I transform the functions of all headers into class methods?
 - [ ] Add escape key to altern between full screen and window
+- [ ] Finish full screen configurations

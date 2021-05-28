@@ -71,3 +71,5 @@ Fixing Issues
 The first issue I fixed was the draw function, it was inside the window header, so I've decided to create a new header, exclusive to draw.
 
 The second issue was the cursor, once the cursor I was using were a square and it was not that intuitive about where I was clicking at, so I've added the default windows cursor. After I did this, I decided to split the function that was creating the cursor, one to create a default cursor and the other to create a standard cursor.
+
+The third issue I fixed was the nvidia logo stucking into full screen. I had to reformulate the entire Window class to make it more simple and functional, but is not ready yet, I need to read the GLFW Window properties and events documentation and finish it later in another issue.
