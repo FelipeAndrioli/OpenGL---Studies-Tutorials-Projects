@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <array>
+#include <math.h>
 
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -66,13 +67,47 @@ void Window::Resize(int cx, int cy) {
     updateViewport = true;
 }
 
-void Draw() {
+void DrawCircle(float radius, int numberOfSides, bool edgeOnly) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, 0, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    GLdouble middle_width = SCREEN_WIDTH / 2;
+    GLdouble middle_height = SCREEN_HEIGHT / 2;
+    GLint circle_edges = numberOfSides + 1;
+
+    GLdouble circleVerticesX[circle_edges];
+    GLdouble circleVerticesY[circle_edges];
+    GLdouble circleVerticesZ[circle_edges];
+
+    GLdouble circle_vertices[circle_edges * 3];
+
+    for (int i = 0; i < circle_edges; i++) {
+        circleVerticesX[i] = middle_width + radius * cos(M_PI * i / 180.0);
+        circleVerticesY[i] = middle_height + radius * sin(M_PI * i / 180.0);
+        circleVerticesZ[i] = 0.0;
+    }
+
+    for (int i = 0; i < circle_edges; i++) {
+        circle_vertices[i * 3] = circleVerticesX[i];
+        circle_vertices[i * 3 + 1] = circleVerticesY[i];
+        circle_vertices[i * 3 + 2] = circleVerticesZ[i];
+    }
+
+    if (edgeOnly) {
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_DOUBLE, 0, circle_vertices);
+        glDrawArrays(GL_LINE_STRIP, 0, circle_edges);
+        glDisableClientState(GL_VERTEX_ARRAY);
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_DOUBLE, 0, circle_vertices);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, circle_edges);
+        glDisableClientState(GL_VERTEX_ARRAY);    
+    }
 }
 
 void Window::MainLoop() {
@@ -84,7 +119,7 @@ void Window::MainLoop() {
         }
         
         //render here
-        Draw();
+        DrawCircle(200.0, 361, false);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
