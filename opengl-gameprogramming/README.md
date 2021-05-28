@@ -25,3 +25,4 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
     - [ ] Fix square grid, it's filling when it should not
     - [ ] Fix triangle strip grid, it's filling when it should not
 - [ ] Fix on your own example, find out how to draw only the edges of the circle
+    - [ ] Add function to change between circles with mouse/keyboard input (only if have time)
