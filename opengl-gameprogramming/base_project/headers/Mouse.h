@@ -40,14 +40,22 @@ void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
 }
 
 
-GLFWcursor* createCursor() {
-    unsigned char pixels[16 * 16 * 4];
-    memset(pixels, 0xff, sizeof(pixels));
-    GLFWimage image;
-    image.width = 16;
-    image.height = 16;
-    image.pixels = pixels;
-    GLFWcursor *cursor = glfwCreateCursor(&image, 0, 0);
+GLFWcursor* createCursor(bool standard_cursor) {
+
+    GLFWcursor* cursor = NULL;
+
+    if (standard_cursor) {
+        cursor = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+    } else {
+        unsigned char pixels[16 * 16 * 4];
+        memset(pixels, GLFW_ARROW_CURSOR, sizeof(pixels));
+
+        GLFWimage image;
+        image.width = 16;
+        image.height = 16;
+        image.pixels = pixels;
+        cursor = glfwCreateCursor(&image, 0, 0);
+    }
 
     return cursor;
 }
@@ -60,6 +68,6 @@ void initMouse(GLFWwindow* window) {
     glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
     glfwSetScrollCallback(window, scrollCallback);
 
-    GLFWcursor* cursor = createCursor();
+    GLFWcursor* cursor = createCursor(true);
     glfwSetCursor(window, cursor);
 }
