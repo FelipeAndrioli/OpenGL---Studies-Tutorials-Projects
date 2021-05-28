@@ -24,3 +24,4 @@ This directory is from my studies from the book Beginning OpenGL Game Programmin
     - [ ] Find out how to draw all the grids at the same time, x axis issue
     - [ ] Fix square grid, it's filling when it should not
     - [ ] Fix triangle strip grid, it's filling when it should not
+- [ ] Fix on your own example, find out how to draw only the edges of the circle

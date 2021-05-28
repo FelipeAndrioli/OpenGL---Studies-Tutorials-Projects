@@ -60,58 +60,6 @@ Chapter 3
 
 Well, today I've decided to move forward from the examples to do some progress in chapter 3, I'm going to answer the final questions and do the final chapter exercise.
 
-What You Have Learned - Chapter 3
+By the end of the day I've finished the On Your Own section of the chapter, but I'm feeling itsn't right. I mean, to draw the edge circles I've used the OpenGL primitive GL_LINE_STRIP, and to draw the filled circle I've used the OpenGL primitive GL_TRIANGLE_FAN. I'd like to find out a way to draw only the edges of the GL_TRIANGLE_STRIP, it's on TODO's list.
 
-- You can query current settings from the OpenGL state machine by usint the glGet() and glIsEnabled() frunctions.
-
-- Primitives are drawn by firts specifying the primitive type with the glBegin() function, then sending the vertices and following up with the glEnd() function.
-
-- The glVertex() function specifies a vertex in a glBegin()/glEnd() block and is available in several variations that allow you to define the number of coordinates, the coordinates' data type, and whether the coordinates are being passed individually or as an array.
-
-- You can draw points by passing GL_POINTS as the parameter to glBegin(), modify point size by using the glPointSize() function, turn point antialiasing on by passing GL_POINT_SMOOTH to glEnable(), and control the effect of distance on points with glPointParameter().
-
-- Lines are drawn by passing GL_LINES as the parameter to glBegin(). You can modify line width with the glLineWidth() function, and line antialising is turned on by sending GL_LINE_SMOOTH to glEnable(). Line stippling is accomplished through the use of the glLineStipple() function.
-
-- You can change the way OpenGL draw polygons by using the glPolygonMode() function. Passing GL_POINT forces OpenGL to draw only the vertices of polygons; GL_LINE forces OpenGL to draw the edges between polygon vertices as lines; GL_FILL is the default behaviour, which renders polygons with the interior filled and allows polygon smoothing and stippling.
-
-- Passing GL_CULL_FACE to glEnable() tells OpenGL to enable its face culling mechanism. Using the glCullFace() function then allows you to specify which polygon side OpenGL should cull.
-
-- By default, OpenGL treats vertices that are ordered counterclockwise in a polygon as the front face of the polygon, while the clockwise vertices are the back face. The glFrontFace() function allows you to modify this setting.
-
-- Triangles are the most important polygon in 3D graphics as any polygon can be broken down into a set of triangles. You draw a triangle in OpenGL by passing GL_TRIANGLES to glBegin().
-
-- You can draw a set of triangles more efficiently by passing GL_TRIANGLE_STRIP or GL_TRIANGLE_FAN to glBegin(). GL_TRIANGLE_STRIP draws a triangle strip, which creates a strip of triangles by combining vertices into sets of triplets. GL_TRIANGLE_FAN starts with the first vertex as the center vertex and draws the rest as a fan of vertices around the center.
-
-- Quadrilaterals may also be drawn by passing GL_QUADS or QL_QUAD_TRIP to glBegin().
-
-- n-sided convex polygons may be drawn by passing GL_POLYGON to glBegin().
-
-- You can save and restore OpenGL state variables using the glPushAtrtrib() and glPopAttrib() functions.
-
-### Review Questions
-
-    1. How would you determine if OpenGL is drawing antialiased lines?
-        A: Sending GL_LINE_SMOOTH to glEnable().
-    2. How is culling enabled?
-        A: Sending GL_CULL_FACE to glEnable().
-    3. In what order does OpenGL draw vertices for a GL_TRIANGLE_STRIP?
-        A: The front face of the polygon the order is counterclockwise, and the back face is clockwise.
-    4. In what order does OpenGL draw vertices for a GL_TRIANGLE_FAN?
-        A: The front face of the polygon the order is counterclockwise, and the back face is clockwise.
-    5. What do the following variations of glVertex() mean?
-        a. glVertex3f()
-            A: Receives 3 coordinates values (x, y, z) as floats.
-        b. glVertex2iv()
-            A: Specifies a pointer to an array of two, three or four int elements.
-        c. glVertex4d()
-            A: Specifies x, y, z and w coordinates of a vertex, receiving double values.
-        d. glVertex3fv()
-            A: Specifies a pointer to an array of two, three or four float elements.
-        e. glVertex2s()
-            A: Specifies two short points, x and y.
-
-### On Your Own
-
-    1. You have been tasked to write a function that draws a 2D circle approximation with the option of drawing only the edge of the circle or drawing the circle filled at the world origin (0, 0, 0). Your function must accept the radius of the circle and a value for the number of edges in the circle approximation. Write a function to draw the circle approximation given the following prototype:
-
-        void DrawCircleApproximation(float radius, int numberOfSides, bool edgeOnly);
+Tomorrow it's gonna be the day to fix some of the TODO's issues.
