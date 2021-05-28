@@ -5,6 +5,7 @@
 #include <cstring>
 #include <vector>
 
+//#include "headers/Window.h"
 #include "headers/Window.h"
 
 #define SCREEN_WIDTH 800
@@ -18,7 +19,7 @@ int main(int argc, char** argv) {
     }
 
     Window window;
-    window.Init(SCREEN_WIDTH, SCREEN_HEIGHT);
+    window.Init(SCREEN_WIDTH, SCREEN_HEIGHT, true);
     //window.SetFullScreen(true);
 
     return 0;
