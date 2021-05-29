@@ -30,8 +30,8 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [X] Fix NVIDIA logo screwing in full screen
 - [ ] Finish grid draw application
     - [ ] Find out how to draw all the grids at the same time, x axis issue
-    - [ ] Fix square grid, it's filling when it should not
-    - [ ] Fix triangle strip grid, it's filling when it should not
+    - [X] Fix square grid, it's filling when it should not
+    - [X] Fix triangle strip grid, it's filling when it should not
 - [ ] Fix on your own example, find out how to draw only the edges of the circle
     - [ ] Add function to change between circles with mouse/keyboard input (only if have time)
 - [ ] Add string parameter on window creation to alter the window name
