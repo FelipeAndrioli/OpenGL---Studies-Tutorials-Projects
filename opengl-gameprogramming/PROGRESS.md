@@ -77,3 +77,9 @@ The third issue I fixed was the nvidia logo stucking into full screen. I had to 
 I've fixed the issue of the primitives filling when it should not, just setting the function glPolygonMode with the parameters GL_FRONT_AND_BACK and GL_LINE. After that I tried to find out a simple solution of the x axis grid, where I was trying to draw all the grids at once, but it have some many different ways to do it and instead get testing all of the solutions I decided to move forward with it.
 
 I add my past solution to my drawing circle example and realize that it's just easier draw a circle edge using only lines due to the high amount of edges that we create drawing it with triangles.
+
+The string issue was pretty easy, just have to add the parameter inside Window class.
+
+Comentaries about removing unused includes are expendables.
+
+Tomorrow I'm going to transform all the header functions into class methods and move forward with full screen configurations.
