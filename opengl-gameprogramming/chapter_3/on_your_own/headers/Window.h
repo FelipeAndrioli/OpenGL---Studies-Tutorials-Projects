@@ -119,7 +119,7 @@ void Window::MainLoop() {
         }
         
         //render here
-        DrawCircle(200.0, 361, false);
+        DrawCircle(200.0, 361, true);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
