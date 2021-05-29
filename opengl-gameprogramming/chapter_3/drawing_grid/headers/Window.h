@@ -79,8 +79,8 @@ void Draw() {
     for (GLdouble y = 10; y < 50; y += 10) {
         for (GLdouble x = 10; x < 50; x += 10) {
             
-            /*
-            // Point grid
+            //Point grid
+
             GLdouble point_position_x = x * 5;
             GLdouble point_position_y = y * 5;
 
@@ -93,12 +93,9 @@ void Draw() {
             glDrawArrays(GL_POINTS, 0, 1);
             glDisableClientState(GL_VERTEX_ARRAY);
 
-            */
-
-            /*
             // Triangle grid
 
-            GLdouble starting_triangle_position_x = (x * 5);
+            GLdouble starting_triangle_position_x = (x * 25) ;
 
             GLdouble triangle_vertices[] = {
                 starting_triangle_position_x, y * 5, 0.0,
@@ -111,12 +108,7 @@ void Draw() {
             glDrawArrays(GL_TRIANGLES, 0, 3);
             glDisableClientState(GL_VERTEX_ARRAY);
 
-            */
-
-            
-
-            // Filled square grid
-
+            /*
             GLdouble starting_quad_position_x = x * 5;
             GLdouble starting_quad_position_y = y * 5;
 
@@ -143,7 +135,7 @@ void Draw() {
             glDisableClientState(GL_VERTEX_ARRAY);
             glDisableClientState(GL_COLOR_ARRAY);
 
-            
+            */
 
            /*
 
