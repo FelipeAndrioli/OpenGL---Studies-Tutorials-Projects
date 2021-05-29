@@ -15,17 +15,17 @@ class Window {
         GLFWmonitor* monitor = NULL;
 
     public:
-        void Init(int width, int height, bool full_window);
+        void Init(const char* title, int width, int height, bool full_window);
         void MainLoop(int width, int height);
 };
 
-void Window::Init(int width, int height, bool full_window) {
+void Window::Init(const char* title, int width, int height, bool full_window) {
 
     if (full_window) {
         monitor = glfwGetPrimaryMonitor();
     }
 
-    window = glfwCreateWindow(width, height, "main.exe", monitor, NULL);
+    window = glfwCreateWindow(width, height, title, monitor, NULL);
 
     initKeyboard(window);
     initMouse(window);
