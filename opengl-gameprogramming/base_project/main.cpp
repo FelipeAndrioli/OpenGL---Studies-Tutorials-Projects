@@ -1,11 +1,3 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
-#include <cstdlib>
-#include <cstring>
-#include <vector>
-
-//#include "headers/Window.h"
 #include "headers/Window.h"
 
 #define SCREEN_WIDTH 800

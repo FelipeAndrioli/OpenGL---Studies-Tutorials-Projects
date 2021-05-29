@@ -1,9 +1,5 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
-#include <cstdlib>
-#include <cstring>
-#include <array>
 
 /*
     According to my progress, I'm going to turn this file with only one function

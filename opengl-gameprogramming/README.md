@@ -34,7 +34,7 @@ The book had too many good examples, to demonstrate the funtionalities from Open
     - [X] Fix triangle strip grid, it's filling when it should not
 - [X] Fix on your own example, find out how to draw only the edges of the circle
 - [X] Add string parameter on window creation to alter the window name
-- [ ] Remove unused dependencies from header files
+- [X] Remove unused dependencies from header files
 - [ ] Should I transform the functions of all headers into class methods?
 - [ ] Add escape key to altern between full screen and window
 - [ ] Finish full screen configurations

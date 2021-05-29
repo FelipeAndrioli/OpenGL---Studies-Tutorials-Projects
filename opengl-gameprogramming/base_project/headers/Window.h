@@ -1,9 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <cstdlib>
 #include <cstring>
-#include <array>
 
 #include "Keyboard.h"
 #include "Mouse.h"

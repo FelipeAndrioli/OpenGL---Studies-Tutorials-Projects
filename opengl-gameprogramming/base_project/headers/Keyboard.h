@@ -1,9 +1,4 @@
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
-#include <cstdlib>
-#include <cstring>
-#include <array>
 
 void keyCallback (GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {

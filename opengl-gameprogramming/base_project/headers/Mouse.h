@@ -1,9 +1,4 @@
-#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
-#include <cstdlib>
-#include <cstring>
-#include <array>
 
 static void cursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
     std::cout << xpos << " : " << ypos << std::endl;
