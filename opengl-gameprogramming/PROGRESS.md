@@ -83,3 +83,15 @@ The string issue was pretty easy, just have to add the parameter inside Window c
 Comentaries about removing unused includes are expendables.
 
 Tomorrow I'm going to transform all the header functions into class methods and move forward with full screen configurations.
+
+## Day Eight
+
+Chapter 4
+
+Some definitions to be fixed:
+
+    - Viewing Transformation: In 3D graphics, specifies the location of the camera (not a true OpenGL transformation)
+    - Modeling Transformation: In 3D graphics, handles moving objects around the scene (not a true OpenGL transformation)
+    - Projection Transformation: Defines the viewing volume and clipping planes
+    - Viewport Transformation: Maps the projection of the scene into the rendering window
+    - Modelview Transformation: Combination of the viewing and modeling transformations
