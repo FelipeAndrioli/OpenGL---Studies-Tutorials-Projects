@@ -95,3 +95,13 @@ Some definitions to be fixed:
     - Projection Transformation: Defines the viewing volume and clipping planes
     - Viewport Transformation: Maps the projection of the scene into the rendering window
     - Modelview Transformation: Combination of the viewing and modeling transformations
+
+Today I've started the chapter 4, which is gonna focus the transformations in OpenGL. It's probably gonna be a very extensive and hard chapter, I'm expecting to maybe finish it in next week.
+
+## Day Nine
+
+Chapter 4
+
+Today I just read more about transformations, altought not having time to reproduce any example.
+
+
