@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
     }
 
     Window window;
-    window.Init("Main.exe", SCREEN_WIDTH, SCREEN_HEIGHT, false);
+    window.Init("Translation.exe", SCREEN_WIDTH, SCREEN_HEIGHT, false);
 
     return 0;
 }
