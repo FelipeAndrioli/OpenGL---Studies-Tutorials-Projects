@@ -6,6 +6,8 @@
     into a class with more complex and complete functions
 */
 
+GLfloat angle = 0.0f;
+
 void Draw(GLint screen_width, GLint screen_height) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -20,9 +22,22 @@ void Draw(GLint screen_width, GLint screen_height) {
         510.0, 130.0, 0.0
     };
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glRotatef(angle, 0.0f, 1.0f, 0.0f);
+    glPushMatrix();
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, polygonVertices);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDrawArrays(GL_QUADS, 0, 4);
     glDisableClientState(GL_VERTEX_ARRAY);
+    glPopMatrix();
+
+    std::cout << angle << std::endl;
+
+    if (angle == 360.0) {
+        angle = angle - 360.0;
+    } else {
+        angle += 1.0;
+    }
 }
