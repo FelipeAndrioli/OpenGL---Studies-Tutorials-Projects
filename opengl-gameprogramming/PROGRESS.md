@@ -104,4 +104,10 @@ Chapter 4
 
 Today I just read more about transformations, altought not having time to reproduce any example.
 
+## Day Ten
 
+Chapter 4
+
+I'm finally finishing all the transformation examples, the rotation gives me a little bit more work, but was just a question to think a little bit different and all the things works.
+
+Tomorrow I am going to fix the most TODO's that I can, hope to finish them all like past week.

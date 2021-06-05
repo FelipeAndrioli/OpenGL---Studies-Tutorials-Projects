@@ -35,6 +35,8 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [X] Fix on your own example, find out how to draw only the edges of the circle
 - [X] Add string parameter on window creation to alter the window name
 - [X] Remove unused dependencies from header files
+- [x] Finish drawing cube
+    - [X] Fix cube
 - [ ] Transform header functions into class methods
     - [ ] Draw.h
     - [ ] Keyboard.h
@@ -43,4 +45,3 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [ ] Add escape key to close the window without mouse
 - [ ] Finish full screen configurations
 - [ ] Review mouse position feature
-- [ ] Finish drawing cube
