@@ -9,21 +9,89 @@
 void Draw(GLint screen_width, GLint screen_height) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, screen_width, 0, screen_height, 0, 1);
+    glOrtho(-screen_width / 2, screen_width / 2, -screen_height / 2, screen_height / 2, -50.0, 50.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    GLfloat polygonVertices[] = {
-        320, 240, 0,
-        370, 290, 0,
-        420, 240, 0,
-        370, 190, 0
+    GLfloat cube_vertices[] =  {
+	//face
+	30.0, 30.0, 30.0,	//top right
+	30.0, -30.0, 30.0,	//bottom right
+	-30.0, -30.0, 30.0,	//bottom left
+	-30.0, 30.0, 30.0,	//top left
+
+	//top
+	30.0, 30.0, 30.0,	//front right
+	30.0, 30.0, -30.0,	//back right
+	-30.0, 30.0, -30.0,	//back left
+	-30.0, 30.0, 30.0,	//front left
+
+	//bottom
+	30.0, -30.0, 30.0,	//front right
+	30.0, -30.0, -30.0,	//back right
+	-30.0, -30.0, -30.0,	//back left
+	-30.0, -30.0, 30.0,	//front left
+
+	//left
+	-30.0, 30.0, 30.0,	//front top
+	-30.0, 30.0, -30.0,	//back top
+	-30.0, -30.0, -30.0,	//back bottom
+	-30.0, -30.0, 30.0,	//front bottom
+
+	//right
+	30.0, 30.0, 30.0,	//front top
+	30.0, 30.0, -30.0,	//back top
+	30.0, -30.0, 30.0,	//front bottom
+	30.0, -30.0, -30.0,	//back bottom
+
+	//back
+	30.0, 30.0, -30.0,	//back top right
+	30.0, -30.0, -30.0,	//back bottom right
+	-30.0, -30.0, -30.0, 	//back bottom left
+	-30.0, 30.0, -30.0	//back top left
     };
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    GLfloat cube_colors[] = {
+	1.0, 0.0, 0.0,
+	1.0, 0.0, 0.0,
+	1.0, 0.0, 0.0,
+	1.0, 0.0, 0.0,
 
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+
+	0.0, 0.0, 1.0, 
+	0.0, 0.0, 1.0,
+	0.0, 0.0, 1.0,
+	0.0, 0.0, 1.0,
+
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+
+	1.0, 0.0, 0.0,
+	1.0, 0.0, 0.0,
+	1.0, 0.0, 0.0,
+	1.0, 0.0, 0.0,
+
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0,
+	0.0, 1.0, 0.0
+    };
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glPushMatrix();
     glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, polygonVertices);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, cube_vertices);
+    glColorPointer(3, GL_FLOAT, 0, cube_colors);
+    glDrawArrays(GL_QUADS, 0, 24);
     glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glPopMatrix();
 }
