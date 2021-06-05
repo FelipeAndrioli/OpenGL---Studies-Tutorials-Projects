@@ -42,3 +42,5 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [ ] Add escape key to altern between full screen and window
 - [ ] Add escape key to close the window without mouse
 - [ ] Finish full screen configurations
+- [ ] Review mouse position feature
+- [ ] Finish drawing cube
