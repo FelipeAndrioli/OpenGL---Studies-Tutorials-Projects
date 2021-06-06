@@ -25,7 +25,8 @@ void Window::Init(const char* title, int width, int height, bool full_window) {
 
     window = glfwCreateWindow(width, height, title, monitor, NULL);
 
-    initKeyboard(window);
+    Keyboard keyboard;
+    keyboard.initKeyboard(window);
     initMouse(window);
 
     if (window == NULL) {

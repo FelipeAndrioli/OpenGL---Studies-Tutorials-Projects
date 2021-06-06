@@ -1,5 +1,11 @@
 #include <GLFW/glfw3.h>
 
+class Keyboard {
+    private:
+    public:
+        void initKeyboard(GLFWwindow *window);
+};
+
 void keyCallback (GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
         switch (key) {
@@ -19,7 +25,7 @@ void keyCallback (GLFWwindow *window, int key, int scancode, int action, int mod
     }
 }
 
-void initKeyboard(GLFWwindow* window) {
+void Keyboard::initKeyboard(GLFWwindow *window) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 }
