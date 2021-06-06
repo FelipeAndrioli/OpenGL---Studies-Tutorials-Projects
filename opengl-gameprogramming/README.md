@@ -45,3 +45,4 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [ ] Add escape key to close the window without mouse
 - [ ] Finish full screen configurations
 - [ ] Review mouse position feature
+	- [ ] Update function can fix it
