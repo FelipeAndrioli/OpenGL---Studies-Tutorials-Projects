@@ -1,5 +1,14 @@
 #include <GLFW/glfw3.h>
 
+class Mouse {
+    private:
+        GLFWcursor* cursor = NULL;
+    public:
+        GLFWcursor* createDefaultCursor();
+        GLFWcursor* createPersonCursor();
+        void initMouse(GLFWwindow* window);
+};
+
 static void cursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
     std::cout << xpos << " : " << ypos << std::endl;
 }
@@ -34,12 +43,11 @@ void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
     std::cout << xoffset << " : " << yoffset << std::endl;
 }
 
-GLFWcursor* createDefaultCursor() {
+GLFWcursor* Mouse::createDefaultCursor() {
     return glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
 }
 
-GLFWcursor* createPersonCursor(bool standard_cursor) {
-
+GLFWcursor* Mouse::createPersonCursor() {
     /*
         Create a personalized cursor, might be useful sometime
     */
@@ -51,12 +59,12 @@ GLFWcursor* createPersonCursor(bool standard_cursor) {
     image.width = 16;
     image.height = 16;
     image.pixels = pixels;
-    GLFWcursor* cursor = glfwCreateCursor(&image, 0, 0);
+    cursor = glfwCreateCursor(&image, 0, 0);
 
     return cursor;
 }
 
-void initMouse(GLFWwindow* window) {
+void Mouse::initMouse(GLFWwindow* window) {
     //glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetCursorEnterCallback(window, cursorEnterCallback);
@@ -64,6 +72,6 @@ void initMouse(GLFWwindow* window) {
     glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
     glfwSetScrollCallback(window, scrollCallback);
 
-    GLFWcursor* cursor = createDefaultCursor();
+    cursor = Mouse::createDefaultCursor();
     glfwSetCursor(window, cursor);
 }
