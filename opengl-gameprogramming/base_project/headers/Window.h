@@ -43,8 +43,11 @@ void Window::Init(const char* title, int width, int height, bool full_window) {
 }
 
 void Window::MainLoop(int width, int height) {
+
+    Draw draw;
+
     while(!glfwWindowShouldClose(window)) {
-        Draw(width, height);
+        draw.render(width, height);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
