@@ -15,13 +15,14 @@ class Window {
     public:
         void init(const char* title, int width, int height, bool full_window);
         void mainLoop(int width, int height);
+        void closeWindow(GLFWwindow* window);
 };
 
 void Window::init(const char* title, int width, int height, bool full_window) {
 
     if (full_window) {
         monitor = glfwGetPrimaryMonitor();
-    }
+    } 
 
     window = glfwCreateWindow(width, height, title, monitor, NULL);
 

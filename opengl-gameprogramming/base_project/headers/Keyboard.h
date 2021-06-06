@@ -25,6 +25,8 @@ void keyCallback (GLFWwindow *window, int key, int scancode, int action, int mod
                 std::cout << "Enter pressed" << std::endl;
             case GLFW_KEY_ESCAPE:
                 std::cout << "Escape pressed" << std::endl;
+                std::cout << "Closing window" << std::endl;
+                glfwSetWindowShouldClose(window, 1);
         }
     }
 }
