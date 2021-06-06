@@ -37,10 +37,10 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [X] Remove unused dependencies from header files
 - [x] Finish drawing cube
     - [X] Fix cube
-- [ ] Transform header functions into class methods
-    - [ ] Draw.h
-    - [ ] Keyboard.h
-    - [ ] Mouse.h
+- [X] Transform header functions into class methods
+    - [X] Draw.h
+    - [X] Keyboard.h
+    - [X] Mouse.h
 - [ ] Add escape key to altern between full screen and window
 - [ ] Add escape key to close the window without mouse
 - [ ] Finish full screen configurations
