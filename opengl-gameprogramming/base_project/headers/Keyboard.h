@@ -21,6 +21,10 @@ void keyCallback (GLFWwindow *window, int key, int scancode, int action, int mod
             case GLFW_KEY_RIGHT:
                 std::cout << "Right arrow pressed" << std::endl;
                 break;
+            case GLFW_KEY_ENTER:
+                std::cout << "Enter pressed" << std::endl;
+            case GLFW_KEY_ESCAPE:
+                std::cout << "Escape pressed" << std::endl;
         }
     }
 }

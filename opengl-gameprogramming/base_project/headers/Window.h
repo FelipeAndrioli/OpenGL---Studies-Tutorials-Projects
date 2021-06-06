@@ -13,11 +13,11 @@ class Window {
         GLFWmonitor* monitor = NULL;
 
     public:
-        void Init(const char* title, int width, int height, bool full_window);
-        void MainLoop(int width, int height);
+        void init(const char* title, int width, int height, bool full_window);
+        void mainLoop(int width, int height);
 };
 
-void Window::Init(const char* title, int width, int height, bool full_window) {
+void Window::init(const char* title, int width, int height, bool full_window) {
 
     if (full_window) {
         monitor = glfwGetPrimaryMonitor();
@@ -39,11 +39,10 @@ void Window::Init(const char* title, int width, int height, bool full_window) {
     glfwMakeContextCurrent(window);
     glfwSetWindowUserPointer(window, NULL);
 
-    Window::MainLoop(width, height);
+    Window::mainLoop(width, height);
 }
 
-void Window::MainLoop(int width, int height) {
-
+void Window::mainLoop(int width, int height) {
     Draw draw;
 
     while(!glfwWindowShouldClose(window)) {
