@@ -111,3 +111,11 @@ Chapter 4
 I'm finally finishing all the transformation examples, the rotation gives me a little bit more work, but was just a question to think a little bit different and all the things works.
 
 Tomorrow I am going to fix the most TODO's that I can, hope to finish them all like past week.
+
+## Day Eleven
+
+Chapter 4
+
+I couldn't finish all the items from the fix list, but I'm satisfied that, all the time I've tried to fix these issues, I am able to handle all of them just by myself (without looking for online architecture models or fixes to the problems).
+
+

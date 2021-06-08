@@ -46,3 +46,5 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [ ] Finish full screen configurations
 - [ ] Review mouse position feature
 	- [ ] Update function can fix it
+- [ ] Create a class to handle the entire application, instead of initialize all of it from Window class
+- [ ] Finish scaling example
