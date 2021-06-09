@@ -16,6 +16,7 @@ void Draw::render(GLint screen_width, GLint screen_height) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-screen_width / 2, screen_width / 2, -screen_height / 2, screen_height / 2, -50.0, 50.0);
+    //glFrustum(-screen_width / 2, screen_width / 2, -screen_height / 2, screen_height / 2, -50.0, 50.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
