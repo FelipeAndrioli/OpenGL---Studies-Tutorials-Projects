@@ -118,4 +118,10 @@ Chapter 4
 
 I couldn't finish all the items from the fix list, but I'm satisfied that, all the time I've tried to fix these issues, I am able to handle all of them just by myself (without looking for online architecture models or fixes to the problems).
 
+## Day Twelve
 
+Chapter 4
+
+I reach a point in chapter 4 where we learn about the two projections we can use in OpenGL, Ortographic and Perspective. Ortographic is used in CAD applications and in 2D games, due to it not make any adjustment for distance from the camera. Perspective make adjustments to create a realistic environment according from the distance the objects are from the camera.
+
+I've also learned about a function in OpenGL Utility Library (glu), which allows us to directly specify the field of view, and then calculates the frustum for us.
