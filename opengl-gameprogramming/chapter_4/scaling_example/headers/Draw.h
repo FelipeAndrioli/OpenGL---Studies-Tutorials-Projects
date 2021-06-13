@@ -86,6 +86,7 @@ void Draw(GLint screen_width, GLint screen_height) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glPushMatrix();
+	glScalef(0.5f, 0.5f, 0.5f);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, cube_vertices);
