@@ -44,3 +44,26 @@ After that we just need to compile our code with the correct links, this is what
 	g++ test.cpp -o test.exe -lglfw3 -lopengl32 -lgdi32 
 
 You can give a look in the script I am using to compile and use it as base to create your own.
+
+## Study Plan
+
+I'm going to focus on book per time, so in this very first moment, I'm focusing the Beginning OpenGL Game Programming.
+
+Once I finish this book, I'm going to start the Foundations of Game Engine Development Volume 1 - Mathematics. I'm going for the next books of this series that are:
+
+	Volume 2: Rendering
+	Volume 3: Models & Materials
+	Volume 4: Physics
+
+But after these two initial books I'm studying, I'll change things a little bit. Now I'm focusing only in the books, when I finish these two I'll split the focus on books and projects.
+
+## Current Projects
+
+- Beginning OpenGL Game Programming.
+
+## Next Projects
+
+- Foundations of Game Engine Development Volume 1 - Mathematics
+- Sorting algorithm visualization
+- First game: Ping Pong
+- Fuck it all, I'm going for Minecraft
