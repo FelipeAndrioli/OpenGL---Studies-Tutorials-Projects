@@ -16,6 +16,7 @@ class Window {
         void init(const char* title, int width, int height, bool full_window);
         void mainLoop(int width, int height);
         void closeWindow(GLFWwindow* window);
+        GLFWwindow* getInitializedWindow();
 };
 
 void Window::init(const char* title, int width, int height, bool full_window) {
@@ -51,4 +52,8 @@ void Window::mainLoop(int width, int height) {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+}
+
+GLFWwindow* Window::getInitializedWindow() {
+    return window;
 }
