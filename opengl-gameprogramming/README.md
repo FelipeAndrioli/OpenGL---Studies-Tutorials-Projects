@@ -22,10 +22,11 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 
 ## Fixes TODO's
 - [ ] Review mouse position feature
-	- [ ] Update function can fix it
-- [ ] Code the Projection Examples
-	- [ ] Orthographic Projection
-	- [ ] Perspective Projection
+	- [ ] Update function can fix
+- [ ] Create a method to define which kind of projection we are going to use
+	- [ ] Orthographic projections
+	- [ ] Perspective projections
+- [ ] Review the way we are defining the coordinate system in the base project. It might've be defined wrong.
 
 ## Features TODO's
 - [ ] FOV on base project
