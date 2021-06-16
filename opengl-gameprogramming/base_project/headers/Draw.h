@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <GL/glu.h>
 
 /*
     According to my progress, I'm going to turn this file with only one function
@@ -15,6 +16,7 @@ class Draw {
 void Draw::render(GLint screen_width, GLint screen_height) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+	gluLookAt(0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -100.0f, 0.0f, 1.0f, 0.0f);
     glOrtho(-screen_width / 2, screen_width / 2, -screen_height / 2, screen_height / 2, -50.0, 50.0);
     //glFrustum(-screen_width / 2, screen_width / 2, -screen_height / 2, screen_height / 2, -50.0, 50.0);
     glMatrixMode(GL_MODELVIEW);
@@ -93,6 +95,7 @@ void Draw::render(GLint screen_width, GLint screen_height) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glPushMatrix();
+	glRotatef(45.0, 1.0, 1.0, 1.0);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, cube_vertices);
