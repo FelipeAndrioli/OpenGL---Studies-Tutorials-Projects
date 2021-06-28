@@ -34,3 +34,4 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 - [ ] Finish full screen configurations
     - [ ] Add escape key to altern between full screen and window
     - [ ] Nothing messing up on the screen
+- [ ] Draw the new architecture, the way it is going to work with the Core class
