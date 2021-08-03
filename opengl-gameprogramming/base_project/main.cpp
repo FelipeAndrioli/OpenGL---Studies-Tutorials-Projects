@@ -5,6 +5,7 @@
 #include "Libraries/Output Library/Window.h"
 #include "Libraries/Draw Library/Draw.h"
 #include "Libraries/Input Library/Mouse.h"
+#include "Libraries/Input Library/Keyboard.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -23,6 +24,9 @@ int main(int argc, char** argv) {
 
     Mouse mouse;
     mouse.initMouse(window.getWindow());
+
+    Keyboard keyboard;
+    keyboard.initKeyboard(window.getWindow());
 
     while(!glfwWindowShouldClose(window.getWindow())) {
         draw.render(SCREEN_WIDTH, SCREEN_HEIGHT);
