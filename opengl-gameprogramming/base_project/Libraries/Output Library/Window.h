@@ -3,10 +3,6 @@
 #include <iostream>
 #include <cstring>
 
-#include "Keyboard.h"
-#include "Mouse.h"
-#include "Draw.h"
-
 class Window {
     private:
         GLFWwindow* window = NULL;
@@ -17,6 +13,7 @@ class Window {
         void mainLoop(int width, int height);
         void closeWindow(GLFWwindow* window);
         GLFWwindow* getInitializedWindow();
+        GLFWwindow* getWindow();
 };
 
 void Window::init(const char* title, int width, int height, bool full_window) {
@@ -27,12 +24,6 @@ void Window::init(const char* title, int width, int height, bool full_window) {
 
     window = glfwCreateWindow(width, height, title, monitor, NULL);
 
-    Keyboard keyboard;
-    keyboard.initKeyboard(window);
-
-    Mouse mouse;
-    mouse.initMouse(window);
-
     if (window == NULL) {
         glfwTerminate();
         throw std::runtime_error("Error initializing window");
@@ -41,19 +32,21 @@ void Window::init(const char* title, int width, int height, bool full_window) {
     glfwMakeContextCurrent(window);
     glfwSetWindowUserPointer(window, NULL);
 
-    Window::mainLoop(width, height);
+    //Window::mainLoop(width, height);
 }
 
 void Window::mainLoop(int width, int height) {
-    Draw draw;
 
     while(!glfwWindowShouldClose(window)) {
-        draw.render(width, height);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 }
 
 GLFWwindow* Window::getInitializedWindow() {
+    return window;
+}
+
+GLFWwindow* Window::getWindow() {
     return window;
 }

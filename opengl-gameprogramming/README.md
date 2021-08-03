@@ -36,3 +36,4 @@ The book had too many good examples, to demonstrate the funtionalities from Open
     - [ ] Nothing messing up on the screen
 - [X] Draw the new architecture, the way it is going to work with the Core class
 - [ ] Export the entire "engine" as a DLL
+- [ ] Do a refactoring to prepare the exportation as a DLL
