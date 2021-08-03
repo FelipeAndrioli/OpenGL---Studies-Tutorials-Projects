@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Libraries/Output Library/Window.h"
+#include "Libraries/Draw Library/Draw.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -17,7 +18,10 @@ int main(int argc, char** argv) {
     Window window;
     window.init("Main.exe", SCREEN_WIDTH, SCREEN_HEIGHT, false);
 
+    Draw draw;
+
     while(!glfwWindowShouldClose(window.getWindow())) {
+        draw.render(SCREEN_WIDTH, SCREEN_HEIGHT);
         glfwSwapBuffers(window.getWindow());
         glfwPollEvents();
     }

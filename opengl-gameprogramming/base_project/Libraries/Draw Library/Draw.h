@@ -2,11 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <GL/glu.h>
 
-/*
-    According to my progress, I'm going to turn this file with only one function
-    into a class with more complex and complete functions
-*/
-
 class Draw {
 	private:
 	public:
