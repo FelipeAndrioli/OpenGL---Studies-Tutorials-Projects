@@ -30,10 +30,10 @@ The book had too many good examples, to demonstrate the funtionalities from Open
 
 ## Features TODO's
 - [ ] FOV on base project
-- [ ] Core class to handle the application (decentralize it from Window class)
+- [X] Core class to handle the application (decentralize it from Window class)
 - [ ] Finish full screen configurations
     - [ ] Add escape key to altern between full screen and window
     - [ ] Nothing messing up on the screen
 - [X] Draw the new architecture, the way it is going to work with the Core class
 - [ ] Export the entire "engine" as a DLL
-- [ ] Do a refactoring to prepare the exportation as a DLL
+- [X] Do a refactoring to prepare the exportation as a DLL
