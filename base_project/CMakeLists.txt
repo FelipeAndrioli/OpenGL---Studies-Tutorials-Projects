@@ -1,32 +1,40 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(base_opengl_project LANGUAGE CXX)
+project(base_opengl_project)
 
-# OpenGL Setup
-find_package(OpenGL REQUIRED)
+file(GLOB_RECURSE SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+)
 
-include_directories(${OPENGL_INCLUDE_DIRS})
+file(GLOB_RECURSE HEADER_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp
+)
+
+add_executable(
+    ${PROJECT_NAME}
+    ${SOURCE_FILES}
+    ${HEADER_FILES}
+)
 
 # GLFW Setup
-set(GLFW_BUILD_DOCS OFF CACHE BOOL  "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_INSTALL OFF CACHE BOOL  "" FORCE)
-add_subdirectory("dependencies/glfw")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glfw)
+target_link_libraries(${PROJECT_NAME} glfw)
 
 # GLM Setup
-set(GLMINCLUDES "dependencies/glm")
-get_filename_component(GLMINC_PREFIX "${GLMINCLUDES}" ABSOLUTE)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glm)
+target_link_libraries(${PROJECT_NAME} glm)
 
-if (NOT EXISTS ${GLMINC_PREFIX}) 
-    message(FATAL_ERROR "Necessary glm headers do not exists: " ${GLMINC_PREFIX})
-endif()
+# GLEW Setup
+add_definitions(-DGLEW_STATIC)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glew)
+target_link_libraries(${PROJECT_NAME} libglew_static)
 
-include_directories(${GLMINC_PREFIX})
-
-set( GLFW-CMAKE-STARTER-SRC
-     main.cpp
-     )
-     
-add_executable( GLFW-CMake-starter WIN32 ${GLFW-CMAKE-STARTER-SRC} )
-target_link_libraries( GLFW-CMake-starter ${OPENGL_LIBRARIES} glfw )
+# Define project properties
+set_property(TARGET ${PROJECT_NAME} PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
+set_property(TARGET ${PROJECT_NAME} PROPERTY RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
+set_property(TARGET ${PROJECT_NAME} PROPERTY RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
+set_property(TARGET ${PROJECT_NAME} PROPERTY RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
+set_property(TARGET ${PROJECT_NAME} PROPERTY RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
+set_property(TARGET ${PROJECT_NAME} PROPERTY OUTPUT_NAME "main")
