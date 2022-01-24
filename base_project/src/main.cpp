@@ -9,6 +9,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
+void processInput(GLFWwindow *window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+    }
+}
+
 int main(int argc, char** argv) {
 
     //Initialize glfw
@@ -54,6 +60,15 @@ int main(int argc, char** argv) {
 
     //Render loop
     while (!glfwWindowShouldClose(window)) {
+        //The function process input, check in each iteration if the escape key is being pressed,
+        //if it is, then it sets the glfwWindowShouldClose to true and therefore, the window is 
+        //going to be closed
+        processInput(window);
+
+        //Rendering commands here
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         //glfwSwapBuffers will swap the color buffer that is used to render to during this render 
         //iteration and show it as output to the screen
         glfwSwapBuffers(window);
