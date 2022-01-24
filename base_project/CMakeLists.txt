@@ -31,6 +31,10 @@ add_definitions(-DGLEW_STATIC)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glew)
 target_link_libraries(${PROJECT_NAME} libglew_static)
 
+# Glad Setup
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glad)
+target_link_libraries(${PROJECT_NAME} glad)
+
 # Define project properties
 set_property(TARGET ${PROJECT_NAME} PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
 set_property(TARGET ${PROJECT_NAME} PROPERTY RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/binaries)
