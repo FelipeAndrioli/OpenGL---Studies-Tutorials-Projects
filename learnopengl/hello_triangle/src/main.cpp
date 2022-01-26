@@ -35,8 +35,7 @@ void processInput(GLFWwindow *window) {
     }
 }
 
-int main(int argc, char** argv) {
-
+void defaultHelloTriangle() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -47,14 +46,14 @@ int main(int argc, char** argv) {
     if (window == NULL) {
         std::cout << "Failed to create a GLFW window" << std::endl;
         glfwTerminate();
-        return -1;
+        return;
     }
 
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+        return;
     }
 
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -215,6 +214,11 @@ int main(int argc, char** argv) {
     glDeleteProgram(shaderProgram);
 
     glfwTerminate();
+}
+
+int main(int argc, char** argv) {
+
+    defaultHelloTriangle();
 
     return 0;
 }
