@@ -270,7 +270,7 @@ void firstExercise() {
     int success;
     char infoLog[512];
 
-    GLuint vertexShader = glCreateShader(GL_VERTEX_ARRAY); 
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER); 
 
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
@@ -512,8 +512,8 @@ void secondExercise() {
 int main(int argc, char** argv) {
 
     //defaultHelloTriangle();
-    //firstExercise();
-    secondExercise();
+    firstExercise();
+    //secondExercise();
 
     return 0;
 }
