@@ -216,9 +216,176 @@ void defaultHelloTriangle() {
     glfwTerminate();
 }
 
+void helloTriangleExercises() {
+    /*
+        - Initialize glfw
+            - Versions
+            - Profile
+        - Create window
+        - Make the window context the current
+        - Check glad
+        - Set viewport
+        - Set render loop
+            - Clear color
+            - Swap buffers
+            - Poll events
+        - Create shaders
+            - Vertex Shader
+            - Fragment Shader
+        - Create shader program
+            - Link shaders
+        - Create vertices
+        - Create Vertex Buffer
+            - Copy vertices
+                - Bind
+                - Copy data
+            - Set the vertex attributes pointers
+            - Set the shader program
+        - Draw the object
+    */
+
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello Triangle Exercises", NULL, NULL);
+
+    if (window == NULL) {
+        std::cout << "Failed initializing the window" << std::endl;
+        glfwTerminate(); 
+        return;
+    }
+
+    glfwMakeContextCurrent(window);
+    
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return;
+    }
+
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    int success;
+    char infoLog[512];
+
+    GLuint vertexShader = glCreateShader(GL_VERTEX_ARRAY); 
+
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+
+    if (!success) {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+
+    GLuint shaderProgram = glCreateProgram();
+    
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    glGetProgramiv(shaderProgram, GL_COMPILE_STATUS, &success);
+
+    if (!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << infoLog << std::endl;
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+
+    //vertices using EBO
+    GLfloat vertices[] = {
+        -0.5f, 0.1f, 0.0f,  // down t1
+        -1.0f, 0.5f, 0.0f,  // left t1
+        0.0f, 0.5f, 0.0f,   // right t1 and left t2
+        0.5f, 0.1f, 0.0f,   // down t2
+        1.0f, 0.5f, 0.0f    // right t2
+    };
+
+    GLuint indices[] = {
+        0, 1, 2,    //first triangle    
+        2, 3, 4,    //second triangle 
+        0, 2, 3     //third triangle 
+    };
+
+/*
+    //vertices using only VAO and VBO
+    GLfloat vertices[] = {
+        -0.9f, -0.5f, 0.0f,
+        -0.0f, -0.5f, 0.0f,
+        -0.45f, 0.5f, 0.0f,
+
+        0.0f, -0.5f, 0.0f,
+        0.9f, -0.5f, 0.0f,
+        0.45f, 0.5f, 0.0f
+    };
+*/
+    GLuint VBO;
+    GLuint VAO;
+    GLuint EBO;
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindVertexArray(0);
+
+    while(!glfwWindowShouldClose(window)) {
+        processInput(window);
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
+    glfwTerminate();
+}
+
 int main(int argc, char** argv) {
 
-    defaultHelloTriangle();
-
+    //defaultHelloTriangle();
+    helloTriangleExercises();
+    
     return 0;
 }
