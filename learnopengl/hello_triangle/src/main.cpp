@@ -57,8 +57,9 @@ void defaultHelloTriangle() {
 
     glfwMakeContextCurrent(window);
 
+    // Load all OpenGL functions using glfw loader function
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << "Failed to initialize OpenGL context" << std::endl;
         return;
     }
 
@@ -266,7 +267,7 @@ void firstExercise() {
     glfwMakeContextCurrent(window);
     
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << "Failed to initialize OpenGL context" << std::endl;
         return;
     }
 
@@ -405,7 +406,7 @@ void secondExercise() {
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << "Failed to initialize OpenGL context" << std::endl;
         return;
     }
 
@@ -532,7 +533,7 @@ void thirdExercise() {
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << "Failed to initialize OpenGL context" << std::endl;
         return;
     }
 
