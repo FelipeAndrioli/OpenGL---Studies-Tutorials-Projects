@@ -5,23 +5,37 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+/*
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
     "void main() {\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\n\0";
+*/
 
+/*
 const char *fragmentShaderSource = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "void main() {\n"
     "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}\n\0";
+*/
 
-const char *yellowFragmentShaderSource = "#version 330 core\n"
-    "out vec4 FragColor;\n"
+const char *vertexShaderSource = "#version 330 core\n"
+    "layout (location = 0) in vec3 aPos;\n"         // the position variable has attribute position 0
+    "out vec4 vertexColor;\n"                       // specify a color output to the fragment shader
     "void main() {\n"
-    "   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
+    "gl_Position = vec4(aPos, 1.0);\n"              // see how we directly give a vec3 to a vec4's constructor
+    "vertexColor = vec4(0.0, 1.0, 0.0, 1.0);\n"     // set the output variable to a dark-red color
     "}\n\0";
+
+const char *fragmentShaderSource = "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "in vec4 vertexColor;\n"                        // the input variable from the vertex shader (same name and same type)
+    "void main() {\n"
+    "FragColor = vertexColor;\n"
+    "}\n\0";
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
