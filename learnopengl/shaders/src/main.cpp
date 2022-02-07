@@ -7,13 +7,13 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
-
+/*
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
     "void main() {\n"
     "gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\n\0";
-
+*/
 
 /*
 const char *fragmentShaderSource = "#version 330 core\n"
@@ -42,11 +42,29 @@ const char *fragmentShaderSource = "#version 330 core\n"
     "}\n\0";
 */
 
+/*
 const char *fragmentShaderSource = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "uniform vec4 ourColor;"
     "void main() {\n"
     "FragColor = ourColor;\n"
+    "}\n\0";
+*/
+
+const char *vertexShaderSource = "#version 330 core\n"
+    "layout (location = 0) in vec3 aPos;\n"         // the position variable has attribute position 0
+    "layout (location = 1) in vec3 aColor;\n"       // the color variable has attribute position 1
+    "out vec3 ourColor;\n"                          // output a color to the fragment shader
+    "void main() {\n"
+    "gl_Position = vec4(aPos, 1.0);\n"
+    "ourColor = aColor;\n"                            // set ourColor to the input color we got from the vertex data
+    "}\n\0";
+
+const char *fragmentShaderSource = "#version 330 core\n"
+    "out vec4 FragColor;\n"
+    "in vec3 ourColor;\n"
+    "void main() {\n"
+    "FragColor = vec4(ourColor, 1.0);\n"
     "}\n\0";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -135,9 +153,10 @@ int main(int argc, char** argv) {
     glDeleteShader(fragmentShader);
 
     GLfloat vertices[] = {
-        0.0f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f
+        // positions        // colors
+        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f,     // top 
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,    //bottom right 
+        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f    //bottom left
     };
 
     GLuint VAO;
@@ -150,8 +169,15 @@ int main(int argc, char** argv) {
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindVertexArray(0);
