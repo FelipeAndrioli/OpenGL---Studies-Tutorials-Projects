@@ -65,17 +65,23 @@ int main(int argc, char** argv) {
     // default vertex shader
     //const char* vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader.vs"; 
 
+    // default fragment shader
+    //const char* fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader.fs"; 
+    
     // first exercise vertex shader
-    const char* vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader_exercise_1.vs"; 
-    const char* fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader.fs"; 
+    //const char* vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader_exercise_1.vs"; 
+
+    // shaders exercise 3    
+    const char* vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader_exercise_3.vs"; 
+    const char* fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader_exercise_3.fs"; 
     
     Shader ourShader(vertex_shader_path, fragment_shader_path);
 
     GLfloat vertices[] = {
         // positions        // colors
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,    // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom left
+        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f      // top
     };
 
     GLuint VAO;
@@ -98,8 +104,9 @@ int main(int argc, char** argv) {
 
     glBindVertexArray(0);
 
-    float offset = 0.5f;
-    
+    // offset exercise 2
+    //float offset = 0.5f;
+
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
@@ -107,7 +114,8 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         ourShader.use();
-        ourShader.setFloat("xOffset", offset);
+        // set uniform offset exercise 2 
+        //ourShader.setFloat("xOffset", offset);
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
