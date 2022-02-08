@@ -62,7 +62,11 @@ int main(int argc, char** argv) {
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    const char* vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader.vs"; 
+    // default vertex shader
+    //const char* vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader.vs"; 
+
+    // first exercise vertex shader
+    const char* vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader_exercise_1.vs"; 
     const char* fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/shader_class/src/shaders/shader.fs"; 
     
     Shader ourShader(vertex_shader_path, fragment_shader_path);
