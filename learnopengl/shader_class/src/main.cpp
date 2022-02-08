@@ -98,6 +98,8 @@ int main(int argc, char** argv) {
 
     glBindVertexArray(0);
 
+    float offset = 0.5f;
+    
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
@@ -105,6 +107,7 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         ourShader.use();
+        ourShader.setFloat("xOffset", offset);
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
