@@ -2,19 +2,31 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
 const char *vertex_shader_source = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos; \n"
+    "layout (location = 1) in vec3 aColor;\n"
+    "layout (location = 2) in vec2 aTexCoord;\n"
+    "out vec3 ourColor;\n" 
+    "out vec2 TexCoord;\n"
     "void main() {\n"
     "gl_Position = vec4(aPos, 1.0);\n"
+    "ourColor = aColor;\n"
+    "TexCoord = aTexCoord;\n"
     "}\n\0";
 
 const char *fragment_shader_source = "#version 330 core\n"
     "out vec4 FragColor;\n"
+    "in vec3 ourColor;\n"
+    "in vec2 TexCoord;\n"
+    "uniform sampler2D ourTexture;\n"
     "void main() {\n"
-    "FragColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);\n"
+    "FragColor = texture(ourTexture, TexCoord);\n"
     "}\n\0";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -98,11 +110,65 @@ int main(int argc, char** argv) {
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
+    unsigned int texture;
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // set the texture wrapping/filtering options (on the currently bound texture object)
+    // wrapping options
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // filtering options
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    int width;
+    int height;
+    int nrChannels;
+    unsigned char *data = stbi_load("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/textures/src/container.jpg", &width, &height, &nrChannels, 0);
+
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        /*
+            This is a large function with quite a few parameters so we'll walk through them step-by-step:
+                - The first argument specifies the texture target; setting this to GL_TEXTURE_2D means this
+                operation will generate a texture on the currently bound texture object at the same target
+                (so any textures bound to targets GL_TEXTURE_1D or GL_TEXTURE_3D will not be affected).
+                - The second argument specifies the mipmap level for which we want to create a texture for
+                if you want to set each mipmap level manually, but we'll leave it at the base level which
+                is 0.
+                - The third argument tells OpenGL in what kind of format we want to store the texture. Our
+                image has only RGB values so we'll store the texture with RGB values as well.
+                - The 4th and 5th argument sets the width and height of the resulting texture. We stored those
+                earlier when loading the image so we'll use the corresponding values.
+                - The next argument should always be 0 (some legacy stuff).
+                - The 7th and 8th argument specify the format and datatype of the source image. We loaded the
+                image with RGB values and stored them as chars (bytes) so we'll pass in the corresponding values.
+                - The last argument is the actual image data.            
+        */
+
+        glGenerateMipmap(GL_TEXTURE_2D);
+        /*
+            Once the glTexImage2D is called, the currently bound texture object now has the texture image attached
+            to it. However, currently it only has the base-level of the texture image loaded and if we wannt to use
+            mipmaps we have to specify all the different images manually (by continually incrementing the second
+            argument) or, we could call glGenerateMipmap after generating the texture. This will automatically
+            generate all the required mipmaps for the currently bound texture.
+        */
+    } else {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    
+    stbi_image_free(data);
+
     GLfloat vertices[] = {
-        0.5f, 0.5f, 0.0f,   // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f, // bottom left
-        -0.5f, 0.5f, 0.0f   // top left
+        // positions        // colors       // texture coords       
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,         // top right
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,        // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,       // bottom left
+        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f         // top left
     };
 
     GLuint indices[] = {
@@ -122,12 +188,18 @@ int main(int argc, char** argv) {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
@@ -138,6 +210,7 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shader_program);
+        glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
