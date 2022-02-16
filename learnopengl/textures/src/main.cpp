@@ -24,9 +24,10 @@ const char *fragment_shader_source = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "in vec3 ourColor;\n"
     "in vec2 TexCoord;\n"
-    "uniform sampler2D ourTexture;\n"
+    "uniform sampler2D texture1;\n"
+    "uniform sampler2D texture2;\n"
     "void main() {\n"
-    "FragColor = texture(ourTexture, TexCoord);\n"
+    "FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);\n"
     "}\n\0";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -110,10 +111,12 @@ int main(int argc, char** argv) {
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
 
-    unsigned int texture;
+    unsigned int texture1;
+    unsigned int texture2;
 
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    // texture 1
+    glGenTextures(1, &texture1);
+    glBindTexture(GL_TEXTURE_2D, texture1);
 
     // set the texture wrapping/filtering options (on the currently bound texture object)
     // wrapping options
@@ -128,6 +131,8 @@ int main(int argc, char** argv) {
     int height;
     int nrChannels;
     unsigned char *data = stbi_load("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/textures/src/container.jpg", &width, &height, &nrChannels, 0);
+
+    stbi_set_flip_vertically_on_load(true);
 
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -162,6 +167,38 @@ int main(int argc, char** argv) {
     }
     
     stbi_image_free(data);
+
+    // texture 2
+
+    glGenTextures(1, &texture2);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+
+    // wrapping options
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // filtering options 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // load texture image
+    data = stbi_load("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/textures/src/awesomeface.png", &width, &height, &nrChannels, 0);
+
+    if (data) {
+        // set up everything together
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+        // create mipmaps
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+
+    stbi_image_free(data); 
+
+    glUseProgram(shader_program);
+    glUniform1i(glGetUniformLocation(shader_program, "texture1"), 0);
+    glUniform1i(glGetUniformLocation(shader_program, "texture2"), 1);
 
     GLfloat vertices[] = {
         // positions        // colors       // texture coords       
@@ -209,11 +246,19 @@ int main(int argc, char** argv) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // bind textures on corresponding texture units
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
+
+        // render container
         glUseProgram(shader_program);
-        glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+        // glfw: swap buffers and poll IO events
         glfwSwapBuffers(window);
         glfwPollEvents(); 
     }
