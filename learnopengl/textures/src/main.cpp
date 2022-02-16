@@ -5,30 +5,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "shader.hpp"
+
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
-
-const char *vertex_shader_source = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos; \n"
-    "layout (location = 1) in vec3 aColor;\n"
-    "layout (location = 2) in vec2 aTexCoord;\n"
-    "out vec3 ourColor;\n" 
-    "out vec2 TexCoord;\n"
-    "void main() {\n"
-    "gl_Position = vec4(aPos, 1.0);\n"
-    "ourColor = aColor;\n"
-    "TexCoord = aTexCoord;\n"
-    "}\n\0";
-
-const char *fragment_shader_source = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "in vec3 ourColor;\n"
-    "in vec2 TexCoord;\n"
-    "uniform sampler2D my_texture_one;\n"
-    "uniform sampler2D my_texture_two;\n"
-    "void main() {\n"
-    "FragColor = mix(texture(my_texture_one, TexCoord), texture(my_texture_two, TexCoord), 0.2);\n"
-    "}\n\0";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -73,43 +53,10 @@ int main(int argc, char** argv) {
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    GLuint shader_program = glCreateProgram();
+    const char* vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/textures/src/shaders/shader.vs";
+    const char* fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/textures/src/shaders/shader.fs";
 
-    int success;
-    char infoLog[512];
-
-    glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
-    glCompileShader(vertex_shader);
-    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-
-    if (!success) {
-        glGetShaderInfoLog(vertex_shader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
-    glCompileShader(fragment_shader);
-    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-
-    if (!success) {
-        glGetShaderInfoLog(fragment_shader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    glAttachShader(shader_program, vertex_shader);
-    glAttachShader(shader_program, fragment_shader);
-    glLinkProgram(shader_program);
-    glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
-
-    if (!success) {
-        glGetProgramInfoLog(shader_program, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << infoLog << std::endl;
-    }
-
-    glDeleteShader(vertex_shader);
-    glDeleteShader(fragment_shader);
+    Shader ShaderProgram = Shader(vertex_shader_path, fragment_shader_path);
 
     unsigned int texture1;
     unsigned int texture2;
@@ -196,9 +143,9 @@ int main(int argc, char** argv) {
 
     stbi_image_free(data); 
 
-    glUseProgram(shader_program);
-    glUniform1i(glGetUniformLocation(shader_program, "my_texture_one"), 0);
-    glUniform1i(glGetUniformLocation(shader_program, "my_texture_two"), 1);
+    ShaderProgram.use();
+    glUniform1i(glGetUniformLocation(ShaderProgram.ID, "my_texture_one"), 0);
+    ShaderProgram.setInt("my_texture_two", 1);
 
     GLfloat vertices[] = {
         // positions        // colors       // texture coords       
@@ -254,7 +201,7 @@ int main(int argc, char** argv) {
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         // render container
-        glUseProgram(shader_program);
+        ShaderProgram.use(); 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -263,7 +210,7 @@ int main(int argc, char** argv) {
         glfwPollEvents(); 
     }
 
-    glDeleteProgram(shader_program);
+    //glDeleteProgram(shader_program);
     glDeleteBuffers(1, &VBO);
     glDeleteVertexArrays(1, &VAO);
 
