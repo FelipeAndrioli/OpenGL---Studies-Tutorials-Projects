@@ -24,10 +24,10 @@ const char *fragment_shader_source = "#version 330 core\n"
     "out vec4 FragColor;\n"
     "in vec3 ourColor;\n"
     "in vec2 TexCoord;\n"
-    "uniform sampler2D texture1;\n"
-    "uniform sampler2D texture2;\n"
+    "uniform sampler2D my_texture_one;\n"
+    "uniform sampler2D my_texture_two;\n"
     "void main() {\n"
-    "FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2);\n"
+    "FragColor = mix(texture(my_texture_one, TexCoord), texture(my_texture_two, TexCoord), 0.2);\n"
     "}\n\0";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -197,8 +197,8 @@ int main(int argc, char** argv) {
     stbi_image_free(data); 
 
     glUseProgram(shader_program);
-    glUniform1i(glGetUniformLocation(shader_program, "texture1"), 0);
-    glUniform1i(glGetUniformLocation(shader_program, "texture2"), 1);
+    glUniform1i(glGetUniformLocation(shader_program, "my_texture_one"), 0);
+    glUniform1i(glGetUniformLocation(shader_program, "my_texture_two"), 1);
 
     GLfloat vertices[] = {
         // positions        // colors       // texture coords       
