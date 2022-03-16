@@ -95,6 +95,9 @@ int main() {
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
 
+   glDeleteShader(vertexShader);
+   glDeleteShader(fragmentShader); 
+
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
