@@ -54,10 +54,15 @@ int main() {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     GLfloat vertices[] = {
-        0.5f, 0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        -0.5f, 0.5f, 0.0f
+        0.5f, 0.5f, 0.0f,   // 0 - top right
+        0.5f, -0.5f, 0.0f,  // 1 - bottom right
+        -0.5f, -0.5f, 0.0f, // 2 - bottom left
+        -0.5f, 0.5f, 0.0f   // 3 - top left
+    };
+
+    GLfloat indices[] = {
+        0, 2, 3,
+        0, 1, 2
     };
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -95,8 +100,30 @@ int main() {
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
 
-   glDeleteShader(vertexShader);
-   glDeleteShader(fragmentShader); 
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader); 
+
+    GLuint VAO; 
+    GLuint VBO;
+    GLuint EBO;
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, sizeof(vertices), GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0); 
 
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
