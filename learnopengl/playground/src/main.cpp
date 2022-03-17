@@ -12,6 +12,10 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
 void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
+    } else if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    } else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
 }
 
