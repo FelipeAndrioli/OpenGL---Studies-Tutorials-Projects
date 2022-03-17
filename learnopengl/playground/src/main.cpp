@@ -34,6 +34,15 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 int main() {
 
+    /*
+        TODOs
+
+        - Add texture to the box
+        - Create a shader class which will support all the necessary shader operations
+        - Turn the box into an object
+        - Create an texture class which will support all the necessary texture operations 
+    */
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -59,10 +68,11 @@ int main() {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     GLfloat vertices[] = {
-        0.5f, 0.5f, 0.0f,   // 0 - top right
-        0.5f, -0.5f, 0.0f,  // 1 - bottom right
-        -0.5f, -0.5f, 0.0f, // 2 - bottom left
-        -0.5f, 0.5f, 0.0f   // 3 - top left
+        // positions        // text coords
+        0.5f, 0.5f, 0.0f,   1.0f, 1.0f,     // 0 - top right
+        0.5f, -0.5f, 0.0f,  0.0f, 1.0f,     // 1 - bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,     // 2 - bottom left
+        -0.5f, 0.5f, 0.0f,  1.0f, 0.0f      // 3 - top left
     };
 
     GLuint indices[] = {
@@ -120,10 +130,12 @@ int main() {
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     
