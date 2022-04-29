@@ -3,6 +3,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
@@ -40,6 +43,20 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 int main() {
+
+    /*
+        TODOs
+
+        - Texture
+            - Import image
+            - Create uniforms
+            - Set filters
+        - Objects
+            - Import all the shaders code to external files
+            - Import all the vertex code to external files
+        - Transformations
+            - Continue with the transformations
+    */
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
