@@ -52,11 +52,7 @@ int main() {
     /*
         TODOs
 
-        - Texture
-            - Import image
-            - Create uniforms
-            - Set filters
-        - Objects
+       - Objects
             - Import all the shaders code to external files
             - Import all the vertex code to external files
         - Transformations
