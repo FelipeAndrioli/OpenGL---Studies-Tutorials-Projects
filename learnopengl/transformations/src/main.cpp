@@ -98,7 +98,7 @@ int main() {
     int height;
     int nrChannels;
     
-    unsigned char *data = stbi_load("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/textures/src/container.jpg", &width, &height, nrChannels, 0);
+    unsigned char *data = stbi_load("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/textures/src/container.jpg", &width, &height, &nrChannels, 0);
     stbi_set_flip_vertically_on_load(true);
 
     if (data) {
