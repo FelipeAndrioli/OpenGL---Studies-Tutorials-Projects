@@ -2,6 +2,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #define SCREEN_HEIGHT 600
 #define SCREEN_WIDTH 800
 
@@ -43,6 +46,7 @@ int main() {
         - Create an texture class which will support all the necessary texture operations 
     */
 
+    // glfw and glad initialization
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -67,6 +71,7 @@ int main() {
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    // vertices and indices definitions
     GLfloat vertices[] = {
         // positions        // text coords
         0.5f, 0.5f, 0.0f,   1.0f, 1.0f,     // 0 - top right
@@ -80,6 +85,7 @@ int main() {
         0, 2, 3
    };
 
+    // shaders creation
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     GLuint shaderProgram = glCreateProgram();
@@ -118,6 +124,7 @@ int main() {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader); 
 
+    // vertex and buffer creation
     GLuint VAO; 
     GLuint VBO;
     GLuint EBO;
@@ -142,6 +149,9 @@ int main() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0); 
+
+    // texture
+    
 
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
