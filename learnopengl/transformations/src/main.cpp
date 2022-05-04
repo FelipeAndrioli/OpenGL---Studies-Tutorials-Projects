@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "Shader.hpp"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 
@@ -8,26 +10,6 @@
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
-
-const char *vertexShaderSource = "#version 330 core \n"
-"layout (location = 0) in vec3 aPos;\n"
-"layout (location = 1) in vec2 aTexCoord;\n"
-"out vec4 vertexColor;\n"
-"out vec2 TexCoord;\n"
-"void main() {\n"
-"gl_Position = vec4(aPos, 1.0);\n"
-"vertexColor = vec4(0.5, 0.0, 0.0, 1.0);\n"
-"TexCoord = aTexCoord;\n"
-"}\n\0";
-
-const char *fragmentShaderSource = "#version 330 core\n"
-"in vec4 vertexColor;\n"
-"in vec2 TexCoord;\n"
-"uniform sampler2D texture_a;\n"
-"out vec4 FragColor;\n"
-"void main() {\n"
-"FragColor = texture(texture_a, TexCoord);\n"
-"}\n\0";
 
 void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -83,44 +65,10 @@ int main() {
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    GLuint shaderProgram = glCreateProgram();
-
-    int success;
-    char infoLog[512];
-
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-
-    if (!success) {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-
-    if (!success) {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
-
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-
-    glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    const char* vPath = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/transformations/src/shaders/shader.vs";
+    const char* fPath = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/transformations/src/shaders/shader.fs";
+    
+    Shader ShaderProgram = Shader(vPath, fPath);
 
     GLuint texture_a;
 
@@ -149,8 +97,8 @@ int main() {
 
     stbi_image_free(data);
 
-    glUseProgram(shaderProgram);
-    glUniform1i(glGetUniformLocation(shaderProgram, "texture_a"), 0);
+    ShaderProgram.use();
+    ShaderProgram.setInt("texture_a", 0); 
 
     GLfloat vertices[] = {
         // positions      // texture coords
@@ -200,7 +148,7 @@ int main() {
         glActiveTexture(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture_a);
 
-        glUseProgram(shaderProgram);
+        ShaderProgram.use(); 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -211,7 +159,7 @@ int main() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderProgram);
+    ShaderProgram.end();
 
     glfwTerminate();
 
