@@ -35,7 +35,6 @@ int main() {
         TODOs
 
        - Objects
-            - Import all the shaders code to external files
             - Import all the vertex code to external files
         - Transformations
             - Continue with the transformations
