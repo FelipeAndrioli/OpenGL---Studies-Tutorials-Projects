@@ -31,15 +31,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 int main() {
 
-    /*
-        TODOs
-
-       - Objects
-            - Import all the vertex code to external files
-        - Transformations
-            - Continue with the transformations
-    */
-
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -70,7 +61,9 @@ int main() {
     Shader ShaderProgram = Shader(vPath, fPath);
 
     GLuint texture_a;
+    GLuint texture_b;
 
+    // texture I - Box
     glGenTextures(1, &texture_a);
     glBindTexture(GL_TEXTURE_2D, texture_a);
 
@@ -98,6 +91,31 @@ int main() {
 
     ShaderProgram.use();
     ShaderProgram.setInt("texture_a", 0); 
+
+    // texture II - Happy face
+    glGenTextures(1, &texture_b);
+    glBindTexture(GL_TEXTURE_2D, texture_b);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    unsigned char *data_b = stbi_load("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/textures/src/awesomeface.png", &width, &height, &nrChannels, 0);
+    stbi_set_flip_vertically_on_load(true);
+
+    if (data_b) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data_b);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+
+    stbi_image_free(data_b);
+
+    ShaderProgram.use();
+    ShaderProgram.setInt("texture_b", 1);
 
     GLfloat vertices[] = {
         // positions      // texture coords
@@ -144,8 +162,11 @@ int main() {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glActiveTexture(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_a);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture_b);
 
         ShaderProgram.use(); 
         glBindVertexArray(VAO);
