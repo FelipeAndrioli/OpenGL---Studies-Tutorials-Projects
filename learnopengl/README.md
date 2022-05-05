@@ -6,17 +6,17 @@
 
 Run the command:
 
-''' cmake -S . -B binaries -B build -G "MinGW Makefiles" '''
+``` cmake -S . -B binaries -B build -G "MinGW Makefiles" ```
 
 ### Second
 
 Go to build and run the command:
 
-''' make '''
+``` make ```
 
 ### Third
 
 Go to binaries and run the command:
 
-''' ./main.exe '''
+``` ./main.exe ```
 
