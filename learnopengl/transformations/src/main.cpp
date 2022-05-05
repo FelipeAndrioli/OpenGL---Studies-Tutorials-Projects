@@ -5,6 +5,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -156,6 +160,26 @@ int main() {
     
     glBindVertexArray(0);
 
+    /*
+    // vector
+    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+
+    // identity matrix (diagonals equals to 1 and all the remaining values equals to 0)
+    glm::mat4 trans = glm::mat4(1.0f);
+
+    // function to translate the identiry matrix with the vector we want
+    trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+
+    // add the translation into our initial vector
+    vec = trans * vec;
+
+    // this is going to return -> 2 1 0
+    std::cout << vec.x << " " << vec.y << " " << vec.z << std::endl;
+
+    */
+
+   //trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
@@ -167,6 +191,13 @@ int main() {
 
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture_b);
+
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f)); 
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+    
+        unsigned int transformLoc = glGetUniformLocation(ShaderProgram.ID, "transform");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
         ShaderProgram.use(); 
         glBindVertexArray(VAO);
