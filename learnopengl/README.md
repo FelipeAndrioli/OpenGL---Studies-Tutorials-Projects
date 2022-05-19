@@ -6,7 +6,7 @@
 
 Run the command:
 
-``` cmake -S . -B binaries -B build -G "MinGW Makefiles" ```
+``` cmake -S . -B build -G "MinGW Makefiles" ```
 
 ### Second
 
