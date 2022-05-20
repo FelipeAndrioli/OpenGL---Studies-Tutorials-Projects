@@ -282,21 +282,26 @@ int main() {
         */
  
         //ShaderProgram.setMat4("model", model);
-        //ShaderProgram.setMat4("view", view);
-        //ShaderProgram.setMat4("projection", projection);
+        ShaderProgram.setMat4("view", view);
+        ShaderProgram.setMat4("projection", projection);
        
         glBindVertexArray(VAO);
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        
+     
         for (unsigned int i = 0; i < 10; i++) {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
-            float angle = 20.0f * (i + 1.0f);
-            model = glm::rotate(model, (float)glfwGetTime() * glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            ShaderProgram.setMat4("model", model);
-            ShaderProgram.setMat4("view", view);
-            ShaderProgram.setMat4("projection", projection);
+            float angle = 20.0f * (i + 1.0f) * glfwGetTime();
 
+            /*
+            if (i % 3 == 0) {
+                angle = glfwGetTime() * 25.0f;
+            } 
+            */
+
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            ShaderProgram.setMat4("model", model);
+            
             glDrawArrays(GL_TRIANGLES, 0, 36);
         } 
 
