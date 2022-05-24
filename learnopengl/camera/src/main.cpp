@@ -15,7 +15,14 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);   
+
 void processInput(GLFWwindow *window) {
+
+    const float cameraSpeed = 0.1f;
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
@@ -34,6 +41,27 @@ void processInput(GLFWwindow *window) {
     
     if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
         glDisable(GL_DEPTH_TEST);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        cameraPos += cameraSpeed * cameraFront;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        cameraPos -= cameraSpeed * cameraFront;
+    }
+
+    // We are normalizing the right vector because if we don't, the resulting cross product
+    // may return differently sized vectors based on the cameraFront variable. If we would
+    // not normalize the vector we would move slow or fast based on the camera's orientation
+    // instead of at a consistent movement speed 
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
 }
 
@@ -207,7 +235,7 @@ int main() {
     glBindVertexArray(0);
 
     glEnable(GL_DEPTH_TEST);
-    
+ 
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
@@ -222,11 +250,8 @@ int main() {
 
         ShaderProgram.use(); 
 
-        const float radius = 10.0f;
-        float camX = sin(glfwGetTime()) * radius;
-        float camZ = cos(glfwGetTime()) * radius; 
         glm::mat4 view = glm::mat4(1.0f);
-        view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
         glm::mat4 projection = glm::mat4(1.0f);
         projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
