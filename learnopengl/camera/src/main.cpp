@@ -78,6 +78,18 @@ void processInput(GLFWwindow *window) {
     }
 }
 
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    fov -= (float)yoffset;
+
+    if (fov < 1.0f) {
+        fov = 1.0f;
+    }
+
+    if (fov > 45.0f) {
+        fov = 45.0f;
+    }
+}
+
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
     if (firstMouse) {
@@ -98,7 +110,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
     yaw += xoffset;
     pitch += yoffset;
-
+    
     if (pitch > 89.0f) {
         pitch = 89.0f;
     }
@@ -147,6 +159,7 @@ int main() {
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
 
     const char* vPath = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/coordinate_systems/src/shaders/shader.vs";
     const char* fPath = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/coordinate_systems/src/shaders/shader.fs";
