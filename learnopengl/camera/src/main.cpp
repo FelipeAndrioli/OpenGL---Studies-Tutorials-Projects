@@ -56,6 +56,18 @@ void processInput(GLFWwindow *window) {
         glDisable(GL_DEPTH_TEST);
     }
 
+    /* Exercise 1 - My solution
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        glm::vec3 rightVector = glm::normalize(glm::cross(cameraFront, cameraUp));
+        cameraPos += cameraSpeed * glm::normalize(glm::cross(cameraUp, rightVector));
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        glm::vec3 rightVector = glm::normalize(glm::cross(cameraFront, cameraUp));
+        cameraPos -= cameraSpeed * glm::normalize(glm::cross(cameraUp, rightVector));
+    }
+    */
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         cameraPos += cameraSpeed * cameraFront;
     }
@@ -76,6 +88,8 @@ void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
     }
+
+    // Exercise 1 - Solution from tutorial cameraPos.y = 0.0f;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
@@ -130,6 +144,38 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
+}
+
+glm::mat4 customLookAt(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp) {
+
+    // 1. Position = known
+    // 2. Calculate cameraDirection
+    glm::vec3 zaxis = glm::normalize(position - target);
+    // 3. Get positive right axis vector 
+    glm::vec3 xaxis = glm::normalize(glm::cross(glm::normalize(worldUp), zaxis));
+    // 4. Calculate camera up vector
+    glm::vec3 yaxis = glm::cross(zaxis, xaxis); 
+
+    // Create translation and rotation matrix
+    // In glm we access elements as mat[col][row] due to column-major layout
+    glm::mat4 translation = glm::mat4(1.0f);    // Identity matrix by default
+    translation[3][0] = -position.x;    // Third column, first row
+    translation[3][1] = -position.y;
+    translation[3][2] = -position.z;
+
+    glm::mat4 rotation = glm::mat4(1.0f);
+    rotation[0][0] = xaxis.x;   // First column, first row
+    rotation[1][0] = xaxis.y;
+    rotation[2][0] = xaxis.z;
+    rotation[0][1] = yaxis.x;   // First column, second row
+    rotation[1][1] = yaxis.y;
+    rotation[2][1] = yaxis.z;
+    rotation[0][2] = zaxis.x;   // First column, third row
+    rotation[1][2] = zaxis.y;
+    rotation[2][2] = zaxis.z; 
+
+    // Return lookAt matrix as combination of translation and rotation matrix
+    return rotation * translation; // Remember to read from right to left (first translation then rotation)
 }
 
 int main() {
@@ -323,7 +369,8 @@ int main() {
         ShaderProgram.use(); 
 
         glm::mat4 view = glm::mat4(1.0f);
-        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        //view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        view = customLookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
         glm::mat4 projection = glm::mat4(1.0f);
         projection = glm::perspective(glm::radians(fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
