@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "shader.hpp"
+#include "camera.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h> 
@@ -17,16 +18,10 @@
 #define SCREEN_HEIGHT 600
 
 // camera
-glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);   
-
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = SCREEN_WIDTH / 2;
+float lastY = SCREEN_HEIGHT / 2;
 bool firstMouse = true;
-float lastX = SCREEN_HEIGHT / 2;
-float lastY = SCREEN_WIDTH / 2;
-float yaw = -90.0f;
-float pitch = 0.0f;
-float fov = 45.0f;
 
 // timing
 float deltaTime = 0.0f;
@@ -69,11 +64,11 @@ void processInput(GLFWwindow *window) {
     */
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        cameraPos += cameraSpeed * cameraFront;
+        camera.ProcessKeyboard(FORWARD, deltaTime);
     }
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        cameraPos -= cameraSpeed * cameraFront;
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
     }
 
     // We are normalizing the right vector because if we don't, the resulting cross product
@@ -82,29 +77,23 @@ void processInput(GLFWwindow *window) {
     // instead of at a consistent movement speed 
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.ProcessKeyboard(LEFT, deltaTime);
     }
 
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.ProcessKeyboard(RIGHT, deltaTime);
     }
 
     // Exercise 1 - Solution from tutorial cameraPos.y = 0.0f;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    fov -= (float)yoffset;
-
-    if (fov < 1.0f) {
-        fov = 1.0f;
-    }
-
-    if (fov > 45.0f) {
-        fov = 45.0f;
-    }
+    camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
 
     if (firstMouse) {
         lastX = xpos;
@@ -113,69 +102,16 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     }
 
     float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates range from bottom to top
+    float yoffset = lastY - ypos;
 
     lastX = xpos;
     lastY = ypos;
 
-    const float sensitivity = 0.1f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-    
-    if (pitch > 89.0f) {
-        pitch = 89.0f;
-    }
-
-    if (pitch < -89.0f) {
-        pitch = -89.0f;
-    }
-
-    glm::vec3 direction;
-
-    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    direction.y = sin(glm::radians(pitch));
-    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-
-    cameraFront = glm::normalize(direction);
+    camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
-}
-
-glm::mat4 customLookAt(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp) {
-
-    // 1. Position = known
-    // 2. Calculate cameraDirection
-    glm::vec3 zaxis = glm::normalize(position - target);
-    // 3. Get positive right axis vector 
-    glm::vec3 xaxis = glm::normalize(glm::cross(glm::normalize(worldUp), zaxis));
-    // 4. Calculate camera up vector
-    glm::vec3 yaxis = glm::cross(zaxis, xaxis); 
-
-    // Create translation and rotation matrix
-    // In glm we access elements as mat[col][row] due to column-major layout
-    glm::mat4 translation = glm::mat4(1.0f);    // Identity matrix by default
-    translation[3][0] = -position.x;    // Third column, first row
-    translation[3][1] = -position.y;
-    translation[3][2] = -position.z;
-
-    glm::mat4 rotation = glm::mat4(1.0f);
-    rotation[0][0] = xaxis.x;   // First column, first row
-    rotation[1][0] = xaxis.y;
-    rotation[2][0] = xaxis.z;
-    rotation[0][1] = yaxis.x;   // First column, second row
-    rotation[1][1] = yaxis.y;
-    rotation[2][1] = yaxis.z;
-    rotation[0][2] = zaxis.x;   // First column, third row
-    rotation[1][2] = zaxis.y;
-    rotation[2][2] = zaxis.z; 
-
-    // Return lookAt matrix as combination of translation and rotation matrix
-    return rotation * translation; // Remember to read from right to left (first translation then rotation)
 }
 
 int main() {
@@ -370,10 +306,11 @@ int main() {
 
         glm::mat4 view = glm::mat4(1.0f);
         //view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-        view = customLookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        //view = customLookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        view = camera.GetViewMatrix();
 
         glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(fov), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
+        projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
 
         ShaderProgram.setMat4("view", view);
         ShaderProgram.setMat4("projection", projection);
