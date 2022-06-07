@@ -27,6 +27,9 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+// lightsource
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
 void processInput(GLFWwindow *window) {
 
     float cameraSpeed = 2.5f * deltaTime;
@@ -124,10 +127,10 @@ int main() {
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
-    const char* vPath = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_colors/src/shaders/shader.vs";
-    const char* fPath = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_colors/src/shaders/shader.fs";
+    const char* cube_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_colors/src/shaders/cube.vs";
+    const char* cube_fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_colors/src/shaders/cube.fs";
     
-    Shader ShaderProgram = Shader(vPath, fPath);
+    Shader CubeShaderProgram = Shader(cube_vertex_shader_path, cube_fragment_shader_path);
 
     GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f,
@@ -190,6 +193,28 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
+    const char* light_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_colors/src/shaders/lightsource.vs";
+    const char* light_fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_colors/src/shaders/lightsource.fs";
+
+	Shader LightShaderProgram(light_vertex_shader_path, light_fragment_shader_path);
+   
+	GLuint lightVAO;
+	GLuint lightVBO;
+
+	glGenVertexArrays(1, &lightVAO);
+	glGenBuffers(1, &lightVBO);
+	
+	glBindVertexArray(lightVAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);	
+ 
     glEnable(GL_DEPTH_TEST);
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -204,6 +229,7 @@ int main() {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// coral cube
 		glm::mat4 model = glm::mat4(1.0f);
 
         glm::mat4 view = glm::mat4(1.0f);
@@ -212,14 +238,27 @@ int main() {
         glm::mat4 projection = glm::mat4(1.0f);
         projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
 
-        ShaderProgram.use(); 
-		ShaderProgram.setMat4("model", model);
-        ShaderProgram.setMat4("view", view);
-        ShaderProgram.setMat4("projection", projection);
+        CubeShaderProgram.use(); 
+		CubeShaderProgram.setMat4("model", model);
+        CubeShaderProgram.setMat4("view", view);
+        CubeShaderProgram.setMat4("projection", projection);
        
         glBindVertexArray(VAO);
 		
 		glDrawArrays(GL_TRIANGLES, 0, 36);    
+
+		//lightsource cube
+		model = glm::translate(model, lightPos);
+		model = glm::scale(model, glm::vec3(0.4f));
+
+		LightShaderProgram.use();
+		LightShaderProgram.setMat4("model", model);
+		LightShaderProgram.setMat4("view", view);
+		LightShaderProgram.setMat4("projection", projection);				
+
+		glBindVertexArray(lightVAO);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -227,7 +266,11 @@ int main() {
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    ShaderProgram.end();
+    CubeShaderProgram.end();
+
+    glDeleteVertexArrays(1, &lightVAO);
+    glDeleteBuffers(1, &lightVBO);
+    LightShaderProgram.end();
 
     glfwTerminate();
 
