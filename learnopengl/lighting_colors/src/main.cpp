@@ -239,6 +239,10 @@ int main() {
         projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
 
         CubeShaderProgram.use(); 
+		
+		CubeShaderProgram.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+		CubeShaderProgram.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+
 		CubeShaderProgram.setMat4("model", model);
         CubeShaderProgram.setMat4("view", view);
         CubeShaderProgram.setMat4("projection", projection);
