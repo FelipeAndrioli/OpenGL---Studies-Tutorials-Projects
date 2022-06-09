@@ -246,6 +246,7 @@ int main() {
 		CubeShaderProgram.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
 		CubeShaderProgram.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
 		CubeShaderProgram.setVec3("lightPos", lightPos);
+		CubeShaderProgram.setVec3("viewPos", camera.Position);
 
 		CubeShaderProgram.setMat4("model", model);
         CubeShaderProgram.setMat4("view", view);
