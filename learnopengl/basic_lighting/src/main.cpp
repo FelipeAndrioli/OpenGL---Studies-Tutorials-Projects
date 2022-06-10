@@ -257,6 +257,14 @@ int main() {
 		glDrawArrays(GL_TRIANGLES, 0, 36);    
 
 		//lightsource cube
+
+		lightPos.x = 2.0f * sin(glfwGetTime() * 2.0f);
+		lightPos.z = 2.0f * cos(glfwGetTime() * 2.0f);
+
+		std::cout << "GlfwGetTime = " << glfwGetTime() << std::endl;	
+		std::cout << "Sine -> glfwGetTime = " << sin(glfwGetTime()) << std::endl;	
+		std::cout << "Cosine -> glfwGetTime = " << cos(glfwGetTime()) << std::endl;	
+
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.4f));
 
