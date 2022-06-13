@@ -1,16 +1,18 @@
 #version 330 core
 
-uniform vec3 objectColor;
-uniform vec3 lightColor;
+//uniform vec3 objectColor;
+//uniform vec3 lightColor;
 
-in vec3 Normal;
-in vec3 FragPos;
-in vec3 LightPos;
+//in vec3 Normal;
+//in vec3 FragPos;
+//in vec3 LightPos;
+in vec3 ResultingColor;
 
 out vec4 FragColor;
 
 void main() {
 
+	/* -> Phong shading model
 	// ambient 	
 	float ambientStrength = 0.1;
 	vec3 ambient = ambientStrength * lightColor;
@@ -30,4 +32,7 @@ void main() {
 
 	vec3 result = (ambient + diffuse + specular) * objectColor;
 	FragColor = vec4(result, 1.0); 
+	*/
+
+	FragColor = vec4(ResultingColor, 1.0);	
 }
