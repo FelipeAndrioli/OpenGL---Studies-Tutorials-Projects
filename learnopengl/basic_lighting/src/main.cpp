@@ -28,7 +28,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // lightsource
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(2.0f, 2.0f, 2.0f);
 
 void processInput(GLFWwindow *window) {
 
@@ -258,12 +258,8 @@ int main() {
 
 		//lightsource cube
 
-		lightPos.x = 2.0f * sin(glfwGetTime() * 2.0f);
-		lightPos.z = 2.0f * cos(glfwGetTime() * 2.0f);
-
-		std::cout << "GlfwGetTime = " << glfwGetTime() << std::endl;	
-		std::cout << "Sine -> glfwGetTime = " << sin(glfwGetTime()) << std::endl;	
-		std::cout << "Cosine -> glfwGetTime = " << cos(glfwGetTime()) << std::endl;	
+		lightPos.x = 5.0f * sin(glfwGetTime());
+		lightPos.z = 5.0f * cos(glfwGetTime());
 
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.4f));
