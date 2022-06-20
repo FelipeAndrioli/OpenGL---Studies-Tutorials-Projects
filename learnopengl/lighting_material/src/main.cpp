@@ -242,7 +242,7 @@ int main(int argv, char* argc[]) {
         projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
 
         CubeShaderProgram.use(); 
-
+		
 		glm::vec3 lightColor;
 		lightColor.x = sin(glfwGetTime() * 2.0f);
 		lightColor.y = sin(glfwGetTime() * 0.7f);
@@ -257,10 +257,21 @@ int main(int argv, char* argc[]) {
 		CubeShaderProgram.setVec3("light.ambient", ambientColor);
 		CubeShaderProgram.setVec3("lignt.diffuse", diffuseColor);	
 		CubeShaderProgram.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+	
+		// exercise 1 
+		glm::vec3 materialColor;
+		materialColor.x = sin(glfwGetTime() * 2.0f);
+		materialColor.y = sin(glfwGetTime() * 0.7f);
+		materialColor.z = sin(glfwGetTime() * 1.3f);
 
+		glm::vec3 diffuseMaterialColor = materialColor * glm::vec3(0.5f);
+		glm::vec3 ambientMaterialColor = materialColor * glm::vec3(0.2f);
+	
 		CubeShaderProgram.setFloat("material.shininess", 32.0f);
-		CubeShaderProgram.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-		CubeShaderProgram.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+		//CubeShaderProgram.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+		//CubeShaderProgram.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+		CubeShaderProgram.setVec3("material.ambient", ambientMaterialColor);
+		CubeShaderProgram.setVec3("material.diffuse", diffuseMaterialColor);	
 		CubeShaderProgram.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 		
 		CubeShaderProgram.setVec3("viewPos", camera.Position);
