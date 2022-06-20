@@ -242,7 +242,8 @@ int main(int argv, char* argc[]) {
         projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
 
         CubeShaderProgram.use(); 
-		
+	
+		/*	
 		glm::vec3 lightColor;
 		lightColor.x = sin(glfwGetTime() * 2.0f);
 		lightColor.y = sin(glfwGetTime() * 0.7f);
@@ -250,14 +251,18 @@ int main(int argv, char* argc[]) {
 
 		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
 		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+		*/
 
 		CubeShaderProgram.setVec3("light.position", lightPos);
 		//CubeShaderProgram.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		//CubeShaderProgram.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-		CubeShaderProgram.setVec3("light.ambient", ambientColor);
-		CubeShaderProgram.setVec3("lignt.diffuse", diffuseColor);	
+		//CubeShaderProgram.setVec3("light.ambient", ambientColor);
+		//CubeShaderProgram.setVec3("lignt.diffuse", diffuseColor);	
+		CubeShaderProgram.setVec3("light.ambient", 1.0f, 1.0f, 1.0f);
+		CubeShaderProgram.setVec3("light.diffuse", 1.0f, 1.0f, 1.0f);
 		CubeShaderProgram.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 	
+		/*	
 		// exercise 1 
 		glm::vec3 materialColor;
 		materialColor.x = sin(glfwGetTime() * 2.0f);
@@ -266,14 +271,23 @@ int main(int argv, char* argc[]) {
 
 		glm::vec3 diffuseMaterialColor = materialColor * glm::vec3(0.5f);
 		glm::vec3 ambientMaterialColor = materialColor * glm::vec3(0.2f);
+		*/		
 	
-		CubeShaderProgram.setFloat("material.shininess", 32.0f);
+		//CubeShaderProgram.setFloat("material.shininess", 32.0f);
+		
+		CubeShaderProgram.setFloat("material.shininess", 0.4 * 128.0f);
+	
 		//CubeShaderProgram.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
 		//CubeShaderProgram.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-		CubeShaderProgram.setVec3("material.ambient", ambientMaterialColor);
-		CubeShaderProgram.setVec3("material.diffuse", diffuseMaterialColor);	
-		CubeShaderProgram.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-		
+		//CubeShaderProgram.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+		//CubeShaderProgram.setVec3("material.ambient", ambientMaterialColor);
+		//CubeShaderProgram.setVec3("material.diffuse", diffuseMaterialColor);	
+
+		// exercise 2		
+		CubeShaderProgram.setVec3("material.ambient", 0.24725f, 0.1995f, 0.0745f);			
+		CubeShaderProgram.setVec3("material.diffuse", 0.75164f, 0.60648f, 0.22648f);			
+		CubeShaderProgram.setVec3("material.ambient", 0.628281f, 0.555802f, 0.366065f);			
+	
 		CubeShaderProgram.setVec3("viewPos", camera.Position);
 
 		CubeShaderProgram.setMat4("model", model);
