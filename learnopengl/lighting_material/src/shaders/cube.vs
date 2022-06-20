@@ -15,14 +15,10 @@ out vec3 Normal;
 out vec3 ResultingColor;
 
 void main() {
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
-	FragPos = vec3(view * model * vec4(aPos, 1.0));
-	
-	// Normal to avoid light distorcion	
-	Normal = mat3(transpose(inverse(view * model))) * aNormal;
+	FragPos = vec3(model * vec4(aPos, 1.0));
+	Normal = mat3(transpose(inverse(model))) * aNormal;
 
-	// Light position calculated in View Space
-	LightPos = vec3(view * vec4(lightPos, 1.0));
+	gl_Position = projection * view * vec4(FragPos, 1.0);
 }
 
 

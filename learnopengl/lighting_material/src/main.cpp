@@ -98,14 +98,14 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-int main() {
+int main(int argv, char* argc[]) {
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Lighing Colors.exe", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, argc[0], NULL, NULL);
 
     if (window == NULL) {
         std::cout << "Failed initializing the window!" << std::endl;
@@ -127,8 +127,8 @@ int main() {
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
-    const char* cube_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/basic_lighting/src/shaders/cube.vs";
-    const char* cube_fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/basic_lighting/src/shaders/cube.fs";
+    const char* cube_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_material/src/shaders/cube.vs";
+    const char* cube_fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_material/src/shaders/cube.fs";
     
     Shader CubeShaderProgram = Shader(cube_vertex_shader_path, cube_fragment_shader_path);
 	
@@ -196,8 +196,8 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    const char* light_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/basic_lighting/src/shaders/lightsource.vs";
-    const char* light_fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/basic_lighting/src/shaders/lightsource.fs";
+    const char* light_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_material/src/shaders/lightsource.vs";
+    const char* light_fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_material/src/shaders/lightsource.fs";
 
 	Shader LightShaderProgram(light_vertex_shader_path, light_fragment_shader_path);
    
@@ -222,7 +222,7 @@ int main() {
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    while (!glfwWindowShouldClose(window)) {
+	while (!glfwWindowShouldClose(window)) {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
@@ -242,10 +242,27 @@ int main() {
         projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
 
         CubeShaderProgram.use(); 
+
+		glm::vec3 lightColor;
+		lightColor.x = sin(glfwGetTime() * 2.0f);
+		lightColor.y = sin(glfwGetTime() * 0.7f);
+		lightColor.z = sin(glfwGetTime() * 1.3f);
+
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+		CubeShaderProgram.setVec3("light.position", lightPos);
+		//CubeShaderProgram.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+		//CubeShaderProgram.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+		CubeShaderProgram.setVec3("light.ambient", ambientColor);
+		CubeShaderProgram.setVec3("lignt.diffuse", diffuseColor);	
+		CubeShaderProgram.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+		CubeShaderProgram.setFloat("material.shininess", 32.0f);
+		CubeShaderProgram.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+		CubeShaderProgram.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+		CubeShaderProgram.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 		
-		CubeShaderProgram.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-		CubeShaderProgram.setVec3("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
-		CubeShaderProgram.setVec3("lightPos", lightPos);
 		CubeShaderProgram.setVec3("viewPos", camera.Position);
 
 		CubeShaderProgram.setMat4("model", model);
