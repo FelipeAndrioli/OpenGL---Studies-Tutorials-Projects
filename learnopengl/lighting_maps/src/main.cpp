@@ -269,23 +269,18 @@ int main(int argv, char* argc[]) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-	// load textures - diffuse
+	// load textures 
 	// ----------------------
 	unsigned int diffuseMap = loadTexture("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/container2.png");
-	
+	unsigned int specularMap = loadTexture("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/container2_specular.png");
+	unsigned int emissionMap = loadTexture("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/matrix.jpg");
+
 	// shader configuration
 	// ---------------------	
 	CubeShaderProgram.use();
 	CubeShaderProgram.setInt("material.diffuse", 0);
-
-	// load textures - specular
-	// -----------------------
-	unsigned int specularMap = loadTexture("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/container2_specular.png");
-
-	// shader configuration
-	// ---------------------
-	CubeShaderProgram.use();
 	CubeShaderProgram.setInt("material.specular", 1);
+	CubeShaderProgram.setInt("material.emission", 2);
 	
 	// second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object, which is also a 3D cube)
 	const char* light_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/shaders/lightsource.vs";
@@ -333,7 +328,7 @@ int main(int argv, char* argc[]) {
 		CubeShaderProgram.setVec3("light.position", lightPos);
 		CubeShaderProgram.setVec3("viewPos", camera.Position);
 	
-		// light properties	
+		// light properties
 		CubeShaderProgram.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		CubeShaderProgram.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		CubeShaderProgram.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
@@ -361,6 +356,10 @@ int main(int argv, char* argc[]) {
 		// bind specular map
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
+
+		// bind emission map
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, emissionMap);
 
 		// render the cube	
         glBindVertexArray(VAO);
