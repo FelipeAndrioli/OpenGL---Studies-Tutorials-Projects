@@ -269,7 +269,7 @@ int main(int argv, char* argc[]) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-	// load textures 
+	// load textures - diffuse
 	// ----------------------
 	unsigned int diffuseMap = loadTexture("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/container2.png");
 	
@@ -277,6 +277,15 @@ int main(int argv, char* argc[]) {
 	// ---------------------	
 	CubeShaderProgram.use();
 	CubeShaderProgram.setInt("material.diffuse", 0);
+
+	// load textures - specular
+	// -----------------------
+	unsigned int specularMap = loadTexture("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/container2_specular.png");
+
+	// shader configuration
+	// ---------------------
+	CubeShaderProgram.use();
+	CubeShaderProgram.setInt("material.specular", 1);
 	
 	// second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object, which is also a 3D cube)
 	const char* light_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/shaders/lightsource.vs";
@@ -320,8 +329,6 @@ int main(int argv, char* argc[]) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// object cube
-
-       
         CubeShaderProgram.use(); 
 		CubeShaderProgram.setVec3("light.position", lightPos);
 		CubeShaderProgram.setVec3("viewPos", camera.Position);
@@ -335,7 +342,7 @@ int main(int argv, char* argc[]) {
 		CubeShaderProgram.setFloat("material.shininess", 64.0f);
 		//CubeShaderProgram.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
 		//CubeShaderProgram.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-		CubeShaderProgram.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+		//CubeShaderProgram.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 
 		// view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
@@ -350,6 +357,10 @@ int main(int argv, char* argc[]) {
 		// bind diffuse map 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);	
+
+		// bind specular map
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularMap);
 
 		// render the cube	
         glBindVertexArray(VAO);
