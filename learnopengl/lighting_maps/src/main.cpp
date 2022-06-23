@@ -30,6 +30,9 @@ float lastFrame = 0.0f;
 // lightsource
 glm::vec3 lightPos(2.0f, 2.0f, 2.0f);
 
+// process all input: query GLFW whether relevant keys are pressed/released this frame
+// and react accordingly
+// -----------------------------------------
 void processInput(GLFWwindow *window) {
 
     float cameraSpeed = 2.5f * deltaTime;
@@ -71,10 +74,14 @@ void processInput(GLFWwindow *window) {
     }
 }
 
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// ------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }
 
+// glfw: whenever the mouse moves, this callback is called
+// ------------------------
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
@@ -94,17 +101,68 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
+// glfw: whenever the window size changed (by OS or user resize) this callback
+// function executes
+// --------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+	// make sure the viewport matches the window dimensions; note that width and
+	// height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
 
-int main(int argv, char* argc[]) {
+// utility function for loading a 2D texture from file
+// ---------------------
+unsigned int loadTexture(char const *path) {
+	unsigned int textureID;
 
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	int width;
+	int height;
+	int nrChannels;	
+
+	unsigned char *texture_data = stbi_load(path, &width, &height, &nrChannels, 0);
+	
+	if (texture_data) {
+		
+		GLenum format;
+
+		if (nrChannels == 1) {
+			format = GL_RED;
+		} else if (nrChannels == 3) {
+			format = GL_RGB;
+		} else if (nrChannels == 4) {
+			format = GL_RGBA;
+		} 
+
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, texture_data);
+		glGenerateMipmap(GL_TEXTURE_2D); 
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		stbi_image_free(texture_data);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	} else {
+		std::cout << "Failed to load texture at path: " << path << std::endl;
+		stbi_image_free(texture_data);
+	}
+ 
+	return textureID;	
+}
+
+int main(int argv, char* argc[]) {
+	// glfw: initialize and configure
+	// ------------------------
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+	// glfw: window creation
+	// -----------------------
     GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, argc[0], NULL, NULL);
 
     if (window == NULL) {
@@ -114,24 +172,34 @@ int main(int argv, char* argc[]) {
     }
 
     glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+	
+	// tell GLFW to capture our mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+   
+	// glad: load all OpenGL function pointers
+	// --------------------- 
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed initializing OpenGL context" << std::endl;
         glfwTerminate();
         return -1;
     }
+	
+	// configure global opengl state
+	// ---------------------------
+    glEnable(GL_DEPTH_TEST);
 
-    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-    glfwSetScrollCallback(window, scroll_callback);
-
-    const char* cube_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/shaders/cube.vs";
+	// build and compile the cube shader
+	// -----------------------	
+	const char* cube_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/shaders/cube.vs";
     const char* cube_fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/shaders/cube.fs";
     
     Shader CubeShaderProgram = Shader(cube_vertex_shader_path, cube_fragment_shader_path);
-	
+
+	// set up vertex data (and buffer(s)) and configure vertex attributes
+	// -------------------------	
 	GLfloat vertices[] = {
 		// positions          // normals           // texture coords
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
@@ -176,7 +244,8 @@ int main(int argv, char* argc[]) {
 		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 	};
-	    
+	   
+	// first, configure the cube's VAO (and VBO) 
     GLuint VAO; 
     GLuint VBO; 
 
@@ -200,35 +269,16 @@ int main(int argv, char* argc[]) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-	// box texture load init
-	unsigned int box_texture;
-
-	glGenTextures(1, &box_texture);
-	glBindTexture(GL_TEXTURE_2D, box_texture);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// load textures 
+	// ----------------------
+	unsigned int diffuseMap = loadTexture("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/container2.png");
 	
-	int width;
-	int height;
-	int nrChannels;	
-
-	unsigned char *texture_data = stbi_load("C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/container2.png", &width, &height, &nrChannels, 0);
+	// shader configuration
+	// ---------------------	
+	CubeShaderProgram.use();
+	CubeShaderProgram.setInt("material.diffuse", 0);
 	
-	if (texture_data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, texture_data);
-  		glGenerateMipmap(GL_TEXTURE_2D); 
-	} else {
-		std::cout << "Failed to load texture!" << std::endl;
-	}
- 
-	stbi_image_free(texture_data);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	// box texture load end
-	
+	// second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object, which is also a 3D cube)
 	const char* light_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/shaders/lightsource.vs";
     const char* light_fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/lighting_maps/src/shaders/lightsource.fs";
 
@@ -251,53 +301,61 @@ int main(int argv, char* argc[]) {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);	
  
-    glEnable(GL_DEPTH_TEST);
-
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
+	// render loop
+	// ----------------	
 	while (!glfwWindowShouldClose(window)) {
+		// per-frame time logic
+		// --------------- 
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
+	
+		// input
+		// ---------
         processInput(window);
 
+		// render
+		// ---------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// coral cube
-		glm::mat4 model = glm::mat4(1.0f);
+		// object cube
 
-        glm::mat4 view = glm::mat4(1.0f);
-		view = camera.GetViewMatrix();
-
-        glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
-
+       
         CubeShaderProgram.use(); 
-	
 		CubeShaderProgram.setVec3("light.position", lightPos);
+		CubeShaderProgram.setVec3("viewPos", camera.Position);
+	
+		// light properties	
 		CubeShaderProgram.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		CubeShaderProgram.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		CubeShaderProgram.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-	
-		CubeShaderProgram.setFloat("material.shininess", 32.0f);
-		CubeShaderProgram.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-		CubeShaderProgram.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+
+		// material properties	
+		CubeShaderProgram.setFloat("material.shininess", 64.0f);
+		//CubeShaderProgram.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+		//CubeShaderProgram.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
 		CubeShaderProgram.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 
-		CubeShaderProgram.setVec3("viewPos", camera.Position);
-
-		CubeShaderProgram.setMat4("model", model);
-        CubeShaderProgram.setMat4("view", view);
+		// view/projection transformations
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
+		glm::mat4 view = camera.GetViewMatrix();
         CubeShaderProgram.setMat4("projection", projection);
-       
+        CubeShaderProgram.setMat4("view", view);
+
+		// world transformations
+		glm::mat4 model = glm::mat4(1.0f);
+		CubeShaderProgram.setMat4("model", model);
+      	
+		// bind diffuse map 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseMap);	
+
+		// render the cube	
         glBindVertexArray(VAO);
-		
 		glDrawArrays(GL_TRIANGLES, 0, 36);    
 
 		//lightsource cube
-
 		lightPos.x = 5.0f * sin(glfwGetTime());
 		lightPos.z = 5.0f * cos(glfwGetTime());
 
@@ -310,13 +368,15 @@ int main(int argv, char* argc[]) {
 		LightShaderProgram.setMat4("projection", projection);				
 
 		glBindVertexArray(lightVAO);
-
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
+		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+	// optional: de-allocate all resources once they've outlived their purpose:
+	// ------------------
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     CubeShaderProgram.end();
@@ -325,6 +385,8 @@ int main(int argv, char* argc[]) {
     glDeleteBuffers(1, &lightVBO);
     LightShaderProgram.end();
 
+	// glfw: terminate, clearing all previously allocated GLFW resources
+	// -------------
     glfwTerminate();
 
     return 0;
