@@ -337,7 +337,11 @@ int main(int argv, char* argc[]) {
 
 		// object cube
         CubeShaderProgram.use(); 
-		CubeShaderProgram.setVec3("light.position", lightPos);
+		CubeShaderProgram.setVec3("light.position", camera.Position);	
+		CubeShaderProgram.setVec3("light.direction", camera.Front);	
+		CubeShaderProgram.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		CubeShaderProgram.setFloat("light.outerCutOff", glm::cos(glm::radians(20.0f)));
+		//CubeShaderProgram.setVec3("light.position", lightPos);
 		//CubeShaderProgram.setVec3("light.direction", -0.2f, -1.0f, -0.3f);	
 		CubeShaderProgram.setVec3("viewPos", camera.Position);
 	
@@ -386,8 +390,9 @@ int main(int argv, char* argc[]) {
 		}
 
 		//lightsource cube
-		//lightPos.x = 5.0f * sin(glfwGetTime());
-		//lightPos.z = 5.0f * cos(glfwGetTime());
+		/*
+		lightPos.x = 5.0f * sin(glfwGetTime());
+		lightPos.z = 5.0f * cos(glfwGetTime());
 		
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, lightPos);
@@ -400,6 +405,7 @@ int main(int argv, char* argc[]) {
 
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+		*/
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
         glfwSwapBuffers(window);
