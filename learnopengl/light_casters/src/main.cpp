@@ -337,14 +337,18 @@ int main(int argv, char* argc[]) {
 
 		// object cube
         CubeShaderProgram.use(); 
-		//CubeShaderProgram.setVec3("light.position", lightPos);
-		CubeShaderProgram.setVec3("light.direction", -0.2f, -1.0f, -0.3f);	
+		CubeShaderProgram.setVec3("light.position", lightPos);
+		//CubeShaderProgram.setVec3("light.direction", -0.2f, -1.0f, -0.3f);	
 		CubeShaderProgram.setVec3("viewPos", camera.Position);
 	
 		// light properties
 		CubeShaderProgram.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
 		CubeShaderProgram.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		CubeShaderProgram.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+		CubeShaderProgram.setFloat("light.constant", 1.0f);
+		CubeShaderProgram.setFloat("light.liearn", 0.09f);
+		CubeShaderProgram.setFloat("light.quadratic", 0.032f);
 
 		// material properties	
 		CubeShaderProgram.setFloat("material.shininess", 32.0f);
@@ -381,11 +385,11 @@ int main(int argv, char* argc[]) {
 			glDrawArrays(GL_TRIANGLES, 0, 36);	
 		}
 
-		/* a lamp object is weird when we only have a directional light, don't render the light object
 		//lightsource cube
-		lightPos.x = 5.0f * sin(glfwGetTime());
-		lightPos.z = 5.0f * cos(glfwGetTime());
-
+		//lightPos.x = 5.0f * sin(glfwGetTime());
+		//lightPos.z = 5.0f * cos(glfwGetTime());
+		
+		model = glm::mat4(1.0f);
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.4f));
 
@@ -396,7 +400,6 @@ int main(int argv, char* argc[]) {
 
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		*/
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
         glfwSwapBuffers(window);
