@@ -340,7 +340,7 @@ int main(int argv, char* argc[]) {
 		CubeShaderProgram.setVec3("light.position", camera.Position);	
 		CubeShaderProgram.setVec3("light.direction", camera.Front);	
 		CubeShaderProgram.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-		CubeShaderProgram.setFloat("light.outerCutOff", glm::cos(glm::radians(20.0f)));
+		CubeShaderProgram.setFloat("light.outerCutOff", glm::cos(glm::radians(15.0f)));
 		//CubeShaderProgram.setVec3("light.position", lightPos);
 		//CubeShaderProgram.setVec3("light.direction", -0.2f, -1.0f, -0.3f);	
 		CubeShaderProgram.setVec3("viewPos", camera.Position);
@@ -351,8 +351,9 @@ int main(int argv, char* argc[]) {
 		CubeShaderProgram.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 		CubeShaderProgram.setFloat("light.constant", 1.0f);
-		CubeShaderProgram.setFloat("light.liearn", 0.09f);
-		CubeShaderProgram.setFloat("light.quadratic", 0.032f);
+		CubeShaderProgram.setFloat("light.linear", 0.09f);
+		//CubeShaderProgram.setFloat("light.quadratic", 0.032f);
+		CubeShaderProgram.setFloat("light.quadratic", 0.005f);
 
 		// material properties	
 		CubeShaderProgram.setFloat("material.shininess", 32.0f);

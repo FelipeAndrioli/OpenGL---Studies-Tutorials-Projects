@@ -52,7 +52,6 @@ void main() {
 	float distance = length(light.position - FragPos);
 	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
-
 	// ambient 
 	//vec3 ambient = light.ambient * material.ambient; 
 	vec3 ambient = light.ambient * texture(material.diffuse, TexCoords).rgb; 
@@ -79,5 +78,4 @@ void main() {
 	
 	vec3 result = ambient + diffuse + specular;
 	FragColor = vec4(result, 1.0); 
-	
 }
