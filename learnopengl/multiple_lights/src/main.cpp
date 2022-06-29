@@ -407,7 +407,7 @@ int main(int argv, char* argc[]) {
 		CubeShaderProgram.setFloat("spotLight.linear", 0.09f);				
 		CubeShaderProgram.setFloat("spotLight.quadratic", 0.032f);				
 		CubeShaderProgram.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));				
-		CubeShaderProgram.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));				
+		CubeShaderProgram.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(20.0f)));				
 
 		// view/projection transformations
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
