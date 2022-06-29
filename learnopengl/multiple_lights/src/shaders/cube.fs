@@ -127,6 +127,10 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 	vec3 lightDir = normalize(light.position - fragPos);
 
+	// attenuation
+	float distance = length(light.position - fragPos);
+	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+
 	// intensity
 	float theta = dot(lightDir, normalize(-light.direction));
 	float epsilon = light.cutOff - light.outerCutOff;
@@ -142,6 +146,12 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
 	vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
 	vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
 
+	// applying attenuation
+	ambient *= attenuation;
+	diffuse *= attenuation;
+	specular *= attenuation;
+
+	// applying intensity
 	ambient *= intensity;
 	diffuse *= intensity;
 	specular *= intensity;
@@ -166,6 +176,6 @@ void main() {
 
 	// phase 3: Spot light
 	result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
-
+	
 	FragColor = vec4(result, 1.0);
 }
