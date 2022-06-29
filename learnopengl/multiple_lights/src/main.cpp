@@ -258,6 +258,14 @@ int main(int argv, char* argc[]) {
         glm::vec3( 1.5f,  0.2f, -1.5f),
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
+
+	// positions of the point lights
+	glm::vec3 pointLightPositions[] = {
+		glm::vec3(0.7f, 0.2f, 2.0f),
+		glm::vec3(2.3f, -3.3f, -4.0f),
+		glm::vec3(-4.0f, 2.0f, -12.0f),
+		glm::vec3(0.0f, 0.0f, -3.0f)
+	};
  
 	// first, configure the cube's VAO (and VBO) 
     GLuint VAO; 
@@ -337,76 +345,118 @@ int main(int argv, char* argc[]) {
 
 		// object cube
         CubeShaderProgram.use(); 
-		CubeShaderProgram.setVec3("light.position", camera.Position);	
-		CubeShaderProgram.setVec3("light.direction", camera.Front);	
-		CubeShaderProgram.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-		CubeShaderProgram.setFloat("light.outerCutOff", glm::cos(glm::radians(15.0f)));
-		//CubeShaderProgram.setVec3("light.position", lightPos);
-		//CubeShaderProgram.setVec3("light.direction", -0.2f, -1.0f, -0.3f);	
 		CubeShaderProgram.setVec3("viewPos", camera.Position);
-	
-		// light properties
-		CubeShaderProgram.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-		CubeShaderProgram.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-		CubeShaderProgram.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-
-		CubeShaderProgram.setFloat("light.constant", 1.0f);
-		CubeShaderProgram.setFloat("light.linear", 0.09f);
-		//CubeShaderProgram.setFloat("light.quadratic", 0.032f);
-		CubeShaderProgram.setFloat("light.quadratic", 0.005f);
-
-		// material properties	
 		CubeShaderProgram.setFloat("material.shininess", 32.0f);
-		//CubeShaderProgram.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-		//CubeShaderProgram.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-		//CubeShaderProgram.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+		
+		/*
+			Here we set all the uniforms the the 5/6 types of lights we have. We have to set them manually
+			and index the proper PointLight struct in the array to set each uniform variable. This can be
+			done more code-fiendly by defining light types as classes and set their values in there, or by
+			using a more efficient uniform approach by using 'Uniform buffer objects', but that is something
+			we'll discuss in the 'Advanced GLSL' tutorial.
+		*/		
+		// directional light
+		CubeShaderProgram.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		CubeShaderProgram.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+		CubeShaderProgram.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+		CubeShaderProgram.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+
+		// point light 1
+		CubeShaderProgram.setVec3("pointLights[0].position", pointLightPositions[0]);
+		CubeShaderProgram.setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		CubeShaderProgram.setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		CubeShaderProgram.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		CubeShaderProgram.setFloat("pointLights[0].constant", 1.0f);	
+		CubeShaderProgram.setFloat("pointLights[0].linear", 0.09f);	
+		CubeShaderProgram.setFloat("pointLights[0].quadratic", 0.032f);	
+	
+		// point light 2
+		CubeShaderProgram.setVec3("pointLights[1].position", pointLightPositions[1]);
+		CubeShaderProgram.setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		CubeShaderProgram.setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		CubeShaderProgram.setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		CubeShaderProgram.setFloat("pointLights[1].constant", 1.0f);	
+		CubeShaderProgram.setFloat("pointLights[1].linear", 0.09f);	
+		CubeShaderProgram.setFloat("pointLights[1].quadratic", 0.032f);	
+
+		// point light 3
+		CubeShaderProgram.setVec3("pointLights[2].position", pointLightPositions[2]);
+		CubeShaderProgram.setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+		CubeShaderProgram.setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+		CubeShaderProgram.setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+		CubeShaderProgram.setFloat("pointLights[2].constant", 1.0f);	
+		CubeShaderProgram.setFloat("pointLights[2].linear", 0.09f);	
+		CubeShaderProgram.setFloat("pointLights[2].quadratic", 0.032f);	
+			
+		// point light 4
+		CubeShaderProgram.setVec3("pointLights[3].position", pointLightPositions[3]);
+		CubeShaderProgram.setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+		CubeShaderProgram.setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+		CubeShaderProgram.setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+		CubeShaderProgram.setFloat("pointLights[3].constant", 1.0f);	
+		CubeShaderProgram.setFloat("pointLights[3].linear", 0.09f);	
+		CubeShaderProgram.setFloat("pointLights[3].quadratic", 0.032f);	
+			
+		// spotlight
+		CubeShaderProgram.setVec3("spotLight.position", camera.Position);				
+		CubeShaderProgram.setVec3("spotLight.direction", camera.Front);				
+		CubeShaderProgram.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);				
+		CubeShaderProgram.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);				
+		CubeShaderProgram.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);				
+		CubeShaderProgram.setFloat("spotLight.constant", 1.0f);				
+		CubeShaderProgram.setFloat("spotLight.linear", 0.09f);				
+		CubeShaderProgram.setFloat("spotLight.quadratic", 0.032f);				
+		CubeShaderProgram.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));				
+		CubeShaderProgram.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));				
 
 		// view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f); 
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-        CubeShaderProgram.setMat4("projection", projection);
-        CubeShaderProgram.setMat4("view", view);
+		CubeShaderProgram.setMat4("projection", projection);
+		CubeShaderProgram.setMat4("view", view);
 
 		// world transformations
 		glm::mat4 model = glm::mat4(1.0f);
 		CubeShaderProgram.setMat4("model", model);
-      	
-		// bind diffuse map 
+
+		// bind diffuse map
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, diffuseMap);	
+		glBindTexture(GL_TEXTURE_2D, diffuseMap);
 
 		// bind specular map
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
 
-		// render the cube	
-        glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 36);    
-
-		for (unsigned int i = 0; i < 10; i++) {
-			model = glm::translate(model, cubePositions[i]);
-			CubeShaderProgram.setMat4("model", model);
-
-			glDrawArrays(GL_TRIANGLES, 0, 36);	
-		}
-
-		//lightsource cube
-		/*
-		lightPos.x = 5.0f * sin(glfwGetTime());
-		lightPos.z = 5.0f * cos(glfwGetTime());
+		// render containers
+		glBindVertexArray(VAO);
 		
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.4f));
+		for (unsigned int i = 0; i < 10; i++) {
+			// calculate the model matrix for each object and pass it to shader before drawing
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			CubeShaderProgram.setMat4("model", model);
+		
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}	
 
+		// draw the light source object(s)
 		LightShaderProgram.use();
-		LightShaderProgram.setMat4("model", model);
+		LightShaderProgram.setMat4("projection", projection);
 		LightShaderProgram.setMat4("view", view);
-		LightShaderProgram.setMat4("projection", projection);				
 
-		glBindVertexArray(lightVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		*/
+		// actual rendenring
+		glBindVertexArray(lightVAO);	
+
+		for (unsigned int i = 0; i < 4; i++) {
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, pointLightPositions[i]);
+			model = glm::scale(model, glm::vec3(0.2f));	// make it a smaller cube
+			LightShaderProgram.setMat4("model", model);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
         glfwSwapBuffers(window);
