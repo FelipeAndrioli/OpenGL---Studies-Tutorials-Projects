@@ -1,9 +1,11 @@
 # Notes to improve development
 
 ## Libraries Build
-    - Need to find a way to build Assimp. It doesn't look to be possible to
-    use as the other Libraries we've been using so far, so an alternative 
-    might be to compile it using VSCode and then just import it into our code.
+    - Assimp. It doesn't look to be possible to use as the other Libraries 
+    we've been using so far, so an alternative might be to compile it using 
+    VSCode and then just import it into our code.
+
+    - ImGUI. 
 
 ## Text Editor
     - Function signature(parameters) suggestion, it would help a lot, however 
