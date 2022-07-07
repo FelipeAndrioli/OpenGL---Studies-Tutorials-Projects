@@ -16,7 +16,7 @@
 #define SCREEN_HEIGHT 600
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
-    glViewport(width, height, 0, 0);
+    glViewport(0, 0, width, height);
     std::cout << "Viewport update -> width: " << width << " height: " << height << std::endl;
 }
 
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     glfwSetScrollCallback(window, scroll_callback);
 
     // tell glfw to capture our mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// glad: load all OpenGL function pointers
 	// --------------------- 
