@@ -74,7 +74,7 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath, con
 
 };
 
-void checkCompileErrors(unsigned int ID, std::string type) {
+void Shader::checkCompileErrors(unsigned int ID, std::string type) {
     int success;
     char infoLog[1024];
 
