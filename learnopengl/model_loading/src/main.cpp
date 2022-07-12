@@ -12,29 +12,47 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "../dependencies/glm/glm/glm.hpp"
+#include "../dependencies/glm/glm/gtc/matrix_transform.hpp"
+#include "../dependencies/glm/glm/gtc/type_ptr.hpp"
+
 #include "temporary_vertices.h"
 #include "shader.h"
 #include "texture.h"
+#include "camera.h"
 
 // settings
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+// Camera settings
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = SCREEN_WIDTH / 2;
+float lastY = SCREEN_HEIGHT / 2;
+bool firstMouse = true;
+
+// timing
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
 /*
  * TODO's
  *
  *  - Texture
- *      - Simple texture
- *      - Class?
  *      - Texture Map
- *  - Camera
- *      - Class
- *      - callbacks
  *  - Lighting
  *      - Material light properties
+ *          - Ambient
+ *          - Diffuse
+ *          - Specular
  *      - Light source light properties
+ *          - Ambient
+ *          - Diffuse
+ *          - Specular
  *  - Types of light
- *
+ *      - Directional
+ *      - Point lights
+ *      - Spot light
  */
 
 
@@ -44,17 +62,51 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
 }
 
 void processInput(GLFWwindow *window) {
+
+    float cameraSpeed = 2.5f * deltaTime;
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        camera.processKeyboard(FORWARD, deltaTime);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        camera.processKeyboard(BACKWARD, deltaTime);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        camera.processKeyboard(LEFT, deltaTime);
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        camera.processKeyboard(RIGHT, deltaTime);
+    }
 }
 
-void cursor_pos_callback(GLFWwindow *window, double xpos, double ypos) {
+void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) {
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
 
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.processMouseMovement(xoffset, yoffset);
 }
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
-
+    camera.processMouseScroll(static_cast<float>(yoffset));
 }
 
 int main(int argc, char* argv[]) {
@@ -78,11 +130,12 @@ int main(int argc, char* argv[]) {
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, cursor_pos_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
     // tell glfw to capture our mouse
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// glad: load all OpenGL function pointers
 	// --------------------- 
@@ -93,7 +146,7 @@ int main(int argc, char* argv[]) {
     }
 
     // configure global opengl state 
-    //glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);
 
     const char *texture_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/container2.png";
    
@@ -123,6 +176,7 @@ int main(int argc, char* argv[]) {
 
     // shaders
     const char *vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/shaders/shader.vs";
+
     const char *fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/shaders/shader.fs";
 
     Shader ModelShader = Shader(vertex_shader_path, fragment_shader_path, nullptr);
@@ -150,19 +204,40 @@ int main(int argc, char* argv[]) {
 
     // application main loop
     while (!glfwWindowShouldClose(window)) {
+        // per-frame time logic
+        // --------------------
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        // input
+        // -----
+        processInput(window);
+
         //render
+        //------
         glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        processInput(window);
-
         ModelTexture.active();
         ModelTexture.bind();
         ModelShader.use();
+        ModelShader.setVec3("viewPos", camera.Position);
+
+        // view/projection transformations
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = camera.getViewMatrix();
+        ModelShader.setMat4("projection", projection);
+        ModelShader.setMat4("view", view);
+
+        // world transformations
+        glm::mat4 model = glm::mat4(1.0f);
+        ModelShader.setMat4("model", model);
+
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
