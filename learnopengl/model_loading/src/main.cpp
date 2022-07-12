@@ -12,7 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "temporary_vertices.h"
+//#include "temporary_vertices.h"
 #include "shader.h"
 
 // settings
@@ -73,8 +73,15 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    float vertices[] = {
+        // positions        
+         0.5f, -0.5f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, // bottom left
+         0.0f,  0.5f, 0.0f  // top 
+    };
+
     // configure global opengl state 
-    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_DEPTH_TEST);
 
     unsigned int VAO;
     unsigned int VBO;
@@ -86,13 +93,17 @@ int main(int argc, char* argv[]) {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
     // shaders
+    const char *vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/shaders/shader.vs";
+    const char *fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/shaders/shader.fs";
+
+    Shader ModelShader = Shader(vertex_shader_path, fragment_shader_path, nullptr);
 
     // imgui initialization
     // --------------------
@@ -103,6 +114,15 @@ int main(int argc, char* argv[]) {
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
+
+    float triangle_r = 0.0f;
+    float triangle_g = 0.0f;
+    float triangle_b = 0.0f;
+
+    glm::vec4 colors_vec;
+    colors_vec.x = triangle_r;
+    colors_vec.y = triangle_g;
+    colors_vec.z = triangle_b;
 
     // application main loop
     while (!glfwWindowShouldClose(window)) {
@@ -116,15 +136,23 @@ int main(int argc, char* argv[]) {
 
         processInput(window);
 
-        //glBindVertexArray(VAO);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        ModelShader.use();
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        ImGui::Begin("Hello there!");
-        ImGui::Text("General Kenobi!!");
+        ImGui::Begin("Configurations");
+        ImGui::SliderFloat("Triangle R", &triangle_r, 0.0f, 1.0f); 
+        ImGui::SliderFloat("Triangle G", &triangle_g, 0.0f, 1.0f); 
+        ImGui::SliderFloat("Triangle B", &triangle_b, 0.0f, 1.0f); 
         ImGui::End();
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        colors_vec.x = triangle_r;
+        colors_vec.y = triangle_g;
+        colors_vec.z = triangle_b;
+        ModelShader.setVec3("colors", colors_vec);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
         glfwSwapBuffers(window);
@@ -135,6 +163,7 @@ int main(int argc, char* argv[]) {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
+    ModelShader.end();
     glDeleteBuffers(1, &VBO);
     glDeleteVertexArrays(1, &VAO);
     glfwTerminate(); 
