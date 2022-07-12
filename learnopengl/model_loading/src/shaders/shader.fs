@@ -4,16 +4,14 @@
     Fragment Shader -> Calculate the color of the fragment
 */
 
-uniform float color_r;
-uniform float color_g;
-uniform float color_b;
-uniform float color_a;
-
 uniform vec3 colors;
+uniform sampler2D m_texture;
+
+in vec3 Normal;
+in vec2 TexCoord;
 
 out vec4 FragColor;
 
 void main() {
-   //FragColor = vec4(color_r, color_g, color_b, color_a); 
-   FragColor = vec4(colors, 1.0);
+   FragColor = texture(m_texture, TexCoord);
 }
