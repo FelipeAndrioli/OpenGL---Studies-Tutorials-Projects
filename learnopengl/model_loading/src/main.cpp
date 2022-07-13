@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 
 //#include <glad/glad.h>
 #include "../dependencies/glad/build/include/glad/glad.h"
@@ -24,6 +25,9 @@
 // settings
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
+#define KEY_PRESS_DELAY 200
+
+bool config_mode = false;
 
 // Camera settings
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -61,6 +65,20 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     std::cout << "Viewport update -> width: " << width << " height: " << height << std::endl;
 }
 
+void setConfigMode(GLFWwindow *window) {
+
+    config_mode = !config_mode;
+    std::cout << "Config mode -> " << config_mode << std::endl;
+    
+    if (config_mode) {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    } else {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+
+    Sleep(KEY_PRESS_DELAY);
+}
+
 void processInput(GLFWwindow *window) {
 
     float cameraSpeed = 2.5f * deltaTime;
@@ -69,24 +87,35 @@ void processInput(GLFWwindow *window) {
         glfwSetWindowShouldClose(window, true);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camera.processKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
+        setConfigMode(window);
     }
 
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camera.processKeyboard(BACKWARD, deltaTime);
-    }
+    if (!config_mode) {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            camera.processKeyboard(FORWARD, deltaTime);
+        }
 
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        camera.processKeyboard(LEFT, deltaTime);
-    }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+            camera.processKeyboard(BACKWARD, deltaTime);
+        }
 
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        camera.processKeyboard(RIGHT, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            camera.processKeyboard(LEFT, deltaTime);
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            camera.processKeyboard(RIGHT, deltaTime);
+        }
     }
 }
 
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) {
+
+    if (config_mode) {
+        return;
+    }
+
     float xpos = static_cast<float>(xposIn);
     float ypos = static_cast<float>(yposIn);
 
@@ -106,6 +135,11 @@ void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) {
 }
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
+ 
+    if (config_mode) {
+        return;
+    }   
+
     camera.processMouseScroll(static_cast<float>(yoffset));
 }
 
@@ -134,6 +168,7 @@ int main(int argc, char* argv[]) {
     glfwSetScrollCallback(window, scroll_callback);
 
     // tell glfw to capture our mouse
+    // default = disabled
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -197,10 +232,7 @@ int main(int argc, char* argv[]) {
     float model_g = 0.0f;
     float model_b = 0.0f;
 
-    glm::vec4 colors_vec;
-    colors_vec.x = model_r;
-    colors_vec.y = model_g;
-    colors_vec.z = model_b;
+    float ambient_strength = 0.2f;
 
     // application main loop
     while (!glfwWindowShouldClose(window)) {
@@ -242,18 +274,13 @@ int main(int argc, char* argv[]) {
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         ImGui::Begin("Configurations");
-        ImGui::SliderFloat("Model R", &model_r, 0.0f, 1.0f); 
-        ImGui::SliderFloat("Model G", &model_g, 0.0f, 1.0f); 
-        ImGui::SliderFloat("Model B", &model_b, 0.0f, 1.0f); 
+        ImGui::SliderFloat("Ambient Strength", &ambient_strength, 0.0f, 1.0f);
         ImGui::End();
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        colors_vec.x = model_r;
-        colors_vec.y = model_g;
-        colors_vec.z = model_b;
-        ModelShader.setVec3("colors", colors_vec);
+        ModelShader.setFloat("ambient_strength", ambient_strength);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
         glfwSwapBuffers(window);
