@@ -27,7 +27,7 @@
 #define SCREEN_HEIGHT 600
 #define KEY_PRESS_DELAY 200
 
-bool config_mode = false;
+bool CONFIG_MODE = false;
 
 // Camera settings
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -67,10 +67,11 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
 
 void setConfigMode(GLFWwindow *window) {
 
-    config_mode = !config_mode;
-    std::cout << "Config mode -> " << config_mode << std::endl;
+    CONFIG_MODE = !CONFIG_MODE;
+    std::string state = (CONFIG_MODE) ? "enabled" : "disabled"; 
+    std::cout << "Config mode " << state << std::endl;
     
-    if (config_mode) {
+    if (CONFIG_MODE) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     } else {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -91,7 +92,7 @@ void processInput(GLFWwindow *window) {
         setConfigMode(window);
     }
 
-    if (!config_mode) {
+    if (!CONFIG_MODE) {
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             camera.processKeyboard(FORWARD, deltaTime);
         }
@@ -112,7 +113,7 @@ void processInput(GLFWwindow *window) {
 
 void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) {
 
-    if (config_mode) {
+    if (CONFIG_MODE) {
         return;
     }
 
@@ -136,7 +137,7 @@ void mouse_callback(GLFWwindow *window, double xposIn, double yposIn) {
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
  
-    if (config_mode) {
+    if (CONFIG_MODE) {
         return;
     }   
 
@@ -227,10 +228,6 @@ int main(int argc, char* argv[]) {
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-
-    float model_r = 0.0f;
-    float model_g = 0.0f;
-    float model_b = 0.0f;
 
     float ambient_strength = 0.2f;
 
