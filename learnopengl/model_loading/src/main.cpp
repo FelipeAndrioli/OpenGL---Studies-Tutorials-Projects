@@ -184,6 +184,7 @@ int main(int argc, char* argv[]) {
     // configure global opengl state 
     glEnable(GL_DEPTH_TEST);
 
+    // object 
     const char *texture_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/container2.png";
    
     Texture ModelTexture = Texture(texture_path);
@@ -210,15 +211,37 @@ int main(int argc, char* argv[]) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    // shaders
+    // object shaders
     const char *vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/shaders/shader.vs";
-
     const char *fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/shaders/shader.fs";
 
     Shader ModelShader = Shader(vertex_shader_path, fragment_shader_path, nullptr);
     ModelShader.use();
     ModelShader.setInt("m_texture", 0);
-    
+   
+    // light source
+    unsigned int ls_VAO;
+    unsigned int ls_VBO;
+
+    glGenVertexArrays(1, &ls_VAO);
+    glGenBuffers(1, &ls_VBO);
+
+    glBindVertexArray(ls_VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, ls_VBO);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    // lighht source shaders
+    const char *ls_vertex_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/shaders/ls_shader.vs";
+    const char *ls_fragment_shader_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/shaders/ls_shader.fs";
+  
+    Shader LightSourceShader = Shader(ls_vertex_shader_path, ls_fragment_shader_path, nullptr);
+
     // imgui initialization
     // --------------------
     IMGUI_CHECKVERSION();
@@ -252,6 +275,7 @@ int main(int argc, char* argv[]) {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        // object rendering
         ModelTexture.active();
         ModelTexture.bind();
         ModelShader.use();
@@ -279,7 +303,19 @@ int main(int argc, char* argv[]) {
 
         ModelShader.setFloat("ambient_strength", ambient_strength);
 
-		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
+        // light source rendering
+        LightSourceShader.use();
+        model = glm::translate(model, glm::vec3(2.0f, 2.0f, 2.0f));   
+        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+
+        LightSourceShader.setMat4("projection", projection);
+        LightSourceShader.setMat4("view", view);
+        LightSourceShader.setMat4("model", model);
+
+        glBindVertexArray(ls_VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
