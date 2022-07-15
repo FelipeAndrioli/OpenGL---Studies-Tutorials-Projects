@@ -39,6 +39,9 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+// light source
+glm::vec3 lightPosition(2.0f, 2.0f, 2.0f);
+
 /*
  * TODO's
  *
@@ -252,7 +255,17 @@ int main(int argc, char* argv[]) {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    float ambient_strength = 0.2f;
+    glm::vec3 material_ambient;
+    float material_ambient_strength = 0.0f;
+
+    glm::vec3 material_diffuse;
+    float material_diffuse_strength = 0.0f;
+
+    glm::vec3 light_ambient;
+    float light_ambient_strength = 0.0f;
+
+    glm::vec3 light_diffuse;
+    float light_diffuse_strength = 0.0f;
 
     // application main loop
     while (!glfwWindowShouldClose(window)) {
@@ -295,17 +308,24 @@ int main(int argc, char* argv[]) {
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
         ImGui::Begin("Configurations");
-        ImGui::SliderFloat("Ambient Strength", &ambient_strength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Material ambient", &material_ambient_strength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Material diffuse", &material_diffuse_strength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Light ambient", &light_ambient_strength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Light diffuse", &light_diffuse_strength, 0.0f, 1.0f);
         ImGui::End();
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        ModelShader.setFloat("ambient_strength", ambient_strength);
-
+        ModelShader.setVec3("light.position", lightPosition);
+        ModelShader.setVec3("material.ambient", glm::vec3(material_ambient_strength));
+        ModelShader.setVec3("material.diffuse", glm::vec3(material_diffuse_strength));
+        ModelShader.setVec3("light.ambient", glm::vec3(light_ambient_strength));
+        ModelShader.setVec3("light.diffuse", glm::vec3(light_diffuse_strength));
+        
         // light source rendering
         LightSourceShader.use();
-        model = glm::translate(model, glm::vec3(2.0f, 2.0f, 2.0f));   
+        model = glm::translate(model, lightPosition);   
         model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
 
         LightSourceShader.setMat4("projection", projection);

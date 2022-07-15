@@ -6,6 +6,7 @@
 
 struct Material {
     float shininess;
+    sampler2D m_texture;
 
     vec3 ambient;
     vec3 diffuse;
@@ -13,6 +14,8 @@ struct Material {
 };
 
 struct Light {
+    vec3 position;
+
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -21,22 +24,22 @@ struct Light {
 uniform Material material;
 uniform Light light;
 
-uniform vec3 colors;
-uniform sampler2D m_texture;
-uniform vec3 lightColor;
-
-uniform float ambient_strength;
-
-in vec3 Normal;
 in vec2 TexCoord;
+in vec3 Normal;
+in vec3 FragPos;
 
 out vec4 FragColor;
 
 void main() {
 
-    vec4 result = texture(m_texture, TexCoord);
+    vec3 norm = normalize(Normal);
 
-    result *= ambient_strength;
+    vec3 ambient = material.ambient * light.ambient;
+    
+    vec3 lightDir = normalize(light.position - FragPos);
+    float diff = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = light.diffuse * (diff * material.diffuse);
 
-    FragColor = result;
+    vec3 result = (ambient + diffuse) * vec3(texture(material.m_texture, TexCoord));
+    FragColor = vec4(result, 1.0);
 }
