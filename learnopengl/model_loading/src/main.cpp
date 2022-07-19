@@ -40,7 +40,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // light source
-glm::vec3 lightPosition(2.0f, 2.0f, 2.0f);
+glm::vec3 lightPosition(2.0f, 0.3f, 2.0f);
 
 /*
  * TODO's
@@ -256,16 +256,24 @@ int main(int argc, char* argv[]) {
     ImGui_ImplOpenGL3_Init("#version 330");
 
     glm::vec3 material_ambient;
-    float material_ambient_strength = 0.0f;
+    float material_ambient_strength = 0.2f;
 
     glm::vec3 material_diffuse;
-    float material_diffuse_strength = 0.0f;
+    float material_diffuse_strength = 0.5f;
+
+    glm::vec3 material_specular;
+    float material_specular_strength = 1.0f;
+
+    int material_shininess = 32;
 
     glm::vec3 light_ambient;
-    float light_ambient_strength = 0.0f;
+    float light_ambient_strength = 0.2f;
 
     glm::vec3 light_diffuse;
-    float light_diffuse_strength = 0.0f;
+    float light_diffuse_strength = 0.5f;
+
+    glm::vec3 light_specular;
+    float light_specular_strength = 1.0f;
 
     // application main loop
     while (!glfwWindowShouldClose(window)) {
@@ -292,7 +300,6 @@ int main(int argc, char* argv[]) {
         ModelTexture.active();
         ModelTexture.bind();
         ModelShader.use();
-        ModelShader.setVec3("viewPos", camera.Position);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
@@ -304,33 +311,43 @@ int main(int argc, char* argv[]) {
         glm::mat4 model = glm::mat4(1.0f);
         ModelShader.setMat4("model", model);
 
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-
         ImGui::Begin("Configurations");
         ImGui::SliderFloat("Material ambient", &material_ambient_strength, 0.0f, 1.0f);
         ImGui::SliderFloat("Material diffuse", &material_diffuse_strength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Material specular", &material_specular_strength, 0.0f, 1.0f);
         ImGui::SliderFloat("Light ambient", &light_ambient_strength, 0.0f, 1.0f);
         ImGui::SliderFloat("Light diffuse", &light_diffuse_strength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Light specular", &light_specular_strength, 0.0f, 1.0f);
         ImGui::End();
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         ModelShader.setVec3("light.position", lightPosition);
-        ModelShader.setVec3("material.ambient", glm::vec3(material_ambient_strength));
-        ModelShader.setVec3("material.diffuse", glm::vec3(material_diffuse_strength));
+        ModelShader.setVec3("viewPos", camera.Position);
+
         ModelShader.setVec3("light.ambient", glm::vec3(light_ambient_strength));
         ModelShader.setVec3("light.diffuse", glm::vec3(light_diffuse_strength));
-        
+        ModelShader.setVec3("light.specular", glm::vec3(light_specular_strength));
+ 
+        ModelShader.setVec3("material.ambient", glm::vec3(material_ambient_strength));
+        ModelShader.setVec3("material.diffuse", glm::vec3(material_diffuse_strength));
+        ModelShader.setVec3("material.specular", glm::vec3(material_specular_strength));
+        ModelShader.setInt("material.shininess", material_shininess);
+
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
         // light source rendering
         LightSourceShader.use();
+        lightPosition.x = 2.0f * cos(glfwGetTime() + 2.0f);
+        lightPosition.z = 2.0f * sin(glfwGetTime() + 2.0f);
         model = glm::translate(model, lightPosition);   
-        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-
-        LightSourceShader.setMat4("projection", projection);
-        LightSourceShader.setMat4("view", view);
+        model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
+        
         LightSourceShader.setMat4("model", model);
+        LightSourceShader.setMat4("view", view);
+        LightSourceShader.setMat4("projection", projection);
 
         glBindVertexArray(ls_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);

@@ -15,7 +15,8 @@ Texture::Texture(const char *texture_path) {
     int width;
     int height;
     int nrChannels;
-
+    
+    stbi_set_flip_vertically_on_load(true);
     unsigned char *texture_data = stbi_load(texture_path, &width, &height, &nrChannels, 0);
 
     if (texture_data) {
