@@ -5,7 +5,7 @@
 */
 
 struct Material {
-    int shininess;
+    float shininess;
     sampler2D m_texture;
 
     vec3 ambient;
@@ -23,11 +23,11 @@ struct Light {
 
 uniform Material material;
 uniform Light light;
+uniform vec3 viewPos;
 
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 FragPos;
-in vec3 viewPos;
 
 out vec4 FragColor;
 
@@ -37,7 +37,7 @@ void main() {
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 lightDir = normalize(light.position - FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
-
+    
     vec3 ambient = light.ambient * material.ambient;
 
     float diff = max(dot(norm, lightDir), 0.0);
