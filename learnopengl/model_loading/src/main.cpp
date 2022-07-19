@@ -30,7 +30,7 @@
 bool CONFIG_MODE = false;
 
 // Camera settings
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
 float lastX = SCREEN_WIDTH / 2;
 float lastY = SCREEN_HEIGHT / 2;
 bool firstMouse = true;
@@ -40,7 +40,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // light source
-glm::vec3 lightPosition(2.0f, 0.3f, 2.0f);
+glm::vec3 lightPosition(2.0f, 2.0f, 2.0f);
 
 /*
  * TODO's
@@ -48,14 +48,7 @@ glm::vec3 lightPosition(2.0f, 0.3f, 2.0f);
  *  - Texture
  *      - Texture Map
  *  - Lighting
- *      - Material light properties
- *          - Ambient
- *          - Diffuse
- *          - Specular
- *      - Light source light properties
- *          - Ambient
- *          - Diffuse
- *          - Specular
+ *          - Validate the specular light 
  *  - Types of light
  *      - Directional
  *      - Point lights
@@ -255,24 +248,13 @@ int main(int argc, char* argv[]) {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    glm::vec3 material_ambient;
     float material_ambient_strength = 0.2f;
-
-    glm::vec3 material_diffuse;
     float material_diffuse_strength = 0.5f;
-
-    glm::vec3 material_specular;
     float material_specular_strength = 1.0f;
+    float material_shininess = 32.0f;
 
-    int material_shininess = 32;
-
-    glm::vec3 light_ambient;
     float light_ambient_strength = 0.2f;
-
-    glm::vec3 light_diffuse;
     float light_diffuse_strength = 0.5f;
-
-    glm::vec3 light_specular;
     float light_specular_strength = 1.0f;
 
     // application main loop
@@ -315,6 +297,7 @@ int main(int argc, char* argv[]) {
         ImGui::SliderFloat("Material ambient", &material_ambient_strength, 0.0f, 1.0f);
         ImGui::SliderFloat("Material diffuse", &material_diffuse_strength, 0.0f, 1.0f);
         ImGui::SliderFloat("Material specular", &material_specular_strength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Material shininess", &material_shininess, 2.0f, 256.0f);
         ImGui::SliderFloat("Light ambient", &light_ambient_strength, 0.0f, 1.0f);
         ImGui::SliderFloat("Light diffuse", &light_diffuse_strength, 0.0f, 1.0f);
         ImGui::SliderFloat("Light specular", &light_specular_strength, 0.0f, 1.0f);
@@ -333,7 +316,7 @@ int main(int argc, char* argv[]) {
         ModelShader.setVec3("material.ambient", glm::vec3(material_ambient_strength));
         ModelShader.setVec3("material.diffuse", glm::vec3(material_diffuse_strength));
         ModelShader.setVec3("material.specular", glm::vec3(material_specular_strength));
-        ModelShader.setInt("material.shininess", material_shininess);
+        ModelShader.setFloat("material.shininess", material_shininess);
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
