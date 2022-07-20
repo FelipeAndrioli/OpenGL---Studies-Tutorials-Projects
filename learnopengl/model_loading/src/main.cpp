@@ -22,6 +22,8 @@
 #include "texture.h"
 #include "camera.h"
 
+#include "stb_image.h"
+
 // settings
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -54,7 +56,6 @@ glm::vec3 lightPosition(2.0f, 0.7f, 2.0f);
  *      - Point lights
  *      - Spot light
  */
-
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -180,13 +181,6 @@ int main(int argc, char* argv[]) {
     // configure global opengl state 
     glEnable(GL_DEPTH_TEST);
 
-    // object 
-    const char *diffuse_texture_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/container2.png";
-    const char *specular_texture_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/container2_specular.png"; 
-
-    Texture DiffuseModelTexture = Texture(diffuse_texture_path);
-    Texture SpecularModelTexture = Texture(specular_texture_path);
-
     unsigned int VAO;
     unsigned int VBO;
 
@@ -216,8 +210,15 @@ int main(int argc, char* argv[]) {
     Shader ModelShader = Shader(vertex_shader_path, fragment_shader_path, nullptr);
     ModelShader.use();
 
-    ModelShader.setInt("m_diffuse_texture", 0);
-    ModelShader.setInt("m_specular_texture", 1);
+    // object 
+    const char *diffuse_texture_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/container2.png";
+    const char *specular_texture_path = "C:/Users/Felipe/Documents/current_projects/OpenGL/learnopengl/model_loading/src/container2_specular.png"; 
+
+    Texture DiffuseModelTexture = Texture(diffuse_texture_path);
+    Texture SpecularModelTexture = Texture(specular_texture_path);
+ 
+    ModelShader.setInt("material.m_diffuse_texture", 0);
+    ModelShader.setInt("material.m_specular_texture", 1);
 
     // light source
     unsigned int ls_VAO;
@@ -310,12 +311,9 @@ int main(int argc, char* argv[]) {
         ModelShader.setFloat("material.shininess", material_shininess);
 
         // object rendering
-        DiffuseModelTexture.active(0);
-        DiffuseModelTexture.bind();
-        
-        SpecularModelTexture.active(1);
-        SpecularModelTexture.bind();
-        
+        DiffuseModelTexture.bind(0);
+        SpecularModelTexture.bind(1);
+
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
