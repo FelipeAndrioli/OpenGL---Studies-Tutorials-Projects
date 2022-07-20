@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "texture.h"
 
@@ -40,7 +41,8 @@ Texture::Texture(const char *texture_path) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         
         stbi_image_free(texture_data);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        //glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_2D, ID);
  
     } else {
         std::cout << "Failed to load texture at path: " << texture_path << std::endl;
@@ -48,10 +50,16 @@ Texture::Texture(const char *texture_path) {
     }
 }
 
-void Texture::active() {
-    glActiveTexture(GL_TEXTURE0); 
+void Texture::active(int position) {
+    glActiveTexture(GL_TEXTURE0 + position); 
 }
 
 void Texture::bind() {
     glBindTexture(GL_TEXTURE_2D, ID);
 }
+
+
+
+
+
+

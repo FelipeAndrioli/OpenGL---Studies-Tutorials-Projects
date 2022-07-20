@@ -3,7 +3,7 @@
 class Texture {
     public:
         Texture(const char *texture_path);
-        void active();
+        void active(int position);
         void bind();
         unsigned int ID;
 };
