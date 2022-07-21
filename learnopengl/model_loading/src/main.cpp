@@ -267,6 +267,9 @@ int main(int argc, char* argv[]) {
     float point_light_linear = 0.09f;
     float point_light_quadratic = 0.032f;
 
+    float light_inner_cutoff = 12.5f;
+    float light_outer_cutoff = 17.5f;
+
     // application main loop
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
@@ -285,7 +288,9 @@ int main(int argc, char* argv[]) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ModelShader.use();
-        ModelShader.setVec3("light.position", lightPosition);
+        //ModelShader.setVec3("light.position", lightPosition);
+        ModelShader.setVec3("light.position", camera.Position);
+        ModelShader.setVec3("light.direction", camera.Front);
         ModelShader.setVec3("viewPos", camera.Position);
         
         ImGui_ImplOpenGL3_NewFrame();
@@ -314,6 +319,8 @@ int main(int argc, char* argv[]) {
         ImGui::SliderFloat("Point light linear", &point_light_linear, 0.000f, 1.000f);
         ImGui::SliderFloat("Point light quadratic", &point_light_quadratic, 0.000f, 1.000f);
         ImGui::SliderFloat("Light position z", &lightPosition.z, -30.0f, 30.0f);
+        ImGui::SliderFloat("Light inner cut off angle", &light_inner_cutoff, 0.0f, 25.0f);
+        ImGui::SliderFloat("Light outer cut off angle", &light_outer_cutoff, 0.0f, 25.0f);
         ImGui::End();
 
         ImGui::Render();
@@ -327,7 +334,8 @@ int main(int argc, char* argv[]) {
         ModelShader.setFloat("light.linear", point_light_linear);
         ModelShader.setFloat("light.quadratic", point_light_quadratic);
 
-        ModelShader.setVec3("light.direction", glm::vec3(light_direction_x, light_direction_y, light_direction_z));
+        ModelShader.setFloat("light.innerCutOff", glm::cos(glm::radians(light_inner_cutoff)));
+        ModelShader.setFloat("light.outerCutOff", glm::cos(glm::radians(light_outer_cutoff)));
 
         ModelShader.setFloat("material.shininess", material_shininess);
 
@@ -348,6 +356,7 @@ int main(int argc, char* argv[]) {
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
+        /*
         // light source rendering
         LightSourceShader.use();
         //lightPosition.x = 4.0f * cos(glfwGetTime() + 2.0f);
@@ -361,6 +370,7 @@ int main(int argc, char* argv[]) {
 
         glBindVertexArray(ls_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        */
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
         glfwSwapBuffers(window);
