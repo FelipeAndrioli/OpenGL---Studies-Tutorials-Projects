@@ -27,7 +27,7 @@
 // settings
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
-#define KEY_PRESS_DELAY 200
+#define KEY_PRESS_DELAY 100
 
 bool CONFIG_MODE = false;
 
@@ -292,39 +292,41 @@ int main(int argc, char* argv[]) {
         ModelShader.setVec3("light.position", camera.Position);
         ModelShader.setVec3("light.direction", camera.Front);
         ModelShader.setVec3("viewPos", camera.Position);
+ 
+        // world transformations
+        glm::mat4 model = glm::mat4(1.0f);
+        ModelShader.setMat4("model", model);
         
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.getViewMatrix();
         ModelShader.setMat4("projection", projection);
         ModelShader.setMat4("view", view);
+       
+        if (CONFIG_MODE) {
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
 
-        // world transformations
-        glm::mat4 model = glm::mat4(1.0f);
-        ModelShader.setMat4("model", model);
+            ImGui::Begin("Configurations");
+            ImGui::SliderFloat("Material shininess", &material_shininess, 2.0f, 256.0f);
+            ImGui::SliderFloat("Light ambient", &light_ambient_strength, 0.0f, 1.0f);
+            ImGui::SliderFloat("Light diffuse", &light_diffuse_strength, 0.0f, 1.0f);
+            ImGui::SliderFloat("Light specular", &light_specular_strength, 0.0f, 1.0f);
+            ImGui::SliderFloat("Directional light direction x", &light_direction_x, -1.0f, 1.0f);
+            ImGui::SliderFloat("Directional light direction y", &light_direction_y, -1.0f, 1.0f);
+            ImGui::SliderFloat("Directional light direction z", &light_direction_z, -1.0f, 1.0f);
+            ImGui::SliderFloat("Point light constant", &point_light_constant, 0.000f, 1.000f);
+            ImGui::SliderFloat("Point light linear", &point_light_linear, 0.000f, 1.000f);
+            ImGui::SliderFloat("Point light quadratic", &point_light_quadratic, 0.000f, 1.000f);
+            ImGui::SliderFloat("Light position z", &lightPosition.z, -30.0f, 30.0f);
+            ImGui::SliderFloat("Light inner cut off angle", &light_inner_cutoff, 0.0f, 25.0f);
+            ImGui::SliderFloat("Light outer cut off angle", &light_outer_cutoff, 0.0f, 25.0f);
+            ImGui::End();
 
-        ImGui::Begin("Configurations");
-        ImGui::SliderFloat("Material shininess", &material_shininess, 2.0f, 256.0f);
-        ImGui::SliderFloat("Light ambient", &light_ambient_strength, 0.0f, 1.0f);
-        ImGui::SliderFloat("Light diffuse", &light_diffuse_strength, 0.0f, 1.0f);
-        ImGui::SliderFloat("Light specular", &light_specular_strength, 0.0f, 1.0f);
-        ImGui::SliderFloat("Directional light direction x", &light_direction_x, -1.0f, 1.0f);
-        ImGui::SliderFloat("Directional light direction y", &light_direction_y, -1.0f, 1.0f);
-        ImGui::SliderFloat("Directional light direction z", &light_direction_z, -1.0f, 1.0f);
-        ImGui::SliderFloat("Point light constant", &point_light_constant, 0.000f, 1.000f);
-        ImGui::SliderFloat("Point light linear", &point_light_linear, 0.000f, 1.000f);
-        ImGui::SliderFloat("Point light quadratic", &point_light_quadratic, 0.000f, 1.000f);
-        ImGui::SliderFloat("Light position z", &lightPosition.z, -30.0f, 30.0f);
-        ImGui::SliderFloat("Light inner cut off angle", &light_inner_cutoff, 0.0f, 25.0f);
-        ImGui::SliderFloat("Light outer cut off angle", &light_outer_cutoff, 0.0f, 25.0f);
-        ImGui::End();
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        }
 
         ModelShader.setVec3("light.ambient", glm::vec3(light_ambient_strength));
         ModelShader.setVec3("light.diffuse", glm::vec3(light_diffuse_strength));
