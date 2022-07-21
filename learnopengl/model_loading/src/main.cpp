@@ -42,7 +42,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // light source
-glm::vec3 lightPosition(2.0f, 0.7f, 2.0f);
+glm::vec3 lightPosition(2.0f, 0.7f, 3.0f);
 
 /*
  * TODO's
@@ -259,6 +259,14 @@ int main(int argc, char* argv[]) {
     float light_diffuse_strength = 1.0f;
     float light_specular_strength = 0.5f;
 
+    float light_direction_x = -0.2f;
+    float light_direction_y = -1.0f;
+    float light_direction_z = -0.3f;
+
+    float point_light_constant = 1.0f;
+    float point_light_linear = 0.09f;
+    float point_light_quadratic = 0.032f;
+
     // application main loop
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
@@ -299,6 +307,13 @@ int main(int argc, char* argv[]) {
         ImGui::SliderFloat("Light ambient", &light_ambient_strength, 0.0f, 1.0f);
         ImGui::SliderFloat("Light diffuse", &light_diffuse_strength, 0.0f, 1.0f);
         ImGui::SliderFloat("Light specular", &light_specular_strength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Directional light direction x", &light_direction_x, -1.0f, 1.0f);
+        ImGui::SliderFloat("Directional light direction y", &light_direction_y, -1.0f, 1.0f);
+        ImGui::SliderFloat("Directional light direction z", &light_direction_z, -1.0f, 1.0f);
+        ImGui::SliderFloat("Point light constant", &point_light_constant, 0.0f, 1.0f);
+        ImGui::SliderFloat("Point light linear", &point_light_linear, 0.0f, 1.0f);
+        ImGui::SliderFloat("Point light quadratic", &point_light_quadratic, 0.0f, 1.0f);
+        ImGui::SliderFloat("Light position z", &lightPosition.z, -30.0f, 30.0f);
         ImGui::End();
 
         ImGui::Render();
@@ -307,7 +322,13 @@ int main(int argc, char* argv[]) {
         ModelShader.setVec3("light.ambient", glm::vec3(light_ambient_strength));
         ModelShader.setVec3("light.diffuse", glm::vec3(light_diffuse_strength));
         ModelShader.setVec3("light.specular", glm::vec3(light_specular_strength));
- 
+    
+        ModelShader.setFloat("light.constant", point_light_constant);
+        ModelShader.setFloat("light.linear", point_light_linear);
+        ModelShader.setFloat("light.quadratic", point_light_quadratic);
+
+        ModelShader.setVec3("light.direction", glm::vec3(light_direction_x, light_direction_y, light_direction_z));
+
         ModelShader.setFloat("material.shininess", material_shininess);
 
         // object rendering
@@ -315,12 +336,22 @@ int main(int argc, char* argv[]) {
         SpecularModelTexture.bind(1);
 
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        for (unsigned int i = 0; i < 10; i++) {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 20.0f * i;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            ModelShader.setMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         // light source rendering
         LightSourceShader.use();
-        lightPosition.x = 4.0f * cos(glfwGetTime() + 2.0f);
-        lightPosition.z = 4.0f * sin(glfwGetTime() + 2.0f);
+        //lightPosition.x = 4.0f * cos(glfwGetTime() + 2.0f);
+        //lightPosition.z = 4.0f * sin(glfwGetTime() + 2.0f);
         model = glm::translate(model, lightPosition);   
         model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
         
