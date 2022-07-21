@@ -46,15 +46,7 @@ glm::vec3 lightPosition(2.0f, 0.7f, 3.0f);
 
 /*
  * TODO's
- *
- *  - Texture
- *      - Texture Map
- *  - Lighting
- *          - Validate the specular light 
- *  - Types of light
- *      - Directional
- *      - Point lights
- *      - Spot light
+ * - Multiple lights
  */
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
@@ -255,20 +247,27 @@ int main(int argc, char* argv[]) {
 
     float material_shininess = 64.0f;
 
-    float light_ambient_strength = 0.2f;
-    float light_diffuse_strength = 1.0f;
-    float light_specular_strength = 0.5f;
+    float dir_light_ambient_strength = 0.2f;
+    float dir_light_diffuse_strength = 1.0f;
+    float dir_light_specular_strength = 0.5f;
 
-    float light_direction_x = -0.2f;
-    float light_direction_y = -1.0f;
-    float light_direction_z = -0.3f;
+    float dir_light_direction_x = -0.2f;
+    float dir_light_direction_y = -1.0f;
+    float dir_light_direction_z = -0.3f;
 
     float point_light_constant = 1.0f;
     float point_light_linear = 0.09f;
     float point_light_quadratic = 0.032f;
+    float point_light_ambient_strength = 0.2f;
+    float point_light_diffuse_strength = 1.0f;
+    float point_light_specular_strength = 0.5f;
 
     float light_inner_cutoff = 12.5f;
     float light_outer_cutoff = 17.5f;
+
+    float clear_color_x = 0.3f;
+    float clear_color_y = 0.3f;
+    float clear_color_z = 0.3f;
 
     // application main loop
     while (!glfwWindowShouldClose(window)) {
@@ -307,13 +306,20 @@ int main(int argc, char* argv[]) {
             ImGui::NewFrame();
 
             ImGui::Begin("Configurations");
+            ImGui::SliderFloat("Clear color x", &clear_color_x, 0.000f, 1.000f);
+            ImGui::SliderFloat("Clear color y", &clear_color_y, 0.000f, 1.000f);
+            ImGui::SliderFloat("Clear color z", &clear_color_z, 0.000f, 1.000f);
             ImGui::SliderFloat("Material shininess", &material_shininess, 2.0f, 256.0f);
-            ImGui::SliderFloat("Light ambient", &light_ambient_strength, 0.0f, 1.0f);
-            ImGui::SliderFloat("Light diffuse", &light_diffuse_strength, 0.0f, 1.0f);
-            ImGui::SliderFloat("Light specular", &light_specular_strength, 0.0f, 1.0f);
-            ImGui::SliderFloat("Directional light direction x", &light_direction_x, -1.0f, 1.0f);
-            ImGui::SliderFloat("Directional light direction y", &light_direction_y, -1.0f, 1.0f);
-            ImGui::SliderFloat("Directional light direction z", &light_direction_z, -1.0f, 1.0f);
+            ImGui::SliderFloat("Directional Light ambient", &dir_light_ambient_strength, 0.0f, 1.0f);
+            ImGui::SliderFloat("Directional Light diffuse", &dir_light_diffuse_strength, 0.0f, 1.0f);
+            ImGui::SliderFloat("Directional Light specular", &dir_light_specular_strength, 0.0f, 1.0f);
+            ImGui::SliderFloat("Directional light direction x", &dir_light_direction_x, -1.0f, 1.0f);
+            ImGui::SliderFloat("Directional light direction y", &dir_light_direction_y, -1.0f, 1.0f);
+            ImGui::SliderFloat("Directional light direction z", &dir_light_direction_z, -1.0f, 1.0f);
+
+            ImGui::SliderFloat("Point light ambient", &point_light_ambient_strength, 0.000f, 1.000f);
+            ImGui::SliderFloat("Point light diffuse", &point_light_diffuse_strength, 0.000f, 1.000f);
+            ImGui::SliderFloat("Point light specular", &point_light_specular_strength, 0.000f, 1.000f);
             ImGui::SliderFloat("Point light constant", &point_light_constant, 0.000f, 1.000f);
             ImGui::SliderFloat("Point light linear", &point_light_linear, 0.000f, 1.000f);
             ImGui::SliderFloat("Point light quadratic", &point_light_quadratic, 0.000f, 1.000f);
@@ -329,20 +335,26 @@ int main(int argc, char* argv[]) {
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
 
-        ModelShader.setVec3("light.ambient", glm::vec3(light_ambient_strength));
-        ModelShader.setVec3("light.diffuse", glm::vec3(light_diffuse_strength));
-        ModelShader.setVec3("light.specular", glm::vec3(light_specular_strength));
+        ModelShader.setVec3("dirLight.direction", glm::vec3(dir_light_direction_x, dir_light_direction_y, dir_light_direction_z));
+        ModelShader.setVec3("dirLight.ambient", glm::vec3(dir_light_ambient_strength));
+        ModelShader.setVec3("dirLight.diffuse", glm::vec3(dir_light_diffuse_strength));
+        ModelShader.setVec3("dirLight.specular", glm::vec3(dir_light_specular_strength));
     
-        ModelShader.setFloat("light.constant", point_light_constant);
-        ModelShader.setFloat("light.linear", point_light_linear);
-        ModelShader.setFloat("light.quadratic", point_light_quadratic);
+        ModelShader.setVec3("pointLight.ambient", glm::vec3(dir_light_ambient_strength));
+        ModelShader.setVec3("pointLight.diffuse", glm::vec3(dir_light_diffuse_strength));
+        ModelShader.setVec3("pointLight.specular", glm::vec3(dir_light_specular_strength));
+        ModelShader.setFloat("pointLight.constant", point_light_constant);
+        ModelShader.setFloat("pointLight.linear", point_light_linear);
+        ModelShader.setFloat("pointLight.quadratic", point_light_quadratic);
 
-        //ModelShader.setVec3("light.position", lightPosition);
-        ModelShader.setVec3("light.position", camera.Position);
-        ModelShader.setVec3("light.direction", camera.Front);
+        ModelShader.setVec3("pointLight.position", lightPosition);
+        // SpotLight (flash light)
+        ModelShader.setVec3("pointLight.position", camera.Position);
+        ModelShader.setVec3("pointLight.direction", camera.Front);
+        
         ModelShader.setVec3("viewPos", camera.Position);
-        ModelShader.setFloat("light.innerCutOff", glm::cos(glm::radians(light_inner_cutoff)));
-        ModelShader.setFloat("light.outerCutOff", glm::cos(glm::radians(light_outer_cutoff)));
+        ModelShader.setFloat("pointLight.cutOff", glm::cos(glm::radians(light_inner_cutoff)));
+        ModelShader.setFloat("pointLight.outerCutOff", glm::cos(glm::radians(light_outer_cutoff)));
 
         ModelShader.setFloat("material.shininess", material_shininess);
 
@@ -363,7 +375,6 @@ int main(int argc, char* argv[]) {
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        /*
         // light source rendering
         LightSourceShader.use();
         //lightPosition.x = 4.0f * cos(glfwGetTime() + 2.0f);
@@ -377,7 +388,6 @@ int main(int argc, char* argv[]) {
 
         glBindVertexArray(ls_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-        */
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved, etc)
         glfwSwapBuffers(window);
