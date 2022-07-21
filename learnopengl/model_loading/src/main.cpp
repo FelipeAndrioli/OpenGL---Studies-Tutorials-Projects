@@ -310,9 +310,9 @@ int main(int argc, char* argv[]) {
         ImGui::SliderFloat("Directional light direction x", &light_direction_x, -1.0f, 1.0f);
         ImGui::SliderFloat("Directional light direction y", &light_direction_y, -1.0f, 1.0f);
         ImGui::SliderFloat("Directional light direction z", &light_direction_z, -1.0f, 1.0f);
-        ImGui::SliderFloat("Point light constant", &point_light_constant, 0.0f, 1.0f);
-        ImGui::SliderFloat("Point light linear", &point_light_linear, 0.0f, 1.0f);
-        ImGui::SliderFloat("Point light quadratic", &point_light_quadratic, 0.0f, 1.0f);
+        ImGui::SliderFloat("Point light constant", &point_light_constant, 0.000f, 1.000f);
+        ImGui::SliderFloat("Point light linear", &point_light_linear, 0.000f, 1.000f);
+        ImGui::SliderFloat("Point light quadratic", &point_light_quadratic, 0.000f, 1.000f);
         ImGui::SliderFloat("Light position z", &lightPosition.z, -30.0f, 30.0f);
         ImGui::End();
 
