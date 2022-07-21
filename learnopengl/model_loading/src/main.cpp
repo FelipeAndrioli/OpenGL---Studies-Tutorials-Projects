@@ -288,10 +288,6 @@ int main(int argc, char* argv[]) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ModelShader.use();
-        //ModelShader.setVec3("light.position", lightPosition);
-        ModelShader.setVec3("light.position", camera.Position);
-        ModelShader.setVec3("light.direction", camera.Front);
-        ModelShader.setVec3("viewPos", camera.Position);
  
         // world transformations
         glm::mat4 model = glm::mat4(1.0f);
@@ -304,6 +300,8 @@ int main(int argc, char* argv[]) {
         ModelShader.setMat4("view", view);
        
         if (CONFIG_MODE) {
+            // it should be interesting to transform that maybe in a separate
+            // function or class
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
@@ -322,6 +320,9 @@ int main(int argc, char* argv[]) {
             ImGui::SliderFloat("Light position z", &lightPosition.z, -30.0f, 30.0f);
             ImGui::SliderFloat("Light inner cut off angle", &light_inner_cutoff, 0.0f, 25.0f);
             ImGui::SliderFloat("Light outer cut off angle", &light_outer_cutoff, 0.0f, 25.0f);
+            if (ImGui::Button("Print")) {
+                std::cout << "Hello there!" << std::endl;
+            }
             ImGui::End();
 
             ImGui::Render();
@@ -336,6 +337,10 @@ int main(int argc, char* argv[]) {
         ModelShader.setFloat("light.linear", point_light_linear);
         ModelShader.setFloat("light.quadratic", point_light_quadratic);
 
+        //ModelShader.setVec3("light.position", lightPosition);
+        ModelShader.setVec3("light.position", camera.Position);
+        ModelShader.setVec3("light.direction", camera.Front);
+        ModelShader.setVec3("viewPos", camera.Position);
         ModelShader.setFloat("light.innerCutOff", glm::cos(glm::radians(light_inner_cutoff)));
         ModelShader.setFloat("light.outerCutOff", glm::cos(glm::radians(light_outer_cutoff)));
 
