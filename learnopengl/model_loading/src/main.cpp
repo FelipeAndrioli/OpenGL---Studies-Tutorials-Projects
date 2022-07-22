@@ -30,6 +30,10 @@
 #define KEY_PRESS_DELAY 100
 
 bool CONFIG_MODE = false;
+bool DIR_LIGHT_ENABLE = true;
+bool POINT_LIGHT_ENABLE = true;
+bool SPOT_LIGHT_ENABLE = true;
+float ZERO = 0.0f;
 
 // Camera settings
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -46,7 +50,14 @@ glm::vec3 lightPosition(2.0f, 0.7f, 3.0f);
 
 /*
  * TODO's
- * - Multiple lights
+ *
+ * - Investigate why the point light properties are affecting the other types
+ *   of light
+ *
+ * - Add functions to enable/disable and update the lights
+ *
+ * - Add attenuation to the flaslight
+ *
  */
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
@@ -131,6 +142,67 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
     }   
 
     camera.processMouseScroll(static_cast<float>(yoffset));
+}
+
+void updateLightDir(Shader shader, float d_light_dir_x, float d_light_dir_y, 
+        float d_light_dir_z, float d_light_ambient, float d_light_diffuse, 
+        float d_light_specular) {
+    
+    if (!DIR_LIGHT_ENABLE) {
+        shader.setVec3("dirLight.direction", glm::vec3(ZERO));
+        shader.setVec3("dirLight.ambient", glm::vec3(ZERO));
+        shader.setVec3("dirLight.diffuse", glm::vec3(ZERO));
+        shader.setVec3("dirLight.specular", glm::vec3(ZERO));
+    } else {
+        shader.setVec3("dirLight.direction", glm::vec3(d_light_dir_x, d_light_dir_y, d_light_dir_z));
+        shader.setVec3("dirLight.ambient", glm::vec3(d_light_ambient));
+        shader.setVec3("dirLight.diffuse", glm::vec3(d_light_diffuse));
+        shader.setVec3("dirLight.specular", glm::vec3(d_light_specular));
+    }
+}
+
+void updatePointLight(Shader shader, glm::vec3 light_position, 
+        float p_light_ambient, float p_light_diffuse, float p_light_specular, 
+        float p_light_constant, float p_light_linear, float p_light_quadratic) {
+    if (!POINT_LIGHT_ENABLE) {
+        shader.setVec3("pointLight.ambient", glm::vec3(ZERO));
+        shader.setVec3("pointLight.diffuse", glm::vec3(ZERO));
+        shader.setVec3("pointLight.specular", glm::vec3(ZERO));
+        shader.setFloat("pointLight.constant", ZERO);
+        shader.setFloat("pointLight.linear", ZERO);
+        shader.setFloat("pointLight.quadratic", ZERO);
+        shader.setVec3("pointLight.position", glm::vec3(ZERO));
+    } else {
+        shader.setVec3("pointLight.ambient", glm::vec3(p_light_ambient));
+        shader.setVec3("pointLight.diffuse", glm::vec3(p_light_diffuse));
+        shader.setVec3("pointLight.specular", glm::vec3(p_light_specular));
+        shader.setFloat("pointLight.constant", p_light_constant);
+        shader.setFloat("pointLight.linear", p_light_linear);
+        shader.setFloat("pointLight.quadratic", p_light_quadratic);
+        shader.setVec3("pointLight.position", light_position);
+    }
+}
+
+void updateSpotLight(Shader shader, glm::vec3 position, glm::vec3 direction,
+        float s_light_ambient, float s_light_diffuse, float s_light_specular,
+        float cutOff, float outerCutOff) {
+    if (!SPOT_LIGHT_ENABLE) {
+        shader.setVec3("spotLight.ambient", glm::vec3(ZERO));
+        shader.setVec3("spotLight.diffuse", glm::vec3(ZERO));
+        shader.setVec3("spotLight.specular", glm::vec3(ZERO));
+        shader.setVec3("spotLight.position", glm::vec3(ZERO));
+        shader.setVec3("spotLight.direction", glm::vec3(ZERO));
+        shader.setFloat("spotLight.cutOff", ZERO);
+        shader.setFloat("spotLight.outerCutOff", ZERO);
+    } else {
+        shader.setVec3("spotLight.ambient", glm::vec3(s_light_ambient));
+        shader.setVec3("spotLight.diffuse", glm::vec3(s_light_diffuse));
+        shader.setVec3("spotLight.specular", glm::vec3(s_light_specular));
+        shader.setVec3("spotLight.position", position);
+        shader.setVec3("spotLight.direction", direction);
+        shader.setFloat("spotLight.cutOff", glm::cos(glm::radians(cutOff)));
+        shader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(outerCutOff)));
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -250,7 +322,6 @@ int main(int argc, char* argv[]) {
     float dir_light_ambient_strength = 0.2f;
     float dir_light_diffuse_strength = 1.0f;
     float dir_light_specular_strength = 0.5f;
-
     float dir_light_direction_x = -0.2f;
     float dir_light_direction_y = -1.0f;
     float dir_light_direction_z = -0.3f;
@@ -262,6 +333,9 @@ int main(int argc, char* argv[]) {
     float point_light_diffuse_strength = 1.0f;
     float point_light_specular_strength = 0.5f;
 
+    float spot_light_ambient_strength = 0.2;
+    float spot_light_diffuse_strength = 1.0;
+    float spot_light_specular_strength = 0.5;
     float light_inner_cutoff = 12.5f;
     float light_outer_cutoff = 17.5f;
 
@@ -324,10 +398,32 @@ int main(int argc, char* argv[]) {
             ImGui::SliderFloat("Point light linear", &point_light_linear, 0.000f, 1.000f);
             ImGui::SliderFloat("Point light quadratic", &point_light_quadratic, 0.000f, 1.000f);
             ImGui::SliderFloat("Light position z", &lightPosition.z, -30.0f, 30.0f);
+            ImGui::SliderFloat("Flash light ambient", &spot_light_ambient_strength, 0.000f, 1.000f);
+            ImGui::SliderFloat("Flash light diffuse", &spot_light_diffuse_strength, 0.000f, 1.000f);
+            ImGui::SliderFloat("Flash light specular", &spot_light_specular_strength, 0.000f, 1.000f);
             ImGui::SliderFloat("Light inner cut off angle", &light_inner_cutoff, 0.0f, 25.0f);
             ImGui::SliderFloat("Light outer cut off angle", &light_outer_cutoff, 0.0f, 25.0f);
-            if (ImGui::Button("Print")) {
-                std::cout << "Hello there!" << std::endl;
+            if (ImGui::Button("Directional Light")) {
+                DIR_LIGHT_ENABLE = !DIR_LIGHT_ENABLE;
+                updateLightDir(ModelShader, dir_light_direction_x, 
+                        dir_light_direction_y, dir_light_direction_z,
+                        dir_light_ambient_strength, dir_light_diffuse_strength,
+                        dir_light_specular_strength);
+            }
+
+            if (ImGui::Button("Point Light")) {
+                POINT_LIGHT_ENABLE = !POINT_LIGHT_ENABLE;
+                updatePointLight(ModelShader, lightPosition, point_light_ambient_strength,
+                        point_light_diffuse_strength, point_light_specular_strength,
+                        point_light_constant, point_light_linear, point_light_quadratic);
+            }
+
+            if (ImGui::Button("Flash light")) {
+                SPOT_LIGHT_ENABLE = !SPOT_LIGHT_ENABLE;
+                updateSpotLight(ModelShader, camera.Position, camera.Front,
+                        spot_light_ambient_strength, spot_light_diffuse_strength,
+                        spot_light_specular_strength, light_inner_cutoff, 
+                        light_outer_cutoff);
             }
             ImGui::End();
 
@@ -335,28 +431,21 @@ int main(int argc, char* argv[]) {
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
 
-        ModelShader.setVec3("dirLight.direction", glm::vec3(dir_light_direction_x, dir_light_direction_y, dir_light_direction_z));
-        ModelShader.setVec3("dirLight.ambient", glm::vec3(dir_light_ambient_strength));
-        ModelShader.setVec3("dirLight.diffuse", glm::vec3(dir_light_diffuse_strength));
-        ModelShader.setVec3("dirLight.specular", glm::vec3(dir_light_specular_strength));
-    
-        ModelShader.setVec3("pointLight.ambient", glm::vec3(point_light_ambient_strength));
-        ModelShader.setVec3("pointLight.diffuse", glm::vec3(point_light_diffuse_strength));
-        ModelShader.setVec3("pointLight.specular", glm::vec3(point_light_specular_strength));
-        ModelShader.setFloat("pointLight.constant", point_light_constant);
-        ModelShader.setFloat("pointLight.linear", point_light_linear);
-        ModelShader.setFloat("pointLight.quadratic", point_light_quadratic);
-
-        ModelShader.setVec3("pointLight.position", lightPosition);
-        // SpotLight (flash light)
-        //ModelShader.setVec3("pointLight.position", camera.Position);
-        //ModelShader.setVec3("pointLight.direction", camera.Front);
-        
-        ModelShader.setVec3("viewPos", camera.Position);
-        ModelShader.setFloat("pointLight.cutOff", glm::cos(glm::radians(light_inner_cutoff)));
-        ModelShader.setFloat("pointLight.outerCutOff", glm::cos(glm::radians(light_outer_cutoff)));
-
         ModelShader.setFloat("material.shininess", material_shininess);
+        ModelShader.setVec3("viewPos", camera.Position);
+ 
+        updateLightDir(ModelShader, dir_light_direction_x, dir_light_direction_y, 
+                dir_light_direction_z, dir_light_ambient_strength, 
+                dir_light_diffuse_strength, dir_light_specular_strength);
+    
+        updatePointLight(ModelShader, lightPosition, point_light_ambient_strength,
+                point_light_diffuse_strength, point_light_specular_strength,
+                point_light_constant, point_light_linear, point_light_quadratic);
+
+        updateSpotLight(ModelShader, camera.Position, camera.Front,
+                spot_light_ambient_strength, spot_light_diffuse_strength,
+                spot_light_specular_strength, light_inner_cutoff, 
+                light_outer_cutoff);
 
         // object rendering
         DiffuseModelTexture.bind(0);
