@@ -33,7 +33,7 @@ bool CONFIG_MODE = false;
 bool DIR_LIGHT_ENABLE = true;
 bool POINT_LIGHT_ENABLE = true;
 bool SPOT_LIGHT_ENABLE = true;
-float ZERO = 0.0f;
+float DEFAULT_ZERO_FLOAT = 0.0f;
 
 // Camera settings
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -149,10 +149,10 @@ void updateLightDir(Shader shader, float d_light_dir_x, float d_light_dir_y,
         float d_light_specular) {
     
     if (!DIR_LIGHT_ENABLE) {
-        shader.setVec3("dirLight.direction", glm::vec3(ZERO));
-        shader.setVec3("dirLight.ambient", glm::vec3(ZERO));
-        shader.setVec3("dirLight.diffuse", glm::vec3(ZERO));
-        shader.setVec3("dirLight.specular", glm::vec3(ZERO));
+        shader.setVec3("dirLight.direction", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setVec3("dirLight.ambient", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setVec3("dirLight.diffuse", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setVec3("dirLight.specular", glm::vec3(DEFAULT_ZERO_FLOAT));
     } else {
         shader.setVec3("dirLight.direction", glm::vec3(d_light_dir_x, d_light_dir_y, d_light_dir_z));
         shader.setVec3("dirLight.ambient", glm::vec3(d_light_ambient));
@@ -165,13 +165,13 @@ void updatePointLight(Shader shader, glm::vec3 light_position,
         float p_light_ambient, float p_light_diffuse, float p_light_specular, 
         float p_light_constant, float p_light_linear, float p_light_quadratic) {
     if (!POINT_LIGHT_ENABLE) {
-        shader.setVec3("pointLight.ambient", glm::vec3(ZERO));
-        shader.setVec3("pointLight.diffuse", glm::vec3(ZERO));
-        shader.setVec3("pointLight.specular", glm::vec3(ZERO));
-        shader.setFloat("pointLight.constant", ZERO);
-        shader.setFloat("pointLight.linear", ZERO);
-        shader.setFloat("pointLight.quadratic", ZERO);
-        shader.setVec3("pointLight.position", glm::vec3(ZERO));
+        shader.setVec3("pointLight.ambient", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setVec3("pointLight.diffuse", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setVec3("pointLight.specular", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setFloat("pointLight.constant", DEFAULT_ZERO_FLOAT);
+        shader.setFloat("pointLight.linear", DEFAULT_ZERO_FLOAT);
+        shader.setFloat("pointLight.quadratic", DEFAULT_ZERO_FLOAT);
+        shader.setVec3("pointLight.position", glm::vec3(DEFAULT_ZERO_FLOAT));
     } else {
         shader.setVec3("pointLight.ambient", glm::vec3(p_light_ambient));
         shader.setVec3("pointLight.diffuse", glm::vec3(p_light_diffuse));
@@ -187,13 +187,13 @@ void updateSpotLight(Shader shader, glm::vec3 position, glm::vec3 direction,
         float s_light_ambient, float s_light_diffuse, float s_light_specular,
         float cutOff, float outerCutOff) {
     if (!SPOT_LIGHT_ENABLE) {
-        shader.setVec3("spotLight.ambient", glm::vec3(ZERO));
-        shader.setVec3("spotLight.diffuse", glm::vec3(ZERO));
-        shader.setVec3("spotLight.specular", glm::vec3(ZERO));
-        shader.setVec3("spotLight.position", glm::vec3(ZERO));
-        shader.setVec3("spotLight.direction", glm::vec3(ZERO));
-        shader.setFloat("spotLight.cutOff", ZERO);
-        shader.setFloat("spotLight.outerCutOff", ZERO);
+        shader.setVec3("spotLight.ambient", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setVec3("spotLight.diffuse", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setVec3("spotLight.specular", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setVec3("spotLight.position", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setVec3("spotLight.direction", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setFloat("spotLight.cutOff", DEFAULT_ZERO_FLOAT);
+        shader.setFloat("spotLight.outerCutOff", DEFAULT_ZERO_FLOAT);
     } else {
         shader.setVec3("spotLight.ambient", glm::vec3(s_light_ambient));
         shader.setVec3("spotLight.diffuse", glm::vec3(s_light_diffuse));
