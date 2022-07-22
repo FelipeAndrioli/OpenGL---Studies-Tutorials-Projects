@@ -54,8 +54,6 @@ glm::vec3 lightPosition(2.0f, 0.7f, 3.0f);
  * - Investigate why the point light properties are affecting the other types
  *   of light
  *
- * - Add functions to enable/disable and update the lights
- *
  * - Add attenuation to the flaslight
  *
  */
@@ -339,9 +337,9 @@ int main(int argc, char* argv[]) {
     float light_inner_cutoff = 12.5f;
     float light_outer_cutoff = 17.5f;
 
-    float clear_color_x = 0.3f;
-    float clear_color_y = 0.3f;
-    float clear_color_z = 0.3f;
+    float clear_color_r = 0.3f;
+    float clear_color_g = 0.3f;
+    float clear_color_b = 0.3f;
 
     // application main loop
     while (!glfwWindowShouldClose(window)) {
@@ -357,7 +355,7 @@ int main(int argc, char* argv[]) {
 
         //render
         //------
-        glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+        glClearColor(clear_color_r, clear_color_g, clear_color_b, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ModelShader.use();
@@ -380,9 +378,9 @@ int main(int argc, char* argv[]) {
             ImGui::NewFrame();
 
             ImGui::Begin("Configurations");
-            ImGui::SliderFloat("Clear color x", &clear_color_x, 0.000f, 1.000f);
-            ImGui::SliderFloat("Clear color y", &clear_color_y, 0.000f, 1.000f);
-            ImGui::SliderFloat("Clear color z", &clear_color_z, 0.000f, 1.000f);
+            ImGui::SliderFloat("Clear color R", &clear_color_r, 0.000f, 1.000f);
+            ImGui::SliderFloat("Clear color G", &clear_color_g, 0.000f, 1.000f);
+            ImGui::SliderFloat("Clear color B", &clear_color_b, 0.000f, 1.000f);
             ImGui::SliderFloat("Material shininess", &material_shininess, 2.0f, 256.0f);
             ImGui::SliderFloat("Directional Light ambient", &dir_light_ambient_strength, 0.0f, 1.0f);
             ImGui::SliderFloat("Directional Light diffuse", &dir_light_diffuse_strength, 0.0f, 1.0f);
