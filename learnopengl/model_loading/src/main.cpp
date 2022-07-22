@@ -48,13 +48,6 @@ float lastFrame = 0.0f;
 // light source
 glm::vec3 lightPosition(2.0f, 0.7f, 3.0f);
 
-/*
- * TODO's
- *
- * - Add attenuation to the flaslight
- *
- */
-
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
     std::cout << "Viewport update -> width: " << width << " height: " << height << std::endl;
