@@ -340,17 +340,17 @@ int main(int argc, char* argv[]) {
         ModelShader.setVec3("dirLight.diffuse", glm::vec3(dir_light_diffuse_strength));
         ModelShader.setVec3("dirLight.specular", glm::vec3(dir_light_specular_strength));
     
-        ModelShader.setVec3("pointLight.ambient", glm::vec3(dir_light_ambient_strength));
-        ModelShader.setVec3("pointLight.diffuse", glm::vec3(dir_light_diffuse_strength));
-        ModelShader.setVec3("pointLight.specular", glm::vec3(dir_light_specular_strength));
+        ModelShader.setVec3("pointLight.ambient", glm::vec3(point_light_ambient_strength));
+        ModelShader.setVec3("pointLight.diffuse", glm::vec3(point_light_diffuse_strength));
+        ModelShader.setVec3("pointLight.specular", glm::vec3(point_light_specular_strength));
         ModelShader.setFloat("pointLight.constant", point_light_constant);
         ModelShader.setFloat("pointLight.linear", point_light_linear);
         ModelShader.setFloat("pointLight.quadratic", point_light_quadratic);
 
         ModelShader.setVec3("pointLight.position", lightPosition);
         // SpotLight (flash light)
-        ModelShader.setVec3("pointLight.position", camera.Position);
-        ModelShader.setVec3("pointLight.direction", camera.Front);
+        //ModelShader.setVec3("pointLight.position", camera.Position);
+        //ModelShader.setVec3("pointLight.direction", camera.Front);
         
         ModelShader.setVec3("viewPos", camera.Position);
         ModelShader.setFloat("pointLight.cutOff", glm::cos(glm::radians(light_inner_cutoff)));
