@@ -32,7 +32,7 @@
 bool CONFIG_MODE = false;
 bool DIR_LIGHT_ENABLE = true;
 bool POINT_LIGHT_ENABLE = true;
-bool SPOT_LIGHT_ENABLE = true;
+bool SPOT_LIGHT_ENABLE = false;
 float DEFAULT_ZERO_FLOAT = 0.0f;
 
 // Camera settings
@@ -50,9 +50,6 @@ glm::vec3 lightPosition(2.0f, 0.7f, 3.0f);
 
 /*
  * TODO's
- *
- * - Investigate why the point light properties are affecting the other types
- *   of light
  *
  * - Add attenuation to the flaslight
  *
@@ -183,6 +180,7 @@ void updatePointLight(Shader shader, glm::vec3 light_position,
 
 void updateSpotLight(Shader shader, glm::vec3 position, glm::vec3 direction,
         float s_light_ambient, float s_light_diffuse, float s_light_specular,
+        float s_light_constant, float s_light_linear, float s_light_quadratic,
         float cutOff, float outerCutOff) {
     if (!SPOT_LIGHT_ENABLE) {
         shader.setVec3("spotLight.ambient", glm::vec3(DEFAULT_ZERO_FLOAT));
@@ -190,6 +188,9 @@ void updateSpotLight(Shader shader, glm::vec3 position, glm::vec3 direction,
         shader.setVec3("spotLight.specular", glm::vec3(DEFAULT_ZERO_FLOAT));
         shader.setVec3("spotLight.position", glm::vec3(DEFAULT_ZERO_FLOAT));
         shader.setVec3("spotLight.direction", glm::vec3(DEFAULT_ZERO_FLOAT));
+        shader.setFloat("spotLight.constant", DEFAULT_ZERO_FLOAT);
+        shader.setFloat("spotLight.linear", DEFAULT_ZERO_FLOAT);
+        shader.setFloat("spotLight.quadratic", DEFAULT_ZERO_FLOAT);
         shader.setFloat("spotLight.cutOff", DEFAULT_ZERO_FLOAT);
         shader.setFloat("spotLight.outerCutOff", DEFAULT_ZERO_FLOAT);
     } else {
@@ -198,6 +199,9 @@ void updateSpotLight(Shader shader, glm::vec3 position, glm::vec3 direction,
         shader.setVec3("spotLight.specular", glm::vec3(s_light_specular));
         shader.setVec3("spotLight.position", position);
         shader.setVec3("spotLight.direction", direction);
+        shader.setFloat("spotLight.constant", s_light_constant);
+        shader.setFloat("spotLight.linear", s_light_linear);
+        shader.setFloat("spotLight.quadratic", s_light_quadratic);
         shader.setFloat("spotLight.cutOff", glm::cos(glm::radians(cutOff)));
         shader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(outerCutOff)));
     }
@@ -334,6 +338,9 @@ int main(int argc, char* argv[]) {
     float spot_light_ambient_strength = 0.2;
     float spot_light_diffuse_strength = 1.0;
     float spot_light_specular_strength = 0.5;
+    float spot_light_constant = 1.0f;
+    float spot_light_linear = 0.09f;
+    float spot_light_quadratic = 0.032f;
     float light_inner_cutoff = 12.5f;
     float light_outer_cutoff = 17.5f;
 
@@ -399,6 +406,9 @@ int main(int argc, char* argv[]) {
             ImGui::SliderFloat("Flash light ambient", &spot_light_ambient_strength, 0.000f, 1.000f);
             ImGui::SliderFloat("Flash light diffuse", &spot_light_diffuse_strength, 0.000f, 1.000f);
             ImGui::SliderFloat("Flash light specular", &spot_light_specular_strength, 0.000f, 1.000f);
+            ImGui::SliderFloat("FLash light constant", &spot_light_constant, 0.000f, 1.000f);
+            ImGui::SliderFloat("Flash light linear", &spot_light_linear, 0.000f, 1.000f);
+            ImGui::SliderFloat("Flash light quadratic", &spot_light_quadratic, 0.000f, 1.000f);
             ImGui::SliderFloat("Light inner cut off angle", &light_inner_cutoff, 0.0f, 25.0f);
             ImGui::SliderFloat("Light outer cut off angle", &light_outer_cutoff, 0.0f, 25.0f);
             if (ImGui::Button("Directional Light")) {
@@ -420,8 +430,9 @@ int main(int argc, char* argv[]) {
                 SPOT_LIGHT_ENABLE = !SPOT_LIGHT_ENABLE;
                 updateSpotLight(ModelShader, camera.Position, camera.Front,
                         spot_light_ambient_strength, spot_light_diffuse_strength,
-                        spot_light_specular_strength, light_inner_cutoff, 
-                        light_outer_cutoff);
+                        spot_light_specular_strength, spot_light_constant,
+                        spot_light_linear, spot_light_quadratic,
+                        light_inner_cutoff, light_outer_cutoff);
             }
             ImGui::End();
 
@@ -442,7 +453,8 @@ int main(int argc, char* argv[]) {
 
         updateSpotLight(ModelShader, camera.Position, camera.Front,
                 spot_light_ambient_strength, spot_light_diffuse_strength,
-                spot_light_specular_strength, light_inner_cutoff, 
+                spot_light_specular_strength, spot_light_constant,
+                spot_light_linear, spot_light_quadratic, light_inner_cutoff, 
                 light_outer_cutoff);
 
         // object rendering

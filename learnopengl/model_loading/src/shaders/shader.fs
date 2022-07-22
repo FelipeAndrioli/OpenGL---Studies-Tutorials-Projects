@@ -37,6 +37,10 @@ struct SpotLight {
     float cutOff;
     float outerCutOff;
 
+    float constant;
+    float linear;
+    float quadratic;
+    
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -119,10 +123,12 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     vec3 diffuse = light.diffuse * diff * vec3(texture(material.m_diffuse_texture, TexCoord));
     vec3 specular = light.specular * spec * vec3(texture(material.m_specular_texture, TexCoord));
 
+    PointLight nPointLight = PointLight(light.position, light.constant, light.linear, light.quadratic, ambient, diffuse, specular);
+    
     diffuse *= intensity;
     specular *= intensity;
-   
-    return (ambient + diffuse + specular);
+
+    return (ambient + diffuse + specular) * CalcPointLight(nPointLight, normal, fragPos, viewDir);
 }
 
 void main() {
