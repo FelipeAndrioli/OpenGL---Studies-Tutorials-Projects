@@ -61,6 +61,7 @@ void setConfigMode(GLFWwindow *window) {
     
     if (CONFIG_MODE) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        firstMouse = true;
     } else {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
